@@ -5,7 +5,7 @@ PFont font;
 int butSizeX = 170;
 int butSizeY = 25;
 
-int pointSize = 15;
+int pointSize = 18;
 
 int numOfBut = 5;
 int addPointButX, addPointButY;
@@ -25,7 +25,7 @@ color highlightButColor = color(204);
 
 //Points
 ArrayList<PVector> points; 
-int numberOfRandomPoints = 7;
+int numberOfRandomPoints = 3;
 PVector changingPoint;
 
 void setup() {
@@ -92,6 +92,7 @@ void draw(){
   
   //Printing points
   for (PVector p : points) {
+      fill(color(#3FCBF0));
       ellipse(p.x, p.y, pointSize, pointSize);
   }
 }
@@ -120,9 +121,9 @@ void mousePressed() {
     if (addMode == true) {
        addPoint();
     }
-    /*if (deleteMode == true) {
+    if (deleteMode == true) {
         deletePoint();
-    }*/
+    }
     if (moveMode == true) {
       
       movePoint();
@@ -144,6 +145,10 @@ void mouseReleased(){
 }
 
 void movePoint(){
+  deletePoint();
+}
+
+void deletePoint(){
   for(int i = 0; i < points.size(); i++){
     float distX = points.get(i).x - mouseX;
     float distY = points.get(i).y - mouseY;
@@ -161,16 +166,11 @@ void addPoint(){
   points.add(new PVector(mouseX, mouseY));
 }
 
-//Removing points from screnn
-void removeAllPoints(){
-  points.clear();
-}
-
 //Adding multiple random points to screen
 void addRandomPoints(){
   for(int i = 1; i <= numberOfRandomPoints; i++){
-    float x = random(0, width - pointSize );
-    float y = random(0, height - pointSize);
+    float x = random(pointSize/2, width - pointSize/2 );
+    float y = random(pointSize/2, height - pointSize/2);
     
     if(inButtonsArea(x, y)){
       x = butSizeX + x;
@@ -179,6 +179,11 @@ void addRandomPoints(){
     points.add(new PVector(x, y));
   }
   
+}
+
+//Removing points from screnn
+void removeAllPoints(){
+  points.clear();
 }
 
 //Are you over button?
