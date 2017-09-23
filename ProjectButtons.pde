@@ -154,7 +154,9 @@ void deletePoint(){
     float distY = points.get(i).y - mouseY;
     boolean isPoint = sqrt(sq(distX) + sq(distY)) < pointSize/2 ;
     if(isPoint){
-      changingPoint = new PVector(points.get(i).x, points.get(i).y);
+      if(moveMode){
+        changingPoint = new PVector(points.get(i).x, points.get(i).y);
+      }
       points.remove(points.get(i));
       break;
     }
