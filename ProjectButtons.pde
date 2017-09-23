@@ -18,6 +18,7 @@ int deletePointButX,deletePointButY;
 boolean moveMode = false;
 boolean deleteMode = false;
 boolean addMode = false;
+boolean overButtons = false;
 
 color currentColor = color(255);
 color highlightButColor = color(204);
@@ -25,6 +26,7 @@ color highlightButColor = color(204);
 //Points
 ArrayList<PVector> points; 
 int numberOfRandomPoints = 7;
+PVector changingPoint;
 
 void setup() {
        size(640, 360);
@@ -95,46 +97,63 @@ void draw(){
 }
 
 void mousePressed() {
-  if ( overBut(addPointButX, addPointButY) ) {
-    addMode = true;
-    deleteMode = false;
-    moveMode = false;
-  } else if ( overBut(movePointButX, movePointButY) ) {
-    addMode = false;
-    deleteMode = false;
-    moveMode = true;
-  } else if ( overBut(deletePointButX, deletePointButY) ) {
-    addMode = false;
-    deleteMode = true;
-    moveMode = false;
-  }else if (overBut(clearSceneButX, clearSceneButY)) {
-    addMode = false;
-    deleteMode = false;
-    moveMode = false;
-    removeAllPoints();
-  }else if (overBut(randomPointsButX, randomPointsButY)) {
-    addMode = false;
-    deleteMode = false;
-    moveMode = false;
-    addRandomPoints();
-  }else if (addMode == true) {
-    addPoint();
-  }/*else if (deleteMode == true) {
-    deletePoint();
-  }else if (moveMode == true) {
-    movePoint();
-  }*/
   
+  //If you click into Buttons area
+  if(inButtonsArea(mouseX, mouseY)){
+    if ( overBut(addPointButX, addPointButY) ) {
+      setModes(true, false, false);
+    } else if ( overBut(movePointButX, movePointButY) ) {
+      setModes(false, false, true);
+    } else if ( overBut(deletePointButX, deletePointButY) ) {
+      setModes(false, true, false);
+    }else if (overBut(clearSceneButX, clearSceneButY)) {
+      setModes(false, false, false);
+      removeAllPoints();
+    }else if (overBut(randomPointsButX, randomPointsButY)) {
+      setModes(false, false, false);
+      addRandomPoints();
+    }
+  }
+  
+  //If you click outside buttons area
+  if(!inButtonsArea(mouseX, mouseY)){
+    if (addMode == true) {
+       addPoint();
+    }
+    /*if (deleteMode == true) {
+        deletePoint();
+    }*/
+    if (moveMode == true) {
+      
+      movePoint();
+    }
+  }
   
 }
 
-boolean overBut(int x, int y) {
-  if (mouseX >= x && mouseX <= x + butSizeX
-      && mouseY >= y && mouseY <= y + butSizeY) {
-    return true;
-  } else {
-    return false;
+
+
+void mouseReleased(){
+  //NEED to have point to be moved, can not move it to button area
+  if(moveMode == true &&  changingPoint != null && !inButtonsArea(mouseX, mouseY)){
+    points.add(new PVector(mouseX, mouseY));
+    
+    //setting changingPoint to null after editation of point
+    changingPoint = null;
   }
+}
+
+void movePoint(){
+  for(int i = 0; i < points.size(); i++){
+    float distX = points.get(i).x - mouseX;
+    float distY = points.get(i).y - mouseY;
+    boolean isPoint = sqrt(sq(distX) + sq(distY)) < pointSize/2 ;
+    if(isPoint){
+      changingPoint = new PVector(points.get(i).x, points.get(i).y);
+      points.remove(points.get(i));
+      break;
+    }
+  }  
 }
 
 //Adding single point
@@ -150,13 +169,39 @@ void removeAllPoints(){
 //Adding multiple random points to screen
 void addRandomPoints(){
   for(int i = 1; i <= numberOfRandomPoints; i++){
-    float x = random(0, width);
-    float y = random(0, height);
-    if(x < butSizeX + pointSize && y < butSizeY * numOfBut + pointSize){
+    float x = random(0, width - pointSize );
+    float y = random(0, height - pointSize);
+    
+    if(inButtonsArea(x, y)){
       x = butSizeX + x;
       y = butSizeY + y;
     }
     points.add(new PVector(x, y));
   }
   
+}
+
+//Are you over button?
+boolean overBut(int x, int y) {
+  if (mouseX >= x && mouseX <= x + butSizeX
+      && mouseY >= y && mouseY <= y + butSizeY) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+//Whether you are in Buttons area 
+boolean inButtonsArea(float x, float y){
+  if(x < butSizeX + pointSize && y < butSizeY * numOfBut + pointSize){
+    return true;
+  }
+  return false;
+}
+
+//Setting modes of app 
+void setModes(boolean add, boolean delete, boolean move){
+  addMode = add;
+  deleteMode = delete;
+  moveMode = move;
 }
