@@ -43,11 +43,6 @@ void draw(){
   background(currentColor);
   stroke(0);
   
-  if (moveMode) {
-    fill(highlightButColor);
-  } else {
-    fill(currentColor);
-  }
   
   fill(currentColor);
   rect(clearSceneButX, clearSceneButY, butSizeX, butSizeY);
