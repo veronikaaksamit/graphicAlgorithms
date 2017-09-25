@@ -129,7 +129,7 @@ void mousePressed() {
       addRandomPoints();
     }else if (overBut(giftWrapButX, giftWrapButY)) {
       setModes(false, false, false);
-      
+      giftWrapping();
     }else if (overBut(grahamScButX, grahamScButY)) {
       setModes(false, false, false);
     }
@@ -148,6 +148,10 @@ void mousePressed() {
     }
   }
   
+}
+
+void giftWrapping(){
+  getMaxPointX();
 }
 
 
@@ -229,4 +233,16 @@ void setModes(boolean add, boolean delete, boolean move){
   addMode = add;
   deleteMode = delete;
   moveMode = move;
+}
+
+PVector getMaxPointX(){
+  float max = 0;
+  PVector pointMaxX = null;
+  for(int i = 0; i < points.size(); i++){
+      if(points.get(i).x > max){
+        pointMaxX = points.get(i);
+        max = points.get(i).x;
+      }
+  }
+  return pointMaxX;
 }
