@@ -2,17 +2,19 @@ PFont font;
 
 //Sizes
  //Button width and height
-int butSizeX = 170;
-int butSizeY = 25;
+int butSizeX = 270;
+int butSizeY = 30;
 
 int pointSize = 18;
 
-int numOfBut = 5;
+int numOfBut = 7;
 int addPointButX, addPointButY;
 int clearSceneButX, clearSceneButY;
 int randomPointsButX,randomPointsButY;
 int movePointButX,movePointButY;
 int deletePointButX,deletePointButY;
+int giftWrapButX, giftWrapButY;
+int grahamScButX, grahamScButY;
 
 //Modes
 boolean moveMode = false;
@@ -29,7 +31,7 @@ int numberOfRandomPoints = 3;
 PVector changingPoint;
 
 void setup() {
-       size(640, 360);
+       size(1280, 800);
        clearSceneButX = 0;
        clearSceneButY = 0;
        
@@ -44,6 +46,12 @@ void setup() {
        
        deletePointButX = movePointButX;
        deletePointButY = movePointButY + butSizeY;
+       
+       giftWrapButX = deletePointButX;
+       giftWrapButY = deletePointButY + butSizeY;
+       
+       grahamScButX = giftWrapButX;
+       grahamScButY = giftWrapButY + butSizeY;
        
        font = createFont("Courier New Bold", 16);
        textFont(font); 
@@ -82,6 +90,10 @@ void draw(){
   }
   rect(deletePointButX, deletePointButY, butSizeX, butSizeY);
   
+  fill(currentColor);
+  rect(giftWrapButX, giftWrapButY, butSizeX, butSizeY);
+  rect(grahamScButX, grahamScButY, butSizeX, butSizeY);
+  
   //Adding names to buttons
   fill(0);
   text("Clear scene", clearSceneButX + 5,clearSceneButY+20);
@@ -89,6 +101,8 @@ void draw(){
   text("Add point mode", addPointButX + 5,addPointButY+20);
   text("Move point mode", movePointButX + 5,movePointButY+20);
   text("Delete point mode", deletePointButX + 5,deletePointButY+20);
+  text("Gift Wrapping - convex hull", giftWrapButX + 5,giftWrapButY+20);
+  text("Graham Scan   - convex hull", grahamScButX + 5,grahamScButY+20);
   
   //Printing points
   for (PVector p : points) {
@@ -113,6 +127,11 @@ void mousePressed() {
     }else if (overBut(randomPointsButX, randomPointsButY)) {
       setModes(false, false, false);
       addRandomPoints();
+    }else if (overBut(giftWrapButX, giftWrapButY)) {
+      setModes(false, false, false);
+      
+    }else if (overBut(grahamScButX, grahamScButY)) {
+      setModes(false, false, false);
     }
   }
   
@@ -125,8 +144,7 @@ void mousePressed() {
         deletePoint();
     }
     if (moveMode == true) {
-      
-      movePoint();
+        movePoint();
     }
   }
   
