@@ -30,8 +30,15 @@ ArrayList<PVector> points;
 int numberOfRandomPoints = 3;
 PVector changingPoint;
 
+//Convex hull data structures
+PVector maxXPoint;
+PVector[] CHull;
+PVector A;
+PVector B;
+PVector C;
 void setup() {
-       size(1280, 800);
+       //size(1280, 800);
+       size(960, 540);
        clearSceneButX = 0;
        clearSceneButY = 0;
        
@@ -104,11 +111,39 @@ void draw(){
   text("Gift Wrapping - convex hull", giftWrapButX + 5,giftWrapButY+20);
   text("Graham Scan   - convex hull", grahamScButX + 5,grahamScButY+20);
   
+ 
+  
+  
   //Printing points
   for (PVector p : points) {
-      fill(color(#3FCBF0));
-      ellipse(p.x, p.y, pointSize, pointSize);
+      if(maxXPoint != null && p == maxXPoint){
+        fill(color(#2BFA94));
+        ellipse(p.x, p.y, pointSize, pointSize);
+      }else{
+        fill(color(#3FCBF0));
+        ellipse(p.x, p.y, pointSize, pointSize);
+      }
   }
+  
+  if(CHull != null){
+    for (int i = 0; i< CHull.length - 1; i++) {
+      if(CHull[i] != null && CHull[i+1] != null){
+         line( CHull[i].x, CHull[i].y, CHull[i+1].x, CHull[i+1].y );
+      }
+    }
+  }
+  fill(0);
+  if(A!= null){
+    text("A", A.x,A.y);
+  }
+  if(B!= null){
+    text("B", B.x, B.y);
+  }
+  if(C!= null){
+     text("C", C.x, C.y);
+  }
+  
+  
 }
 
 void mousePressed() {
@@ -135,6 +170,8 @@ void mousePressed() {
     }
   }
   
+  
+  
   //If you click outside buttons area
   if(!inButtonsArea(mouseX, mouseY)){
     if (addMode == true) {
@@ -151,9 +188,109 @@ void mousePressed() {
 }
 
 void giftWrapping(){
-  getMaxPointX();
-}
 
+  if(points.size() >= 3){
+    println("Gift wrapping algorithm for Convex Hull");
+    ArrayList<PVector> tempPoints = new ArrayList<PVector>(points);
+    
+    CHull = new PVector[tempPoints.size()+1];
+    maxXPoint = getMaxPointX();
+    A = CHull[0] = maxXPoint;
+    
+    PVector basePoint = new PVector(maxXPoint.x, 1);
+    B = basePoint;
+    
+    int counter = 1;
+    
+    
+    for(int i = 0; i < tempPoints.size(); i++){
+      PVector p = tempPoints.get(i);
+      println( "[" + p.x + ", "+p.y + "]");
+    }
+    tempPoints.remove(maxXPoint);
+    
+    
+    
+    PVector pointMinAngle = null;
+    float minAngle = 360;
+    
+    PVector vec1 = new PVector(basePoint.x - maxXPoint.x, basePoint.y - maxXPoint.y  );
+    float length1 = sqrt(sq(vec1.x) + sq(vec1.y));
+    
+    PVector vec2 = null;
+    
+    
+    
+    
+    for(int i = 0; i < tempPoints.size(); i++){
+      PVector p = tempPoints.get(i);
+      //println("Number of non solved vertices =" + tempPoints.size() + "iteration " + i);
+      vec2 = new PVector(p.x - maxXPoint.x, p.y - maxXPoint.y);
+
+      float length2 = sqrt(sq(vec2.x) + sq(vec2.y));
+      float angle = degrees(acos((vec1.x * vec2.x + vec1.y * vec2.y)/ (length1 * length2)));
+      
+      if(angle <= minAngle){
+        pointMinAngle = new PVector(p.x, p.y);
+        minAngle= angle;
+        println("Min angle ?" + angle);
+      }
+      println(angle);
+      C = CHull[counter] = pointMinAngle;   
+      
+    }
+    tempPoints.remove(pointMinAngle);
+      
+    
+    println("New part");
+    
+    while(tempPoints.size()>0){
+      B = CHull[counter];
+      A = CHull[counter-1];
+      counter++;
+      
+      pointMinAngle = null;
+      minAngle = 360;
+      
+      vec1 = new PVector(A.x - B.x, A.y - B.y  );//BA
+      line( B.x, B.y, A.x, A.y );
+      length1 = sqrt(sq(vec1.x) + sq(vec1.y));
+      
+      float angle = 360;
+      
+      for(int i = 0; i < tempPoints.size(); i++){
+        PVector p = tempPoints.get(i);
+        
+        vec2 = new PVector(p.x - B.x, p.y - B.y); //Bp ...p possible solution
+        float length2 = sqrt(sq(vec2.x) + sq(vec2.y));
+        angle = 180 - degrees(acos((vec1.x * vec2.x + vec1.y * vec2.y)/ (length1 * length2)));
+        
+        if(angle <= minAngle){
+          pointMinAngle = new PVector(p.x, p.y);
+          minAngle= angle;
+          println("Min angle ?" + angle);
+        }
+        println(angle);
+         
+      }
+      // stopping values ...when the smallest angle is with the first point 
+      vec2 = new PVector(maxXPoint.x - B.x, maxXPoint.y - B.y); //BMaxXPoint 
+      float length2 = sqrt(sq(vec2.x) + sq(vec2.y));
+      float maxXAngle = 180 - degrees(acos((vec1.x * vec2.x + vec1.y * vec2.y)/ (length1 * length2)));
+      
+      //when the condition for stopping is fullfilled
+      if(maxXAngle < minAngle){
+        tempPoints.clear();
+        CHull[counter] = maxXPoint;
+      }else{
+        C = CHull[counter] = pointMinAngle; 
+        tempPoints.remove(pointMinAngle);
+      }
+    }    
+    
+  }
+  
+}
 
 
 void mouseReleased(){
@@ -180,6 +317,7 @@ void deletePoint(){
         changingPoint = new PVector(points.get(i).x, points.get(i).y);
       }
       points.remove(points.get(i));
+      println("DELETING POINT");
       break;
     }
   }  
@@ -187,6 +325,7 @@ void deletePoint(){
 
 //Adding single point
 void addPoint(){
+  println("ADDING POINT");
   points.add(new PVector(mouseX, mouseY));
 }
 
@@ -202,12 +341,14 @@ void addRandomPoints(){
     }
     points.add(new PVector(x, y));
   }
+  println("ADDING RANDOM POINTS");
   
 }
 
 //Removing points from screnn
 void removeAllPoints(){
   points.clear();
+  println("CLEARING THE SCENE");
 }
 
 //Are you over button?
