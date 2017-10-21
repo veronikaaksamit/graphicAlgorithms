@@ -202,29 +202,18 @@ void giftWrapping(){
     
     int counter = 1;
     
-    
-    for(int i = 0; i < tempPoints.size(); i++){
-      PVector p = tempPoints.get(i);
-      println( "[" + p.x + ", "+p.y + "]");
-    }
     tempPoints.remove(maxXPoint);
-    
-    
     
     PVector pointMinAngle = null;
     float minAngle = 360;
     
-    PVector vec1 = new PVector(basePoint.x - maxXPoint.x, basePoint.y - maxXPoint.y  );
+    PVector vec1 = new PVector(basePoint.x - maxXPoint.x, basePoint.y - maxXPoint.y);
     float length1 = sqrt(sq(vec1.x) + sq(vec1.y));
     
     PVector vec2 = null;
-    
-    
-    
-    
+        
     for(int i = 0; i < tempPoints.size(); i++){
       PVector p = tempPoints.get(i);
-      //println("Number of non solved vertices =" + tempPoints.size() + "iteration " + i);
       vec2 = new PVector(p.x - maxXPoint.x, p.y - maxXPoint.y);
 
       float length2 = sqrt(sq(vec2.x) + sq(vec2.y));
@@ -233,15 +222,12 @@ void giftWrapping(){
       if(angle <= minAngle){
         pointMinAngle = new PVector(p.x, p.y);
         minAngle= angle;
-        println("Min angle ?" + angle);
       }
-      println(angle);
-      C = CHull[counter] = pointMinAngle;   
+      CHull[counter] = pointMinAngle;   
       
     }
     tempPoints.remove(pointMinAngle);
       
-    
     println("New part");
     
     while(tempPoints.size()>0){
@@ -268,9 +254,7 @@ void giftWrapping(){
         if(angle <= minAngle){
           pointMinAngle = new PVector(p.x, p.y);
           minAngle= angle;
-          println("Min angle ?" + angle);
         }
-        println(angle);
          
       }
       // stopping values ...when the smallest angle is with the first point 
@@ -283,7 +267,7 @@ void giftWrapping(){
         tempPoints.clear();
         CHull[counter] = maxXPoint;
       }else{
-        C = CHull[counter] = pointMinAngle; 
+        CHull[counter] = pointMinAngle; 
         tempPoints.remove(pointMinAngle);
       }
     }    
