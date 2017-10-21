@@ -195,13 +195,15 @@ void giftWrapping(){
     
     CHull = new PVector[tempPoints.size()+1];
     maxXPoint = getMaxPointX();
-    A = CHull[0] = maxXPoint;
+    B = CHull[0] = maxXPoint;
     
-    PVector basePoint = new PVector(maxXPoint.x, 1);
-    B = basePoint;
+    //point under maxXPoint 
+    PVector basePoint = new PVector(maxXPoint.x, maxXPoint.y + 2);
+    A = basePoint;
     
     int counter = 1;
     
+    //removing first point from tempPoints which we are solving
     tempPoints.remove(maxXPoint);
     
     PVector pointMinAngle = null;
@@ -211,46 +213,36 @@ void giftWrapping(){
     float length1 = sqrt(sq(vec1.x) + sq(vec1.y));
     
     PVector vec2 = null;
-        
-    for(int i = 0; i < tempPoints.size(); i++){
-      PVector p = tempPoints.get(i);
-      vec2 = new PVector(p.x - maxXPoint.x, p.y - maxXPoint.y);
-
-      float length2 = sqrt(sq(vec2.x) + sq(vec2.y));
-      float angle = degrees(acos((vec1.x * vec2.x + vec1.y * vec2.y)/ (length1 * length2)));
-      
-      if(angle <= minAngle){
-        pointMinAngle = new PVector(p.x, p.y);
-        minAngle= angle;
-      }
-      CHull[counter] = pointMinAngle;   
-      
-    }
-    tempPoints.remove(pointMinAngle);
-      
-    println("New part");
     
     while(tempPoints.size()>0){
-      B = CHull[counter];
-      A = CHull[counter-1];
-      counter++;
+      //when using A and B for the first time, specific values are already set
+      if(CHull[counter]!= null && CHull[counter - 1]!= null){
+        B = CHull[counter];
+        A = CHull[counter-1];
+        println("setting A and B after first iteration");
+        counter++;
+      }
       
       pointMinAngle = null;
       minAngle = 360;
       
+      //values about BA vector
       vec1 = new PVector(A.x - B.x, A.y - B.y  );//BA
       line( B.x, B.y, A.x, A.y );
       length1 = sqrt(sq(vec1.x) + sq(vec1.y));
       
       float angle = 360;
       
+      //checking all possible points
       for(int i = 0; i < tempPoints.size(); i++){
         PVector p = tempPoints.get(i);
         
+        //getting vector(Bp) with p point at the end and his length + angle (Bp angle BA)
         vec2 = new PVector(p.x - B.x, p.y - B.y); //Bp ...p possible solution
         float length2 = sqrt(sq(vec2.x) + sq(vec2.y));
         angle = 180 - degrees(acos((vec1.x * vec2.x + vec1.y * vec2.y)/ (length1 * length2)));
         
+        //Do we get the smallest angle with this point?
         if(angle <= minAngle){
           pointMinAngle = new PVector(p.x, p.y);
           minAngle= angle;
@@ -258,17 +250,26 @@ void giftWrapping(){
          
       }
       // stopping values ...when the smallest angle is with the first point 
-      vec2 = new PVector(maxXPoint.x - B.x, maxXPoint.y - B.y); //BMaxXPoint 
-      float length2 = sqrt(sq(vec2.x) + sq(vec2.y));
-      float maxXAngle = 180 - degrees(acos((vec1.x * vec2.x + vec1.y * vec2.y)/ (length1 * length2)));
+      float maxXAngle = 360;
+      //getting maxXAngle just when we are not working with first point(the maxXPoint) ...no maxXPoint- maxXPoint - A angle
+      if(counter > 1){
+        vec2 = new PVector(maxXPoint.x - B.x, maxXPoint.y - B.y); //BMaxXPoint 
+        float length2 = sqrt(sq(vec2.x) + sq(vec2.y));
+        maxXAngle = 180 - degrees(acos((vec1.x * vec2.x + vec1.y * vec2.y)/ (length1 * length2)));
+      }
       
-      //when the condition for stopping is fullfilled
+      //when the condition for stopping is fullfilled (smallest angle is with the first point of hull)
       if(maxXAngle < minAngle){
         tempPoints.clear();
         CHull[counter] = maxXPoint;
       }else{
         CHull[counter] = pointMinAngle; 
         tempPoints.remove(pointMinAngle);
+      }
+      
+      //connecting last points when there is no point left
+      if(tempPoints.size()==0){
+        CHull[counter+1] = maxXPoint;
       }
     }    
     
