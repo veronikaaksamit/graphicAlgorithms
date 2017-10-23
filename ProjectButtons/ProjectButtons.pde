@@ -154,9 +154,9 @@ void draw(){
   
   fill(color(#3FCBF0));
   if(polyLines != null){
-    for (int i = 0; i< polyLines.size() - 1; i++) {
+    for (int i = 0; i< polyLines.size(); i++) {
       ellipse(polyLines.get(i).x, polyLines.get(i).y, pointSize, pointSize);
-      if(polyLines.get(i) != null && polyLines.get(i+1) != null){
+      if(polyLines.get(i) != null && polyLines.size()>i+1){
          line( polyLines.get(i).x, polyLines.get(i).y, polyLines.get(i+1).x, polyLines.get(i+1).y );
       }
     }
@@ -372,18 +372,20 @@ void addRandomPoints(){
 }
 
 void createPolygon(){
-  polyLines.add(new PVector(mouseX, mouseY));
   for(int i = 0; i < polyLines.size(); i++){
-    if(mouseX == polyLines.get(i).x && mouseY ==  polyLines.get(i).y){
+    if(isPoint(polyLines.get(i).x, polyLines.get(i).y)){
       println("CREATED POLYGON");
       createPolyMode = false;
+      println("Same points");
     }
   }
+  polyLines.add(new PVector(mouseX, mouseY));
 }
 
 //Removing points from screnn
 void removeAllPoints(){
   points.clear();
+  polyLines.clear();
   println("CLEARING THE SCENE");
   
 }
