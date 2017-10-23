@@ -13,6 +13,7 @@ int clearSceneButX, clearSceneButY;
 int randomPointsButX,randomPointsButY;
 int movePointButX,movePointButY;
 int deletePointButX,deletePointButY;
+int createPolyButX,createPolyButY;
 int giftWrapButX, giftWrapButY;
 int grahamScButX, grahamScButY;
 
@@ -20,6 +21,7 @@ int grahamScButX, grahamScButY;
 boolean moveMode = false;
 boolean deleteMode = false;
 boolean addMode = false;
+boolean createPolyMode = false;
 boolean overButtons = false;
 
 color currentColor = color(255);
@@ -36,13 +38,17 @@ PVector[] CHull;
 PVector A;
 PVector B;
 PVector C;
+
+//PolygonCreation
+ArrayList<PVector> polyLines;
+
 void setup() {
        //size(1280, 800);
        size(960, 540);
        clearSceneButX = 0;
        clearSceneButY = 0;
        
-       randomPointsButX =clearSceneButX  ;
+       randomPointsButX = clearSceneButX  ;
        randomPointsButY = clearSceneButY  + butSizeY;
        
        addPointButX = randomPointsButX;
@@ -54,8 +60,11 @@ void setup() {
        deletePointButX = movePointButX;
        deletePointButY = movePointButY + butSizeY;
        
-       giftWrapButX = deletePointButX;
-       giftWrapButY = deletePointButY + butSizeY;
+       createPolyButX = deletePointButX;
+       createPolyButY = deletePointButY + butSizeY;
+        
+       giftWrapButX = createPolyButX;
+       giftWrapButY = createPolyButY + butSizeY;
        
        grahamScButX = giftWrapButX;
        grahamScButY = giftWrapButY + butSizeY;
@@ -64,6 +73,7 @@ void setup() {
        textFont(font); 
        
        points = new ArrayList<PVector>();
+       polyLines = new ArrayList<PVector>();
        
 }
 
@@ -97,6 +107,14 @@ void draw(){
   }
   rect(deletePointButX, deletePointButY, butSizeX, butSizeY);
   
+  if (createPolyMode) {
+    fill(highlightButColor);
+  }else {
+    fill(currentColor);
+  }
+  rect(createPolyButX, createPolyButY, butSizeX, butSizeY);
+  
+  
   fill(currentColor);
   rect(giftWrapButX, giftWrapButY, butSizeX, butSizeY);
   rect(grahamScButX, grahamScButY, butSizeX, butSizeY);
@@ -108,6 +126,7 @@ void draw(){
   text("Add point mode", addPointButX + 5,addPointButY+20);
   text("Move point mode", movePointButX + 5,movePointButY+20);
   text("Delete point mode", deletePointButX + 5,deletePointButY+20);
+  text("Create polygon mode", createPolyButX + 5, createPolyButY + 20);
   text("Gift Wrapping - convex hull", giftWrapButX + 5,giftWrapButY+20);
   text("Graham Scan   - convex hull", grahamScButX + 5,grahamScButY+20);
   
@@ -132,6 +151,17 @@ void draw(){
       }
     }
   }
+  
+  fill(color(#3FCBF0));
+  if(polyLines != null){
+    for (int i = 0; i< polyLines.size() - 1; i++) {
+      ellipse(polyLines.get(i).x, polyLines.get(i).y, pointSize, pointSize);
+      if(polyLines.get(i) != null && polyLines.get(i+1) != null){
+         line( polyLines.get(i).x, polyLines.get(i).y, polyLines.get(i+1).x, polyLines.get(i+1).y );
+      }
+    }
+  }
+  
   fill(0);
   if(A!= null){
     text("A", A.x,A.y);
@@ -151,22 +181,25 @@ void mousePressed() {
   //If you click into Buttons area
   if(inButtonsArea(mouseX, mouseY)){
     if ( overBut(addPointButX, addPointButY) ) {
-      setModes(true, false, false);
+      setModes(true, false, false, false);
     } else if ( overBut(movePointButX, movePointButY) ) {
-      setModes(false, false, true);
+      setModes(false, false, true, false);
     } else if ( overBut(deletePointButX, deletePointButY) ) {
-      setModes(false, true, false);
+      setModes(false, true, false, false);
+    } else if ( overBut(createPolyButX, createPolyButY) ) {
+      setModes(false, false, false, true);
+      removeAllPoints();
     }else if (overBut(clearSceneButX, clearSceneButY)) {
-      setModes(false, false, false);
+      setModes(false, false, false, false);
       removeAllPoints();
     }else if (overBut(randomPointsButX, randomPointsButY)) {
-      setModes(false, false, false);
+      setModes(false, false, false, false);
       addRandomPoints();
     }else if (overBut(giftWrapButX, giftWrapButY)) {
-      setModes(false, false, false);
+      setModes(false, false, false, false);
       giftWrapping();
     }else if (overBut(grahamScButX, grahamScButY)) {
-      setModes(false, false, false);
+      setModes(false, false, false, false);
     }
   }
   
@@ -182,6 +215,9 @@ void mousePressed() {
     }
     if (moveMode == true) {
         movePoint();
+    }
+    if(createPolyMode == true){
+        createPolygon();
     }
   }
   
@@ -294,10 +330,8 @@ void movePoint(){
 
 void deletePoint(){
   for(int i = 0; i < points.size(); i++){
-    float distX = points.get(i).x - mouseX;
-    float distY = points.get(i).y - mouseY;
-    boolean isPoint = sqrt(sq(distX) + sq(distY)) < pointSize/2 ;
-    if(isPoint){
+    
+    if(isPoint(points.get(i).x, points.get(i).y)){
       if(moveMode){
         changingPoint = new PVector(points.get(i).x, points.get(i).y);
       }
@@ -306,6 +340,13 @@ void deletePoint(){
       break;
     }
   }  
+}
+
+boolean isPoint(float x, float y){
+  float distX = x - mouseX;
+  float distY = y - mouseY;
+  println(sqrt(sq(distX) + sq(distY)) < pointSize/2 );
+  return sqrt(sq(distX) + sq(distY)) < pointSize/2 ;
 }
 
 //Adding single point
@@ -330,10 +371,21 @@ void addRandomPoints(){
   
 }
 
+void createPolygon(){
+  polyLines.add(new PVector(mouseX, mouseY));
+  for(int i = 0; i < polyLines.size(); i++){
+    if(mouseX == polyLines.get(i).x && mouseY ==  polyLines.get(i).y){
+      println("CREATED POLYGON");
+      createPolyMode = false;
+    }
+  }
+}
+
 //Removing points from screnn
 void removeAllPoints(){
   points.clear();
   println("CLEARING THE SCENE");
+  
 }
 
 //Are you over button?
@@ -355,10 +407,11 @@ boolean inButtonsArea(float x, float y){
 }
 
 //Setting modes of app 
-void setModes(boolean add, boolean delete, boolean move){
+void setModes(boolean add, boolean delete, boolean move, boolean createPoly){
   addMode = add;
   deleteMode = delete;
   moveMode = move;
+  createPolyMode = createPoly;
 }
 
 PVector getMaxPointX(){
