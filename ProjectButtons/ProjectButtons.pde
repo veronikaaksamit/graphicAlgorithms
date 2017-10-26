@@ -154,7 +154,7 @@ void draw(){
   fill(color(#3FCBF0));
   if(polyLines != null){
     for (int i = 0; i< polyLines.size(); i++) {
-      if(i < polyLines.size()+1){
+      if(i!= polyLines.size() + 2){
         ellipse(polyLines.get(i).x, polyLines.get(i).y, pointSize, pointSize);
       }
       if(polyLines.get(i) != null && polyLines.size()>i+1){
@@ -189,6 +189,7 @@ void mousePressed() {
       setModes(false, true, false, false);
     } else if ( overBut(createPolyButX, createPolyButY) ) {
       setModes(false, false, false, true);
+      removeAllPoints();
     }else if (overBut(clearSceneButX, clearSceneButY)) {
       setModes(false, false, false, false);
       removeAllPoints();
