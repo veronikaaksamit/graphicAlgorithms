@@ -7,7 +7,7 @@ int butSizeY = 30;
 
 int pointSize = 18;
 
-int numOfBut = 7;
+int numOfBut = 9;
 int addPointButX, addPointButY;
 int clearSceneButX, clearSceneButY;
 int randomPointsButX,randomPointsButY;
@@ -16,6 +16,7 @@ int deletePointButX,deletePointButY;
 int createPolyButX,createPolyButY;
 int giftWrapButX, giftWrapButY;
 int grahamScButX, grahamScButY;
+int triangulationButX, triangulationButY;
 
 //Modes
 boolean moveMode = false;
@@ -69,6 +70,9 @@ void setup() {
        grahamScButX = giftWrapButX;
        grahamScButY = giftWrapButY + butSizeY;
        
+       triangulationButX = grahamScButX;
+       triangulationButY = grahamScButY + butSizeY;
+       
        font = createFont("Courier New Bold", 16);
        textFont(font); 
        
@@ -118,6 +122,7 @@ void draw(){
   fill(currentColor);
   rect(giftWrapButX, giftWrapButY, butSizeX, butSizeY);
   rect(grahamScButX, grahamScButY, butSizeX, butSizeY);
+  rect(triangulationButX, triangulationButY, butSizeX, butSizeY);
   
   //Adding names to buttons
   fill(0);
@@ -129,6 +134,7 @@ void draw(){
   text("Create polygon mode", createPolyButX + 5, createPolyButY + 20);
   text("Gift Wrapping - convex hull", giftWrapButX + 5,giftWrapButY+20);
   text("Graham Scan   - convex hull", grahamScButX + 5,grahamScButY+20);
+  text("Triangulation sweep line", triangulationButX + 5, triangulationButY + 20);
   
  
   
@@ -154,7 +160,7 @@ void draw(){
   fill(color(#3FCBF0));
   if(polyLines != null){
     for (int i = 0; i< polyLines.size(); i++) {
-      if(i!= polyLines.size() + 2){
+      if(i == 0 || i != polyLines.size() -1){
         ellipse(polyLines.get(i).x, polyLines.get(i).y, pointSize, pointSize);
       }
       if(polyLines.get(i) != null && polyLines.size()>i+1){
