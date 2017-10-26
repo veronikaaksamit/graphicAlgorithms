@@ -132,7 +132,6 @@ void draw(){
   
  
   
-  
   //Printing points
   for (PVector p : points) {
       if(maxXPoint != null && p == maxXPoint){
@@ -143,7 +142,6 @@ void draw(){
         ellipse(p.x, p.y, pointSize, pointSize);
       }
   }
-  
   if(CHull != null){
     for (int i = 0; i< CHull.length - 1; i++) {
       if(CHull[i] != null && CHull[i+1] != null){
@@ -152,17 +150,20 @@ void draw(){
     }
   }
   
+  
   fill(color(#3FCBF0));
   if(polyLines != null){
     for (int i = 0; i< polyLines.size(); i++) {
-      ellipse(polyLines.get(i).x, polyLines.get(i).y, pointSize, pointSize);
+      if(i < polyLines.size()+1){
+        ellipse(polyLines.get(i).x, polyLines.get(i).y, pointSize, pointSize);
+      }
       if(polyLines.get(i) != null && polyLines.size()>i+1){
          line( polyLines.get(i).x, polyLines.get(i).y, polyLines.get(i+1).x, polyLines.get(i+1).y );
       }
     }
   }
   
-  fill(0);
+  /*fill(0);
   if(A!= null){
     text("A", A.x,A.y);
   }
@@ -171,7 +172,7 @@ void draw(){
   }
   if(C!= null){
      text("C", C.x, C.y);
-  }
+  }*/
   
   
 }
@@ -188,7 +189,6 @@ void mousePressed() {
       setModes(false, true, false, false);
     } else if ( overBut(createPolyButX, createPolyButY) ) {
       setModes(false, false, false, true);
-      removeAllPoints();
     }else if (overBut(clearSceneButX, clearSceneButY)) {
       setModes(false, false, false, false);
       removeAllPoints();
@@ -386,6 +386,7 @@ void createPolygon(){
 void removeAllPoints(){
   points.clear();
   polyLines.clear();
+  CHull = new PVector[]{};
   println("CLEARING THE SCENE");
   
 }
