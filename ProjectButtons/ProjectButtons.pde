@@ -424,6 +424,32 @@ void setModes(boolean add, boolean delete, boolean move, boolean createPoly){
   createPolyMode = createPoly;
 }
 
+PVector getMaxPointYOnPolygon(){
+  float max = 0;
+  PVector pointMaxY = null;
+  for(int i = 0; i < polyLines.size(); i++){
+      if(polyLines.get(i).y > max){
+        pointMaxY = points.get(i);
+        max = points.get(i).y;
+      }
+  }
+  return pointMaxY;
+}
+
+PVector getMinPointYOnPolygon(){
+  float min = MAX_FLOAT;
+  PVector pointMinY = null;
+  for(int i = 0; i < polyLines.size(); i++){
+      if(polyLines.get(i).y < min){
+        pointMinY = points.get(i);
+        min = points.get(i).y;
+      }
+  }
+  return pointMinY;
+}
+
+
+
 PVector getMaxPointX(){
   float max = 0;
   PVector pointMaxX = null;
