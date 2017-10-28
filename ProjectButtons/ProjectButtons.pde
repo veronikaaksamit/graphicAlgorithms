@@ -7,7 +7,7 @@ int butSizeY = 30;
 
 int pointSize = 18;
 
-int numOfBut = 9;
+int numOfBut = 10;
 int addPointButX, addPointButY;
 int clearSceneButX, clearSceneButY;
 int randomPointsButX,randomPointsButY;
@@ -249,7 +249,7 @@ void giftWrapping(){
     ArrayList<PVector> tempPoints = new ArrayList<PVector>(points);
     
     CHull = new PVector[tempPoints.size()+1];
-    maxXPoint = getMaxXPoint(points).get(0);
+    maxXPoint = getMaxXPoints(points).get(0);
     PVector B = CHull[0] = maxXPoint;
     
     //point under maxXPoint 
@@ -341,18 +341,12 @@ void grahamScan(){
 
 void triangulation(){
   if(polyLines.size()>3){
-    
-    println("Before");
-    for(PVector p: polyLines){
-      println(p);
-    }
-    println(".........................");
     ArrayList<PVector> lexiPolyLines =lexiSort(polyLines);
     polyLines = lexiPolyLines;
-    println(".........................");
-    println("After");
+    ArrayList<PVector> rightP;
+    ArrayList<PVector> leftP;
     for(PVector p: polyLines){
-      println(p);
+      
     }
     
   }else{
@@ -364,11 +358,11 @@ ArrayList<PVector> lexiSort(ArrayList<PVector> lines){
   ArrayList<PVector> result = new ArrayList<PVector>();
   float arraySize = lines.size();
   while(result.size() != arraySize){
-    ArrayList<PVector> minX = getMinXPoints(lines);
-    while(minX.size()>0){
-      PVector point = getMinYPoint(minX);
+    ArrayList<PVector> minY = getMinYPoints(lines);
+    while(minY.size()>0){
+      PVector point = getMinXPoint(minY);
       result.add(point);
-      minX.remove(point);
+      minY.remove(point);
       lines.remove(point);
       println(point);
     }  
@@ -377,6 +371,21 @@ ArrayList<PVector> lexiSort(ArrayList<PVector> lines){
   return result;
 }
 
+ArrayList<PVector> getMinYPoints(ArrayList<PVector> lines){
+  ArrayList<PVector> result = new ArrayList<PVector>();
+  float min = MAX_FLOAT;
+  for(PVector p : lines){
+      if(p.y == min){
+        result.add(p);
+      }
+      if(p.y < min){
+        min = p.y;
+        result.clear();
+        result.add(p);
+      }
+  }
+  return result;
+}
 
 ArrayList<PVector> getMinXPoints(ArrayList<PVector> lines){
   ArrayList<PVector> result = new ArrayList<PVector>();
@@ -394,7 +403,7 @@ ArrayList<PVector> getMinXPoints(ArrayList<PVector> lines){
   return result;
 }
 
-ArrayList<PVector> getMaxXPoint(ArrayList<PVector> points){
+ArrayList<PVector> getMaxXPoints(ArrayList<PVector> points){
   ArrayList<PVector> result = new ArrayList<PVector>();
   float max = 0;
   for(PVector p : points){
@@ -410,12 +419,40 @@ ArrayList<PVector> getMaxXPoint(ArrayList<PVector> points){
   return result;
 }
 
+ArrayList<PVector> getMaxYPoints(ArrayList<PVector> points){
+  ArrayList<PVector> result = new ArrayList<PVector>();
+  float max = 0;
+  for(PVector p : points){
+      if(p.y == max){
+        result.add(p);
+      }
+      if(p.y > max){
+        max = p.y;
+        result.clear();
+        result.add(p);
+      }
+  }
+  return result;
+}
+
 PVector getMinYPoint(ArrayList<PVector> points){
   PVector result = null;
   float min = MAX_FLOAT;
   for(PVector p : points){
       if(p.y < min){
         min = p.y;
+        result = p;
+      }
+  }
+  return result;
+}
+
+PVector getMinXPoint(ArrayList<PVector> points){
+  PVector result = null;
+  float min = MAX_FLOAT;
+  for(PVector p : points){
+      if(p.x < min){
+        min = p.x;
         result = p;
       }
   }
