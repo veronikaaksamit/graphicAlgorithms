@@ -37,12 +37,10 @@ PVector changingPoint;
 //Convex hull data structures
 PVector maxXPoint;
 PVector[] CHull;
-PVector A;
-PVector B;
-PVector C;
 
 //PolygonCreation
 ArrayList<PVector> polyLines;
+PVector minYPPoint, maxYPPoint;
 
 void setup() {
        //size(1280, 800);
@@ -162,29 +160,23 @@ void draw(){
   }
   
   
-  fill(color(#3FCBF0));
   if(polyLines != null){
     for (int i = 0; i< polyLines.size(); i++) {
-      if(i == 0 || i != polyLines.size() -1){
-        ellipse(polyLines.get(i).x, polyLines.get(i).y, pointSize, pointSize);
+      if(minYPPoint == polyLines.get(i) || maxYPPoint == polyLines.get(i)){
+        fill(color(#2BFA94));
+      }else{
+        fill(color(#3FCBF0));
       }
+      ellipse(polyLines.get(i).x, polyLines.get(i).y, pointSize, pointSize);
+      fill(0);
+      text(i, polyLines.get(i).x - 3, polyLines.get(i).y+3);
       if(polyLines.get(i) != null && polyLines.size()>i+1){
          line( polyLines.get(i).x, polyLines.get(i).y, polyLines.get(i+1).x, polyLines.get(i+1).y );
+      }else{
+        line( polyLines.get(0).x, polyLines.get(0).y, polyLines.get(i).x, polyLines.get(i).y );
       }
     }
   }
-  
-  /*fill(0);
-  if(A!= null){
-    text("A", A.x,A.y);
-  }
-  if(B!= null){
-    text("B", B.x, B.y);
-  }
-  if(C!= null){
-     text("C", C.x, C.y);
-  }*/
-  
   
 }
 
@@ -257,12 +249,12 @@ void giftWrapping(){
     ArrayList<PVector> tempPoints = new ArrayList<PVector>(points);
     
     CHull = new PVector[tempPoints.size()+1];
-    maxXPoint = getMaxPointX();
-    B = CHull[0] = maxXPoint;
+    maxXPoint = getMaxXPoint(points).get(0);
+    PVector B = CHull[0] = maxXPoint;
     
     //point under maxXPoint 
     PVector basePoint = new PVector(maxXPoint.x, maxXPoint.y + 2);
-    A = basePoint;
+    PVector A = basePoint;
     
     int counter = 1;
     
@@ -350,11 +342,98 @@ void grahamScan(){
 void triangulation(){
   if(polyLines.size()>3){
     
+    println("Before");
+    for(PVector p: polyLines){
+      println(p);
+    }
+    println(".........................");
+    ArrayList<PVector> lexiPolyLines =lexiSort(polyLines);
+    polyLines = lexiPolyLines;
+    println(".........................");
+    println("After");
+    for(PVector p: polyLines){
+      println(p);
+    }
     
   }else{
     createPolyMode = true;
   }
 }
+
+ArrayList<PVector> lexiSort(ArrayList<PVector> lines){
+  ArrayList<PVector> result = new ArrayList<PVector>();
+  float arraySize = lines.size();
+  while(result.size() != arraySize){
+    ArrayList<PVector> minX = getMinXPoints(lines);
+    while(minX.size()>0){
+      PVector point = getMinYPoint(minX);
+      result.add(point);
+      minX.remove(point);
+      lines.remove(point);
+      println(point);
+    }  
+  }
+  
+  return result;
+}
+
+
+ArrayList<PVector> getMinXPoints(ArrayList<PVector> lines){
+  ArrayList<PVector> result = new ArrayList<PVector>();
+  float min = MAX_FLOAT;
+  for(PVector p : lines){
+      if(p.x == min){
+        result.add(p);
+      }
+      if(p.x < min){
+        min = p.x;
+        result.clear();
+        result.add(p);
+      }
+  }
+  return result;
+}
+
+ArrayList<PVector> getMaxXPoint(ArrayList<PVector> points){
+  ArrayList<PVector> result = new ArrayList<PVector>();
+  float max = 0;
+  for(PVector p : points){
+      if(p.x == max){
+        result.add(p);
+      }
+      if(p.x > max){
+        max = p.x;
+        result.clear();
+        result.add(p);
+      }
+  }
+  return result;
+}
+
+PVector getMinYPoint(ArrayList<PVector> points){
+  PVector result = null;
+  float min = MAX_FLOAT;
+  for(PVector p : points){
+      if(p.y < min){
+        min = p.y;
+        result = p;
+      }
+  }
+  return result;
+}
+
+PVector getMaxYPoint(ArrayList<PVector> points){
+  PVector result = null;
+  float max = 0;
+  for(PVector p : points){
+      if(p.y > max){
+        max = p.y;
+        result = p;
+      }
+  }
+  return result;
+}
+
 
 void mouseReleased(){
   //NEED to have point to be moved, can not move it to button area
@@ -420,7 +499,11 @@ void createPolygon(){
       println("Same points");
     }
   }
-  polyLines.add(new PVector(mouseX, mouseY));
+  if(createPolyMode){
+    polyLines.add(new PVector(mouseX, mouseY));
+  }
+  maxYPPoint = getMaxYPoint(polyLines);
+  minYPPoint = getMinYPoint(polyLines);
 }
 
 //Removing points from screnn
@@ -456,42 +539,4 @@ void setModes(boolean add, boolean delete, boolean move, boolean createPoly){
   deleteMode = delete;
   moveMode = move;
   createPolyMode = createPoly;
-}
-
-PVector getMaxPointYOnPolygon(){
-  float max = 0;
-  PVector pointMaxY = null;
-  for(int i = 0; i < polyLines.size(); i++){
-      if(polyLines.get(i).y > max){
-        pointMaxY = points.get(i);
-        max = points.get(i).y;
-      }
-  }
-  return pointMaxY;
-}
-
-PVector getMinPointYOnPolygon(){
-  float min = MAX_FLOAT;
-  PVector pointMinY = null;
-  for(int i = 0; i < polyLines.size(); i++){
-      if(polyLines.get(i).y < min){
-        pointMinY = points.get(i);
-        min = points.get(i).y;
-      }
-  }
-  return pointMinY;
-}
-
-
-
-PVector getMaxPointX(){
-  float max = 0;
-  PVector pointMaxX = null;
-  for(int i = 0; i < points.size(); i++){
-      if(points.get(i).x > max){
-        pointMaxX = points.get(i);
-        max = points.get(i).x;
-      }
-  }
-  return pointMaxX;
 }
