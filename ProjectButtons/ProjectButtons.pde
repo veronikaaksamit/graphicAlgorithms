@@ -14,6 +14,7 @@ int randomPointsButX,randomPointsButY;
 int movePointButX,movePointButY;
 int deletePointButX,deletePointButY;
 int createPolyButX,createPolyButY;
+int removePolyButX, removePolyButY;
 int giftWrapButX, giftWrapButY;
 int grahamScButX, grahamScButY;
 int triangulationButX, triangulationButY;
@@ -63,9 +64,12 @@ void setup() {
        
        createPolyButX = deletePointButX;
        createPolyButY = deletePointButY + butSizeY;
+       
+       removePolyButX = createPolyButX;
+       removePolyButY = createPolyButY + butSizeY;
         
-       giftWrapButX = createPolyButX;
-       giftWrapButY = createPolyButY + butSizeY;
+       giftWrapButX = removePolyButX;
+       giftWrapButY = removePolyButY + butSizeY;
        
        grahamScButX = giftWrapButX;
        grahamScButY = giftWrapButY + butSizeY;
@@ -118,8 +122,8 @@ void draw(){
   }
   rect(createPolyButX, createPolyButY, butSizeX, butSizeY);
   
-  
   fill(currentColor);
+  rect(removePolyButX, removePolyButY, butSizeX, butSizeY);
   rect(giftWrapButX, giftWrapButY, butSizeX, butSizeY);
   rect(grahamScButX, grahamScButY, butSizeX, butSizeY);
   rect(triangulationButX, triangulationButY, butSizeX, butSizeY);
@@ -131,7 +135,8 @@ void draw(){
   text("Add point mode", addPointButX + 5,addPointButY+20);
   text("Move point mode", movePointButX + 5,movePointButY+20);
   text("Delete point mode", deletePointButX + 5,deletePointButY+20);
-  text("Create polygon mode", createPolyButX + 5, createPolyButY + 20);
+  text("Create polygon = POLY MODE", createPolyButX + 5, createPolyButY + 20);
+  text("Remove polygon by POLY MODE", removePolyButX + 5, removePolyButY + 20);
   text("Gift Wrapping - convex hull", giftWrapButX + 5,giftWrapButY+20);
   text("Graham Scan   - convex hull", grahamScButX + 5,grahamScButY+20);
   text("Triangulation sweep line", triangulationButX + 5, triangulationButY + 20);
@@ -187,26 +192,38 @@ void mousePressed() {
   
   //If you click into Buttons area
   if(inButtonsArea(mouseX, mouseY)){
-    if ( overBut(addPointButX, addPointButY) ) {
+    
+    if (overBut(addPointButX, addPointButY) ) {
       setModes(true, false, false, false);
+      polyLines.clear();
     } else if ( overBut(movePointButX, movePointButY) ) {
       setModes(false, false, true, false);
+      polyLines.clear();
     } else if ( overBut(deletePointButX, deletePointButY) ) {
       setModes(false, true, false, false);
+      polyLines.clear();
     } else if ( overBut(createPolyButX, createPolyButY) ) {
       setModes(false, false, false, true);
       removeAllPoints();
+    }else if ( overBut(removePolyButX, removePolyButY) ) {
+      setModes(false, false, false, false);
+      polyLines.clear();
     }else if (overBut(clearSceneButX, clearSceneButY)) {
       setModes(false, false, false, false);
       removeAllPoints();
     }else if (overBut(randomPointsButX, randomPointsButY)) {
       setModes(false, false, false, false);
+      polyLines.clear();
       addRandomPoints();
     }else if (overBut(giftWrapButX, giftWrapButY)) {
       setModes(false, false, false, false);
       giftWrapping();
     }else if (overBut(grahamScButX, grahamScButY)) {
       setModes(false, false, false, false);
+      grahamScan();
+    }else if (overBut(triangulationButX, triangulationButY)) {
+      setModes(false, false, false, false);
+      triangulation();
     }
   }
   
@@ -229,6 +246,9 @@ void mousePressed() {
   }
   
 }
+
+
+
 
 void giftWrapping(){
 
@@ -262,7 +282,6 @@ void giftWrapping(){
       if(CHull[counter]!= null && CHull[counter - 1]!= null){
         B = CHull[counter];
         A = CHull[counter-1];
-        println("setting A and B after first iteration");
         counter++;
       }
       
@@ -316,10 +335,26 @@ void giftWrapping(){
       }
     }    
     
+  }else{
+    addMode = true;
   }
-  
 }
 
+void grahamScan(){
+  if(points.size() >= 3){
+  }else{
+    addMode = true;
+  }
+}
+
+void triangulation(){
+  if(polyLines.size()>3){
+    
+    
+  }else{
+    createPolyMode = true;
+  }
+}
 
 void mouseReleased(){
   //NEED to have point to be moved, can not move it to button area
@@ -352,7 +387,6 @@ void deletePoint(){
 boolean isPoint(float x, float y){
   float distX = x - mouseX;
   float distY = y - mouseY;
-  println(sqrt(sq(distX) + sq(distY)) < pointSize/2 );
   return sqrt(sq(distX) + sq(distY)) < pointSize/2 ;
 }
 
