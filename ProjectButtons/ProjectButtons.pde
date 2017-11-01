@@ -367,16 +367,48 @@ void triangulation(){
     polyLines = lexiPolyLines;
     ArrayList<PVector> rightP;
     ArrayList<PVector> leftP;
-    for(PVector p: polyLines){
-
-      if(p.x < )
+    polyLines = lexiSort(polyLines);
+    
+    int minPointIndex = polyLines.indexOf(minYPPoint);
+    int maxPointIndex = polyLines.indexOf(maxYPPoint);
+    Integer[] nearIndices = getNearIndices(polyLines, maxPointIndex);
+    PVector a = polyLines.get(nearIndices[0]);
+    PVector b = polyLines.get(nearIndices[1]);
+    if(a.x < b.x){
+      //od max(aj) -> a -> do min je RIGHT PATH
+      //od min(aj) -> b -> do max je LEFT PATH
+    }else{
+      //od max(aj) -> b -> do min je RIGHT PATH
+      //od min(aj) -> a -> do max je LEFT PATH
     }
     
-  }else{
+    for(PVector p: polyLines){
+      
+    }
+  }
+   else{
     createPolyMode = true;
   }
 }
 
+Integer[] getNearIndices(ArrayList<PVector>points, int index){
+  Integer[] result = new Integer[2];
+  if(index == 0){
+    result[0] = 1;
+    result[1] = points.size() - 1;
+    return result;
+  }
+  if(index == points.size() - 1){
+    result[0] = 0;
+    result[1] = points.size() - 2;
+    return result;
+  }
+  
+  result[0] = index - 1;
+  result[1] = index + 1;
+  
+  return result;
+}
 void kDTree(){
   float[] xAxes = new float[points.size()];
   float[] yAxes = new float[points.size()];
