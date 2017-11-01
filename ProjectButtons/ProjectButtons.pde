@@ -42,6 +42,9 @@ PVector[] CHull;
 ArrayList<PVector> polyLines;
 PVector minYPPoint, maxYPPoint;
 
+//Triangulation
+ArrayList<PVector> rightPath, leftPath;
+
 void setup() {
        //size(1280, 800);
        size(960, 540);
@@ -80,7 +83,8 @@ void setup() {
        
        points = new ArrayList<PVector>();
        polyLines = new ArrayList<PVector>();
-       
+       rightPath = new ArrayList<PVector>();
+       leftPath = new ArrayList<PVector>();
 }
 
 void draw(){
@@ -346,7 +350,7 @@ void triangulation(){
     ArrayList<PVector> rightP;
     ArrayList<PVector> leftP;
     for(PVector p: polyLines){
-      
+      if(p.x < )
     }
     
   }else{
