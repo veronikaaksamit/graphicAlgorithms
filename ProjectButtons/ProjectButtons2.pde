@@ -198,7 +198,7 @@ void grahamScan(){
          float length2 = sqrt(sq(vec2.x) + sq(vec2.y));
          float angle = 180 - degrees(acos((vec1.x * vec2.x + vec1.y * vec2.y)/ (length1 * length2)));
          
-         gSPoints.add(new GrahamScanPoint(maxXPoint, angle));
+         gSPoints.add(new GrahamScanPoint(p, angle));
       }
     }
     /*for(GrahamScanPoint p: gSPoints){
@@ -206,9 +206,9 @@ void grahamScan(){
     }*/
     
     Collections.sort(gSPoints);
-    /*for(GrahamScanPoint p: gSPoints){
+    for(GrahamScanPoint p: gSPoints){
       println(p);
-    }*/
+    }
     
   }else{
     addMode = true;
