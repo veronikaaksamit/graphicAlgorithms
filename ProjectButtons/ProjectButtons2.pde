@@ -128,7 +128,7 @@ void giftWrapping(){
       
       //values about BA vector
       vec1 = new PVector(A.x - B.x, A.y - B.y  );//BA
-      line( B.x, B.y, A.x, A.y );
+      //line( B.x, B.y, A.x, A.y );
       length1 = sqrt(sq(vec1.x) + sq(vec1.y));
       
       float angle = 360;
@@ -180,6 +180,35 @@ void giftWrapping(){
 
 void grahamScan(){
   if(points.size() >= 3){
+    maxXPoint = getMaxXPoints(points).get(0);
+    ArrayList<GrahamScanPoint> gSPoints = new ArrayList<GrahamScanPoint>();
+    
+    gSPoints.add(new GrahamScanPoint(maxXPoint, 360));
+    
+    //point under maxXPoint 
+    PVector basePoint = new PVector(maxXPoint.x, maxXPoint.y + 2);
+    
+    PVector vec1 = new PVector(basePoint.x - maxXPoint.x, basePoint.y - maxXPoint.y);
+    float length1 = sqrt(sq(vec1.x) + sq(vec1.y));
+    
+    
+    for(PVector p: points){
+      if(p != maxXPoint){
+         PVector vec2 = new PVector(p.x - maxXPoint.x, p.y - maxXPoint.y); //Bp ...p possible solution
+         float length2 = sqrt(sq(vec2.x) + sq(vec2.y));
+         float angle = 180 - degrees(acos((vec1.x * vec2.x + vec1.y * vec2.y)/ (length1 * length2)));
+         
+         gSPoints.add(new GrahamScanPoint(maxXPoint, angle));
+      }
+    }
+    /*for(GrahamScanPoint p: gSPoints){
+      println(p);
+    }*/
+    
+    Collections.sort(gSPoints);
+    /*for(GrahamScanPoint p: gSPoints){
+      println(p);
+    }*/
     
   }else{
     addMode = true;
