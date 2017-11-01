@@ -7,7 +7,7 @@ int butSizeY = 30;
 
 int pointSize = 18;
 
-int numOfBut = 10;
+int numOfBut = 11;
 int addPointButX, addPointButY;
 int clearSceneButX, clearSceneButY;
 int randomPointsButX,randomPointsButY;
@@ -18,6 +18,7 @@ int removePolyButX, removePolyButY;
 int giftWrapButX, giftWrapButY;
 int grahamScButX, grahamScButY;
 int triangulationButX, triangulationButY;
+int kDTreeButX, kDTreeButY;
 
 //Modes
 boolean moveMode = false;
@@ -42,8 +43,13 @@ PVector[] CHull;
 ArrayList<PVector> polyLines;
 PVector minYPPoint, maxYPPoint;
 
+
 //Triangulation
 ArrayList<PVector> rightPath, leftPath;
+
+//kDTree
+ArrayList<Float> verticalLines;
+ArrayList<Float> horizontalLines;
 
 void setup() {
        //size(1280, 800);
@@ -78,13 +84,20 @@ void setup() {
        triangulationButX = grahamScButX;
        triangulationButY = grahamScButY + butSizeY;
        
+       kDTreeButX = triangulationButX;
+       kDTreeButY = triangulationButY + butSizeY;
+       
        font = createFont("Courier New Bold", 16);
        textFont(font); 
        
        points = new ArrayList<PVector>();
        polyLines = new ArrayList<PVector>();
+
        rightPath = new ArrayList<PVector>();
        leftPath = new ArrayList<PVector>();
+
+       verticalLines = new ArrayList<Float>();
+       horizontalLines = new ArrayList<Float>();
 }
 
 void draw(){
@@ -129,6 +142,7 @@ void draw(){
   rect(giftWrapButX, giftWrapButY, butSizeX, butSizeY);
   rect(grahamScButX, grahamScButY, butSizeX, butSizeY);
   rect(triangulationButX, triangulationButY, butSizeX, butSizeY);
+  rect(kDTreeButX, kDTreeButY, butSizeX, butSizeY);
   
   //Adding names to buttons
   fill(0);
@@ -142,6 +156,7 @@ void draw(){
   text("Gift Wrapping - convex hull", giftWrapButX + 5,giftWrapButY+20);
   text("Graham Scan   - convex hull", grahamScButX + 5,grahamScButY+20);
   text("Triangulation sweep line", triangulationButX + 5, triangulationButY + 20);
+  text("k-D tree", kDTreeButX + 5, kDTreeButY + 20);
   
  
   
@@ -220,6 +235,9 @@ void mousePressed() {
     }else if (overBut(triangulationButX, triangulationButY)) {
       setModes(false, false, false, false);
       triangulation();
+    }else if (overBut(kDTreeButX, kDTreeButY)) {
+      setModes(false, false, false, false);
+      kDTree();
     }
   }
   
@@ -350,12 +368,26 @@ void triangulation(){
     ArrayList<PVector> rightP;
     ArrayList<PVector> leftP;
     for(PVector p: polyLines){
+
       if(p.x < )
     }
     
   }else{
     createPolyMode = true;
   }
+}
+
+void kDTree(){
+  float[] xAxes = new float[points.size()];
+  float[] yAxes = new float[points.size()];
+  for(int i = 0; i < points.size(); i++ ){
+    println(points.get(i));
+    xAxes[i] = points.get(i).x;
+  }
+  
+  xAxes = sort(xAxes);
+  println(xAxes.length/2.0);
+  println(xAxes[xAxes.length/2]);
 }
 
 ArrayList<PVector> lexiSort(ArrayList<PVector> lines){
