@@ -21,14 +21,6 @@ ArrayList<PVector> rightPath, leftPath;
 ArrayList<Float> verticalLines;
 ArrayList<Float> horizontalLines;
 
-
-
-
-
-
-
-
-
 void kDTree(){
   float[] xAxes = new float[points.size()];
   float[] yAxes = new float[points.size()];
@@ -70,6 +62,7 @@ void triangulation(){
     }
   }
    else{
+    removeAllPoints();
     createPolyMode = true;
   }
 }
@@ -80,6 +73,7 @@ void triangulation(){
 
 
 void grahamScan(){
+  removeLinesAndPolygons();
   if(points.size() >= 3){
     gSPoints = new ArrayList<GrahamScanPoint>();
     maxXPoint = getMaxXPoints(points).get(0);
@@ -131,7 +125,7 @@ void grahamScan(){
 }
 
 void giftWrapping(){
-
+  removeLinesAndPolygons();
   if(points.size() >= 3){
     println("Gift wrapping algorithm ... Convex Hull");
     ArrayList<PVector> tempPoints = new ArrayList<PVector>(points);
@@ -281,9 +275,12 @@ void addRandomPoints(){
 //Removing points from screnn
 void removeAllPoints(){
   points.clear();
+  removeLinesAndPolygons();
+  println("CLEARING THE SCENE");
+}
+
+void removeLinesAndPolygons(){
   polyLines.clear();
   gSPoints.clear();
   CHull = new PVector[]{};
-  println("CLEARING THE SCENE");
-  
 }

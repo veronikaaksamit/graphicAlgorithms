@@ -74,12 +74,14 @@ void setup() {
        //Adding, deleting, moving points ...used for Graham Scan + Gift Wrapping
        points = new ArrayList<PVector>();
        
+       //GrahamScan structure
+       gSPoints = new ArrayList<GrahamScanPoint>();
+       
        //Triangulation
        polyLines = new ArrayList<PVector>();
        rightPath = new ArrayList<PVector>();
        leftPath = new ArrayList<PVector>();
        
-
        verticalLines = new ArrayList<Float>();
        horizontalLines = new ArrayList<Float>();
 }
