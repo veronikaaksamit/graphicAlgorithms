@@ -195,3 +195,64 @@ void draw(){
   }
   
 }
+
+//setting modes + calling functions when button pressed
+void mousePressed() {
+  
+  //If you click into Buttons area
+  if(inButtonsArea(mouseX, mouseY)){
+    
+    if (overBut(addPointButX, addPointButY) ) {
+      setModes(true, false, false, false);
+      polyLines.clear();
+    } else if ( overBut(movePointButX, movePointButY) ) {
+      setModes(false, false, true, false);
+      polyLines.clear();
+    } else if ( overBut(deletePointButX, deletePointButY) ) {
+      setModes(false, true, false, false);
+      polyLines.clear();
+    } else if ( overBut(createPolyButX, createPolyButY) ) {
+      setModes(false, false, false, true);
+      removeAllPoints();
+    }else if ( overBut(removePolyButX, removePolyButY) ) {
+      setModes(false, false, false, false);
+      polyLines.clear();
+    }else if (overBut(clearSceneButX, clearSceneButY)) {
+      setModes(false, false, false, false);
+      removeAllPoints();
+    }else if (overBut(randomPointsButX, randomPointsButY)) {
+      setModes(false, false, false, false);
+      polyLines.clear();
+      addRandomPoints();
+    }else if (overBut(giftWrapButX, giftWrapButY)) {
+      setModes(false, false, false, false);
+      giftWrapping();
+    }else if (overBut(grahamScButX, grahamScButY)) {
+      setModes(false, false, false, false);
+      grahamScan();
+    }else if (overBut(triangulationButX, triangulationButY)) {
+      setModes(false, false, false, false);
+      triangulation();
+    }else if (overBut(kDTreeButX, kDTreeButY)) {
+      setModes(false, false, false, false);
+      kDTree();
+    }
+  }
+  
+  //If you click outside buttons area
+  if(!inButtonsArea(mouseX, mouseY)){
+    if (addMode == true) {
+       addPoint();
+    }
+    if (deleteMode == true) {
+        deletePoint();
+    }
+    if (moveMode == true) {
+        movePoint();
+    }
+    if(createPolyMode == true){
+        createPolygon();
+    }
+  }
+  
+}

@@ -24,70 +24,111 @@ ArrayList<Float> horizontalLines;
 
 
 
-void mousePressed() {
-  
-  //If you click into Buttons area
-  if(inButtonsArea(mouseX, mouseY)){
-    
-    if (overBut(addPointButX, addPointButY) ) {
-      setModes(true, false, false, false);
-      polyLines.clear();
-    } else if ( overBut(movePointButX, movePointButY) ) {
-      setModes(false, false, true, false);
-      polyLines.clear();
-    } else if ( overBut(deletePointButX, deletePointButY) ) {
-      setModes(false, true, false, false);
-      polyLines.clear();
-    } else if ( overBut(createPolyButX, createPolyButY) ) {
-      setModes(false, false, false, true);
-      removeAllPoints();
-    }else if ( overBut(removePolyButX, removePolyButY) ) {
-      setModes(false, false, false, false);
-      polyLines.clear();
-    }else if (overBut(clearSceneButX, clearSceneButY)) {
-      setModes(false, false, false, false);
-      removeAllPoints();
-    }else if (overBut(randomPointsButX, randomPointsButY)) {
-      setModes(false, false, false, false);
-      polyLines.clear();
-      addRandomPoints();
-    }else if (overBut(giftWrapButX, giftWrapButY)) {
-      setModes(false, false, false, false);
-      giftWrapping();
-    }else if (overBut(grahamScButX, grahamScButY)) {
-      setModes(false, false, false, false);
-      grahamScan();
-    }else if (overBut(triangulationButX, triangulationButY)) {
-      setModes(false, false, false, false);
-      triangulation();
-    }else if (overBut(kDTreeButX, kDTreeButY)) {
-      setModes(false, false, false, false);
-      kDTree();
-    }
+
+
+
+
+
+void kDTree(){
+  float[] xAxes = new float[points.size()];
+  float[] yAxes = new float[points.size()];
+  for(int i = 0; i < points.size(); i++ ){
+    println(points.get(i));
+    xAxes[i] = points.get(i).x;
   }
   
-  
-  
-  //If you click outside buttons area
-  if(!inButtonsArea(mouseX, mouseY)){
-    if (addMode == true) {
-       addPoint();
-    }
-    if (deleteMode == true) {
-        deletePoint();
-    }
-    if (moveMode == true) {
-        movePoint();
-    }
-    if(createPolyMode == true){
-        createPolygon();
-    }
-  }
-  
+  xAxes = sort(xAxes);
+  println(xAxes.length/2.0);
+  println(xAxes[xAxes.length/2]);
 }
 
 
 
+void triangulation(){
+  if(polyLines.size()>3){
+    ArrayList<PVector> lexiPolyLines =lexiSort(polyLines);
+    polyLines = lexiPolyLines;
+    ArrayList<PVector> rightP;
+    ArrayList<PVector> leftP;
+    polyLines = lexiSort(polyLines);
+    
+    int minPointIndex = polyLines.indexOf(minYPPoint);
+    int maxPointIndex = polyLines.indexOf(maxYPPoint);
+    Integer[] nearIndices = getNearIndices(polyLines.size(), maxPointIndex);
+    PVector a = polyLines.get(nearIndices[0]);
+    PVector b = polyLines.get(nearIndices[1]);
+    if(a.x < b.x){
+      //od max(aj) -> a -> do min je RIGHT PATH
+      //od min(aj) -> b -> do max je LEFT PATH
+    }else{
+      //od max(aj) -> b -> do min je RIGHT PATH
+      //od min(aj) -> a -> do max je LEFT PATH
+    }
+    
+    for(PVector p: polyLines){
+      
+    }
+  }
+   else{
+    createPolyMode = true;
+  }
+}
+
+
+
+
+
+
+void grahamScan(){
+  if(points.size() >= 3){
+    gSPoints = new ArrayList<GrahamScanPoint>();
+    maxXPoint = getMaxXPoints(points).get(0);
+    //added maxX point to structure ...1.point
+    gSPoints.add(new GrahamScanPoint(maxXPoint, 360));
+    
+    //point under maxXPoint 
+    PVector basePoint = new PVector(maxXPoint.x, maxXPoint.y + 2);
+    
+    PVector vec1 = new PVector(basePoint.x - maxXPoint.x, basePoint.y - maxXPoint.y);
+    float length1 = sqrt( sq(vec1.x) + sq(vec1.y) );
+    
+    //calculating angle between maxXPoint, basePoint and every point in the area
+    for(PVector p : points){
+      if(p != maxXPoint){
+         PVector vec2 = new PVector(p.x - maxXPoint.x, p.y - maxXPoint.y); //Bp ...p possible solution
+         float length2 = sqrt( sq(vec2.x) + sq(vec2.y) );
+         float angle = 180 - degrees(acos((vec1.x * vec2.x + vec1.y * vec2.y) / (length1 * length2)));
+         
+         gSPoints.add(new GrahamScanPoint(p, angle));
+      }
+    }
+    
+    //sorting all point by angle from min to max angle
+    Collections.sort(gSPoints);
+    for(GrahamScanPoint p : gSPoints){
+      println(p);
+    }
+    
+    for(int i = 0; i < gSPoints.size(); i ++){
+      while(leftCriterion(gSPoints, i)){
+         println("removing " + gSPoints.get(i) + " from Graham Scan Structure");
+         gSPoints.remove(i);
+         if(i != 0){
+           //need to compare previous point (not the new i point)
+           i = i-1;
+         }
+      }
+    }
+    
+    for(int i = 0; i < gSPoints.size(); i ++){
+       println("Zostal " + gSPoints.get(i) );
+    }
+    
+  }else{
+    addMode = true;
+  }
+  
+}
 
 void giftWrapping(){
 
@@ -179,262 +220,22 @@ void giftWrapping(){
   }
 }
 
-void grahamScan(){
-  
-  if(points.size() >= 3){
-    gSPoints = new ArrayList<GrahamScanPoint>();
-    maxXPoint = getMaxXPoints(points).get(0);
-    
-    gSPoints.add(new GrahamScanPoint(maxXPoint, 360));
-    
-    //point under maxXPoint 
-    PVector basePoint = new PVector(maxXPoint.x, maxXPoint.y + 2);
-    
-    PVector vec1 = new PVector(basePoint.x - maxXPoint.x, basePoint.y - maxXPoint.y);
-    float length1 = sqrt( sq(vec1.x) + sq(vec1.y) );
-    
-    //calculating angle between maxXPoint, basePoint and every point in the area
-    for(PVector p : points){
-      if(p != maxXPoint){
-         PVector vec2 = new PVector(p.x - maxXPoint.x, p.y - maxXPoint.y); //Bp ...p possible solution
-         float length2 = sqrt( sq(vec2.x) + sq(vec2.y) );
-         float angle = 180 - degrees(acos((vec1.x * vec2.x + vec1.y * vec2.y) / (length1 * length2)));
-         
-         gSPoints.add(new GrahamScanPoint(p, angle));
-      }
-    }
-    
-    //sorting all point by angle from min to max angle
-    Collections.sort(gSPoints);
-    for(GrahamScanPoint p : gSPoints){
-      println(p);
-    }
-    
-    for(int i = 0; i < gSPoints.size(); i ++){
-      while(leftCriterion(gSPoints, i)){
-         println("removing " + gSPoints.get(i) + " from Graham Scan Structure");
-         gSPoints.remove(i);
-         if(i != 0){
-           //need to compare previous point (not the new i point)
-           i = i-1;
-         }
-      }
-    }
-    
-    for(int i = 0; i < gSPoints.size(); i ++){
-       println("Zostal " + gSPoints.get(i) );
-    }
-    
-  }else{
-    addMode = true;
-  }
-  
-}
-
-boolean leftCriterion(ArrayList<GrahamScanPoint> gSPoints, int index){
-  Integer[] nearIndices = getNearIndices(gSPoints.size(), index);
-  PVector p1 = gSPoints.get(nearIndices[0]).getCoordinates();
-  PVector p2 = gSPoints.get(index).getCoordinates();
-  PVector p3 = gSPoints.get(nearIndices[1]).getCoordinates();
-  
-  float resultInNum = (p2.x - p1.x)* (p3.y - p1.y) - (p2.y - p1.y) *(p3.x - p1.x);
-  if(resultInNum >= 0) return true; //no need for deletion turns LEFT
-  else return false;//need to remove middle point turns RIGHT
-}
-
-void triangulation(){
-  if(polyLines.size()>3){
-    ArrayList<PVector> lexiPolyLines =lexiSort(polyLines);
-    polyLines = lexiPolyLines;
-    ArrayList<PVector> rightP;
-    ArrayList<PVector> leftP;
-    polyLines = lexiSort(polyLines);
-    
-    int minPointIndex = polyLines.indexOf(minYPPoint);
-    int maxPointIndex = polyLines.indexOf(maxYPPoint);
-    Integer[] nearIndices = getNearIndices(polyLines.size(), maxPointIndex);
-    PVector a = polyLines.get(nearIndices[0]);
-    PVector b = polyLines.get(nearIndices[1]);
-    if(a.x < b.x){
-      //od max(aj) -> a -> do min je RIGHT PATH
-      //od min(aj) -> b -> do max je LEFT PATH
-    }else{
-      //od max(aj) -> b -> do min je RIGHT PATH
-      //od min(aj) -> a -> do max je LEFT PATH
-    }
-    
-    for(PVector p: polyLines){
-      
+void createPolygon(){
+  for(int i = 0; i < polyLines.size(); i++){
+    if(isPoint(polyLines.get(i).x, polyLines.get(i).y)){
+      println("CREATED POLYGON");
+      createPolyMode = false;
+      println("Same points");
     }
   }
-   else{
-    createPolyMode = true;
+  if(createPolyMode){
+    polyLines.add(new PVector(mouseX, mouseY));
   }
+  maxYPPoint = getMaxYPoint(polyLines);
+  minYPPoint = getMinYPoint(polyLines);
 }
 
-Integer[] getNearIndices(int arrayLSize, int index){
-  Integer[] result = new Integer[2];
-  if(index == 0){
-    result[0] = arrayLSize - 1;
-    result[1] = 1;
-    return result;
-  }
-  if(index == arrayLSize - 1){
-    result[0] = arrayLSize - 2;
-    result[1] = 0;
-    return result;
-  }
-  
-  result[0] = index - 1;
-  result[1] = index + 1;
-  
-  return result;
-}
-void kDTree(){
-  float[] xAxes = new float[points.size()];
-  float[] yAxes = new float[points.size()];
-  for(int i = 0; i < points.size(); i++ ){
-    println(points.get(i));
-    xAxes[i] = points.get(i).x;
-  }
-  
-  xAxes = sort(xAxes);
-  println(xAxes.length/2.0);
-  println(xAxes[xAxes.length/2]);
-}
-
-ArrayList<PVector> lexiSort(ArrayList<PVector> lines){
-  ArrayList<PVector> result = new ArrayList<PVector>();
-  float arraySize = lines.size();
-  while(result.size() != arraySize){
-    ArrayList<PVector> minY = getMinYPoints(lines);
-    while(minY.size()>0){
-      PVector point = getMinXPoint(minY);
-      result.add(point);
-      minY.remove(point);
-      lines.remove(point);
-      println(point);
-    }  
-  }
-  
-  return result;
-}
-
-ArrayList<PVector> getMinYPoints(ArrayList<PVector> lines){
-  ArrayList<PVector> result = new ArrayList<PVector>();
-  float min = MAX_FLOAT;
-  for(PVector p : lines){
-      if(p.y == min){
-        result.add(p);
-      }
-      if(p.y < min){
-        min = p.y;
-        result.clear();
-        result.add(p);
-      }
-  }
-  return result;
-}
-
-ArrayList<PVector> getMinXPoints(ArrayList<PVector> lines){
-  ArrayList<PVector> result = new ArrayList<PVector>();
-  float min = MAX_FLOAT;
-  for(PVector p : lines){
-      if(p.x == min){
-        result.add(p);
-      }
-      if(p.x < min){
-        min = p.x;
-        result.clear();
-        result.add(p);
-      }
-  }
-  return result;
-}
-
-ArrayList<PVector> getMaxXPoints(ArrayList<PVector> points){
-  ArrayList<PVector> result = new ArrayList<PVector>();
-  float max = 0;
-  for(PVector p : points){
-      if(p.x == max){
-        result.add(p);
-      }
-      if(p.x > max){
-        max = p.x;
-        result.clear();
-        result.add(p);
-      }
-  }
-  return result;
-}
-
-ArrayList<PVector> getMaxYPoints(ArrayList<PVector> points){
-  ArrayList<PVector> result = new ArrayList<PVector>();
-  float max = 0;
-  for(PVector p : points){
-      if(p.y == max){
-        result.add(p);
-      }
-      if(p.y > max){
-        max = p.y;
-        result.clear();
-        result.add(p);
-      }
-  }
-  return result;
-}
-
-PVector getMinYPoint(ArrayList<PVector> points){
-  PVector result = null;
-  float min = MAX_FLOAT;
-  for(PVector p : points){
-      if(p.y < min){
-        min = p.y;
-        result = p;
-      }
-  }
-  return result;
-}
-
-PVector getMinXPoint(ArrayList<PVector> points){
-  PVector result = null;
-  float min = MAX_FLOAT;
-  for(PVector p : points){
-      if(p.x < min){
-        min = p.x;
-        result = p;
-      }
-  }
-  return result;
-}
-
-PVector getMaxYPoint(ArrayList<PVector> points){
-  PVector result = null;
-  float max = 0;
-  for(PVector p : points){
-      if(p.y > max){
-        max = p.y;
-        result = p;
-      }
-  }
-  return result;
-}
-
-
-void mouseReleased(){
-  //NEED to have point to be moved, can not move it to button area
-  if(moveMode == true &&  changingPoint != null && !inButtonsArea(mouseX, mouseY)){
-    points.add(new PVector(mouseX, mouseY));
-    
-    //setting changingPoint to null after editation of point
-    changingPoint = null;
-  }
-}
-
-void movePoint(){
-  deletePoint();
-}
-
+//Removes point on specific possition if there is ont
 void deletePoint(){
   for(int i = 0; i < points.size(); i++){
     
@@ -449,10 +250,10 @@ void deletePoint(){
   }  
 }
 
-boolean isPoint(float x, float y){
-  float distX = x - mouseX;
-  float distY = y - mouseY;
-  return sqrt(sq(distX) + sq(distY)) < pointSize/2 ;
+//Just removes point, 
+//and moveMode is already set, so after mouse release point is created
+void movePoint(){
+  deletePoint();
 }
 
 //Adding single point
@@ -477,21 +278,6 @@ void addRandomPoints(){
   
 }
 
-void createPolygon(){
-  for(int i = 0; i < polyLines.size(); i++){
-    if(isPoint(polyLines.get(i).x, polyLines.get(i).y)){
-      println("CREATED POLYGON");
-      createPolyMode = false;
-      println("Same points");
-    }
-  }
-  if(createPolyMode){
-    polyLines.add(new PVector(mouseX, mouseY));
-  }
-  maxYPPoint = getMaxYPoint(polyLines);
-  minYPPoint = getMinYPoint(polyLines);
-}
-
 //Removing points from screnn
 void removeAllPoints(){
   points.clear();
@@ -500,30 +286,4 @@ void removeAllPoints(){
   CHull = new PVector[]{};
   println("CLEARING THE SCENE");
   
-}
-
-//Are you over button?
-boolean overBut(int x, int y) {
-  if (mouseX >= x && mouseX <= x + butSizeX
-      && mouseY >= y && mouseY <= y + butSizeY) {
-    return true;
-  } else {
-    return false;
-  }
-}
-
-//Whether you are in Buttons area 
-boolean inButtonsArea(float x, float y){
-  if(x < butSizeX + pointSize && y < butSizeY * numOfBut + pointSize){
-    return true;
-  }
-  return false;
-}
-
-//Setting modes of app 
-void setModes(boolean add, boolean delete, boolean move, boolean createPoly){
-  addMode = add;
-  deleteMode = delete;
-  moveMode = move;
-  createPolyMode = createPoly;
 }
