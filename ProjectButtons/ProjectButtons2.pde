@@ -7,6 +7,7 @@ PVector changingPoint;
 //Convex hull data structures
 PVector maxXPoint;
 PVector[] CHull;
+ArrayList<GrahamScanPoint> gSPoints;
 
 //PolygonCreation
 ArrayList<PVector> polyLines;
@@ -179,9 +180,10 @@ void giftWrapping(){
 }
 
 void grahamScan(){
+  
   if(points.size() >= 3){
+    gSPoints = new ArrayList<GrahamScanPoint>();
     maxXPoint = getMaxXPoints(points).get(0);
-    ArrayList<GrahamScanPoint> gSPoints = new ArrayList<GrahamScanPoint>();
     
     gSPoints.add(new GrahamScanPoint(maxXPoint, 360));
     
@@ -189,30 +191,55 @@ void grahamScan(){
     PVector basePoint = new PVector(maxXPoint.x, maxXPoint.y + 2);
     
     PVector vec1 = new PVector(basePoint.x - maxXPoint.x, basePoint.y - maxXPoint.y);
-    float length1 = sqrt(sq(vec1.x) + sq(vec1.y));
+    float length1 = sqrt( sq(vec1.x) + sq(vec1.y) );
     
-    
-    for(PVector p: points){
+    //calculating angle between maxXPoint, basePoint and every point in the area
+    for(PVector p : points){
       if(p != maxXPoint){
          PVector vec2 = new PVector(p.x - maxXPoint.x, p.y - maxXPoint.y); //Bp ...p possible solution
-         float length2 = sqrt(sq(vec2.x) + sq(vec2.y));
-         float angle = 180 - degrees(acos((vec1.x * vec2.x + vec1.y * vec2.y)/ (length1 * length2)));
+         float length2 = sqrt( sq(vec2.x) + sq(vec2.y) );
+         float angle = 180 - degrees(acos((vec1.x * vec2.x + vec1.y * vec2.y) / (length1 * length2)));
          
          gSPoints.add(new GrahamScanPoint(p, angle));
       }
     }
-    /*for(GrahamScanPoint p: gSPoints){
-      println(p);
-    }*/
     
+    //sorting all point by angle from min to max angle
     Collections.sort(gSPoints);
-    for(GrahamScanPoint p: gSPoints){
+    for(GrahamScanPoint p : gSPoints){
       println(p);
+    }
+    
+    for(int i = 0; i < gSPoints.size(); i ++){
+      while(leftCriterion(gSPoints, i)){
+         println("removing " + gSPoints.get(i) + " from Graham Scan Structure");
+         gSPoints.remove(i);
+         if(i != 0){
+           //need to compare previous point (not the new i point)
+           i = i-1;
+         }
+      }
+    }
+    
+    for(int i = 0; i < gSPoints.size(); i ++){
+       println("Zostal " + gSPoints.get(i) );
     }
     
   }else{
     addMode = true;
   }
+  
+}
+
+boolean leftCriterion(ArrayList<GrahamScanPoint> gSPoints, int index){
+  Integer[] nearIndices = getNearIndices(gSPoints.size(), index);
+  PVector p1 = gSPoints.get(nearIndices[0]).getCoordinates();
+  PVector p2 = gSPoints.get(index).getCoordinates();
+  PVector p3 = gSPoints.get(nearIndices[1]).getCoordinates();
+  
+  float resultInNum = (p2.x - p1.x)* (p3.y - p1.y) - (p2.y - p1.y) *(p3.x - p1.x);
+  if(resultInNum >= 0) return true; //no need for deletion turns LEFT
+  else return false;//need to remove middle point turns RIGHT
 }
 
 void triangulation(){
@@ -225,7 +252,7 @@ void triangulation(){
     
     int minPointIndex = polyLines.indexOf(minYPPoint);
     int maxPointIndex = polyLines.indexOf(maxYPPoint);
-    Integer[] nearIndices = getNearIndices(polyLines, maxPointIndex);
+    Integer[] nearIndices = getNearIndices(polyLines.size(), maxPointIndex);
     PVector a = polyLines.get(nearIndices[0]);
     PVector b = polyLines.get(nearIndices[1]);
     if(a.x < b.x){
@@ -245,16 +272,16 @@ void triangulation(){
   }
 }
 
-Integer[] getNearIndices(ArrayList<PVector>points, int index){
+Integer[] getNearIndices(int arrayLSize, int index){
   Integer[] result = new Integer[2];
   if(index == 0){
-    result[0] = 1;
-    result[1] = points.size() - 1;
+    result[0] = arrayLSize - 1;
+    result[1] = 1;
     return result;
   }
-  if(index == points.size() - 1){
-    result[0] = 0;
-    result[1] = points.size() - 2;
+  if(index == arrayLSize - 1){
+    result[0] = arrayLSize - 2;
+    result[1] = 0;
     return result;
   }
   
@@ -469,6 +496,7 @@ void createPolygon(){
 void removeAllPoints(){
   points.clear();
   polyLines.clear();
+  gSPoints.clear();
   CHull = new PVector[]{};
   println("CLEARING THE SCENE");
   

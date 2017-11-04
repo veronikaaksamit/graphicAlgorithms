@@ -1,5 +1,7 @@
 public class GrahamScanPoint implements Comparable{
+  
   private PVector coordinates;
+  
   //if 360 then it is the base point (biggest X coordinate)
   private float angle;
   
@@ -7,7 +9,6 @@ public class GrahamScanPoint implements Comparable{
     this.setCoordinates(coord);
     this.setAngle(angle);
   }
-  
   
   public void setAngle(float angle){
     this.angle = angle;
@@ -20,6 +21,7 @@ public class GrahamScanPoint implements Comparable{
   public void setCoordinates(PVector coord){
     this.coordinates = coord;
   }
+  
   public PVector getCoordinates(){
     return coordinates;
   }

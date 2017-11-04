@@ -71,11 +71,14 @@ void setup() {
        font = createFont("Courier New Bold", 16);
        textFont(font); 
        
+       //Adding, deleting, moving points ...used for Graham Scan + Gift Wrapping
        points = new ArrayList<PVector>();
+       
+       //Triangulation
        polyLines = new ArrayList<PVector>();
-
        rightPath = new ArrayList<PVector>();
        leftPath = new ArrayList<PVector>();
+       
 
        verticalLines = new ArrayList<Float>();
        horizontalLines = new ArrayList<Float>();
@@ -158,6 +161,19 @@ void draw(){
       }
     }
   }
+  
+  if(gSPoints != null){
+    for (int i = 0; i< gSPoints.size() - 1; i++) {
+      if(gSPoints.get(i).getCoordinates() != null && gSPoints.get(i+1).getCoordinates() != null){
+         line(gSPoints.get(i).getCoordinates().x, gSPoints.get(i).getCoordinates().y, 
+             gSPoints.get(i+1).getCoordinates().x, gSPoints.get(i+1).getCoordinates().y );
+      }
+    }
+    if(gSPoints.size()>1){
+      line(gSPoints.get(0).getCoordinates().x, gSPoints.get(0).getCoordinates().y, 
+             gSPoints.get(gSPoints.size() - 1).getCoordinates().x, gSPoints.get(gSPoints.size() - 1).getCoordinates().y );
+     }
+    }
   
   
   if(polyLines != null){
