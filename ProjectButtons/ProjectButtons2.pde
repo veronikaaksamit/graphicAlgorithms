@@ -66,7 +66,7 @@ void grahamScan(){
     }
     
     for(int i = 0; i < gSPoints.size(); i ++){
-      while(leftCriterion(gSPoints, i)){
+      while(leftCriterion(gSPoints, i) && gSPoints.size() >1){
          println("removing " + gSPoints.get(i) + " from Graham Scan Structure");
          gSPoints.remove(i);
          if(i != 0){

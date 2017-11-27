@@ -29,6 +29,10 @@ boolean leftCriterion(ArrayList<GrahamScanPoint> gSPoints, int index){
 
 Integer[] getNearIndices(int arrayLSize, int index){
   Integer[] result = new Integer[2];
+  if(arrayLSize < 2){
+    return null;
+  }
+  
   println("arraySize " + arrayLSize + " index: "+ index);
   if(index == 0){
     result[0] = 1;
