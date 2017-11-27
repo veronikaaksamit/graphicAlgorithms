@@ -1,3 +1,7 @@
+void voronoiDiagrams(){
+}
+
+
 void delaunayTriangulation(){
 }
 

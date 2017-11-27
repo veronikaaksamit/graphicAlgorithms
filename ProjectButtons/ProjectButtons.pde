@@ -9,7 +9,7 @@ int butSizeY = 30;
 
 int pointSize = 18;
 
-int numOfBut = 12;
+int numOfBut = 13;
 int addPointButX, addPointButY;
 int clearSceneButX, clearSceneButY;
 int randomPointsButX,randomPointsButY;
@@ -22,6 +22,7 @@ int grahamScButX, grahamScButY;
 int triangulationButX, triangulationButY;
 int kDTreeButX, kDTreeButY;
 int delaunayTButX, delaunayTButY;
+int voronoiDiagButX, voronoiDiagButY;
 
 //Modes
 boolean moveMode = false;
@@ -71,6 +72,9 @@ void setup() {
        
        delaunayTButX = kDTreeButX;
        delaunayTButY = kDTreeButY + butSizeY;
+       
+       voronoiDiagButX = delaunayTButX;
+       voronoiDiagButY = delaunayTButY + butSizeY;
        
        font = createFont("Courier New Bold", 16);
        textFont(font); 
@@ -134,6 +138,7 @@ void draw(){
   rect(triangulationButX, triangulationButY, butSizeX, butSizeY);
   rect(kDTreeButX, kDTreeButY, butSizeX, butSizeY);
   rect(delaunayTButX, delaunayTButY, butSizeX, butSizeY);
+  rect(voronoiDiagButX, voronoiDiagButY, butSizeX, butSizeY);
   
   //Adding names to buttons
   fill(0);
@@ -149,6 +154,7 @@ void draw(){
   text("Triangulation sweep line", triangulationButX + 5, triangulationButY + 20);
   text("k-D tree", kDTreeButX + 5, kDTreeButY + 20);
   text("Delaunay triangulation", delaunayTButX + 5, delaunayTButY + 20);
+  text("Voronoi diagrams", voronoiDiagButX + 5, voronoiDiagButY + 20);
   
  
   
@@ -247,6 +253,10 @@ void mousePressed() {
     }else if (overBut(delaunayTButX, delaunayTButY)) {
       setModes(false, false, false, false);
       delaunayTriangulation();
+    }else if (overBut(voronoiDiagButX, voronoiDiagButY)) {
+      setModes(false, false, false, false);
+      delaunayTriangulation();
+      voronoiDiagrams();
     }
   }
   
