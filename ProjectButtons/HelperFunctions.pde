@@ -1,4 +1,4 @@
-ArrayList<PVector> lexiSort(ArrayList<PVector> inLines){
+ArrayList<PVector> lexiSort(AbstractList<PVector> inLines){
   ArrayList<PVector> lines = new ArrayList<PVector>(inLines);
   ArrayList<PVector> result = new ArrayList<PVector>();
   float arraySize = lines.size();
@@ -52,7 +52,7 @@ Integer[] getNearIndices(int arrayLSize, int index){
   return result;
 }
 
-void printPVectorList(ArrayList<PVector> vectors){
+void printPVectorList(AbstractList<PVector> vectors){
   println("Starting print");
   for(int i = 0; i< vectors.size(); i++){
     println(i + " :["+ vectors.get(i).x + ", "+ vectors.get(i).y + "]");
@@ -102,7 +102,7 @@ void setModes(boolean add, boolean delete, boolean move, boolean createPoly){
   createPolyMode = createPoly;
 }
 
-ArrayList<PVector> getMinYPoints(ArrayList<PVector> lines){
+ArrayList<PVector> getMinYPoints(AbstractList<PVector> lines){
   ArrayList<PVector> result = new ArrayList<PVector>();
   float min = MAX_FLOAT;
   for(PVector p : lines){
@@ -118,7 +118,7 @@ ArrayList<PVector> getMinYPoints(ArrayList<PVector> lines){
   return result;
 }
 
-ArrayList<PVector> getMinXPoints(ArrayList<PVector> lines){
+ArrayList<PVector> getMinXPoints(AbstractList<PVector> lines){
   ArrayList<PVector> result = new ArrayList<PVector>();
   float min = MAX_FLOAT;
   for(PVector p : lines){
@@ -134,7 +134,7 @@ ArrayList<PVector> getMinXPoints(ArrayList<PVector> lines){
   return result;
 }
 
-ArrayList<PVector> getMaxXPoints(ArrayList<PVector> points){
+ArrayList<PVector> getMaxXPoints(AbstractList<PVector> points){
   ArrayList<PVector> result = new ArrayList<PVector>();
   float max = 0;
   for(PVector p : points){
@@ -150,7 +150,7 @@ ArrayList<PVector> getMaxXPoints(ArrayList<PVector> points){
   return result;
 }
 
-ArrayList<PVector> getMaxYPoints(ArrayList<PVector> points){
+ArrayList<PVector> getMaxYPoints(AbstractList<PVector> points){
   ArrayList<PVector> result = new ArrayList<PVector>();
   float max = 0;
   for(PVector p : points){
@@ -166,7 +166,7 @@ ArrayList<PVector> getMaxYPoints(ArrayList<PVector> points){
   return result;
 }
 
-PVector getMinYPoint(ArrayList<PVector> points){
+PVector getMinYPoint(AbstractList<PVector> points){
   PVector result = null;
   float min = MAX_FLOAT;
   for(PVector p : points){
@@ -178,7 +178,7 @@ PVector getMinYPoint(ArrayList<PVector> points){
   return result;
 }
 
-PVector getMinXPoint(ArrayList<PVector> points){
+PVector getMinXPoint(AbstractList<PVector> points){
   PVector result = null;
   float min = MAX_FLOAT;
   for(PVector p : points){
@@ -190,7 +190,7 @@ PVector getMinXPoint(ArrayList<PVector> points){
   return result;
 }
 
-PVector getMaxYPoint(ArrayList<PVector> points){
+PVector getMaxYPoint(AbstractList<PVector> points){
   PVector result = null;
   float max = 0;
   for(PVector p : points){

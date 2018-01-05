@@ -6,46 +6,46 @@ void delaunayTriangulation(){
 }
 
 void triangulation(){
-  if(polyLines.size()>3){
-    ArrayList<PVector> lexiPolyLines = lexiSort(polyLines);
-    //polyLines = lexiPolyLines;
+  if(polygons.size()>3){
+    ArrayList<PVector> lexipolygons = lexiSort(polygons);
+    //polygons = lexipolygons;
     ArrayList<PVector> rightP;
     ArrayList<PVector> leftP;
-    //polyLines = lexiSort(polyLines);
+    //polygons = lexiSort(polygons);
     
-    printPVectorList(polyLines);
+    printPVectorList(polygons);
     println("min y point " + minYPPoint );
     println("max y point " + maxYPPoint );
-    int upperPointIndex = polyLines.indexOf(minYPPoint);
-    int lowerPointIndex = polyLines.indexOf(maxYPPoint);
+    int upperPointIndex = polygons.indexOf(minYPPoint);
+    int lowerPointIndex = polygons.indexOf(maxYPPoint);
     
     println("upper point index " + upperPointIndex );
     println("lower y point index " + lowerPointIndex );
-    Integer[] nearIndices = getNearIndices(polyLines.size(), upperPointIndex);
+    Integer[] nearIndices = getNearIndices(polygons.size(), upperPointIndex);
     println("bigger index " + nearIndices[1] );
     println("smaller index " + nearIndices[0] );
-    PVector a = polyLines.get(nearIndices[0]);
-    PVector b = polyLines.get(nearIndices[1]);
+    PVector a = polygons.get(nearIndices[0]);
+    PVector b = polygons.get(nearIndices[1]);
     
-    CyclicList l = new CyclicList(polyLines);
+    //CyclicList l = new CyclicList(polygons);
     
     
     
     if(a.x < b.x){
-      rightPath = l.getElementsBetween( upperPointIndex , lowerPointIndex, "N");
+      //rightPath = l.getElementsBetween( upperPointIndex , lowerPointIndex, "N");
       println("right path");
       printPVectorList(rightPath);
-      leftPath = l.getElementsBetween( upperPointIndex , lowerPointIndex, "P");
+      //leftPath = l.getElementsBetween( upperPointIndex , lowerPointIndex, "P");
       println("left path");
       printPVectorList(leftPath);
       //od max(aj) -> a -> do min je RIGHT PATH
       //od min(aj) -> b -> do max je LEFT PATH
     }else{
       
-      leftPath = l.getElementsBetween( upperPointIndex , lowerPointIndex, "N");
+      //leftPath = l.getElementsBetween( upperPointIndex , lowerPointIndex, "N");
       println("left path");
       printPVectorList(leftPath);
-      rightPath = l.getElementsBetween( upperPointIndex , lowerPointIndex, "P");
+      //rightPath = l.getElementsBetween( upperPointIndex , lowerPointIndex, "P");
       println("right path");
       printPVectorList(rightPath);
       

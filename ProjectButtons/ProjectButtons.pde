@@ -62,11 +62,14 @@ void setup() {
        //Adding, deleting, moving points ...used for Graham Scan + Gift Wrapping
        points = new ArrayList<PVector>();
        
+       //New structure for polygon created by Graham Scan, Gift Wrapping or just Create Polygon Mode
+       //later used for triangulation, ...
+       polygons = new LinkedList<PVector>();
+       
        //GrahamScan structure
        gSPoints = new ArrayList<GrahamScanPoint>();
        
        //Triangulation
-       polyLines = new ArrayList<PVector>();
        rightPath = new ArrayList<PVector>();
        leftPath = new ArrayList<PVector>();
        
@@ -149,13 +152,6 @@ void draw(){
         ellipse(p.x, p.y, pointSize, pointSize);
       }
   }
-  if(CHull != null){
-    for (int i = 0; i< CHull.length - 1; i++) {
-      if(CHull[i] != null && CHull[i+1] != null){
-         line( CHull[i].x, CHull[i].y, CHull[i+1].x, CHull[i+1].y );
-      }
-    }
-  }
   
   if(gSPoints != null){
     for (int i = 0; i< gSPoints.size() - 1; i++) {
@@ -171,20 +167,20 @@ void draw(){
     }
   
   
-  if(polyLines != null){
-    for (int i = 0; i< polyLines.size(); i++) {
-      if(minYPPoint == polyLines.get(i) || maxYPPoint == polyLines.get(i)){
+  if(polygons != null){
+    for (int i = 0; i< polygons.size(); i++) {
+      if(minYPPoint == polygons.get(i) || maxYPPoint == polygons.get(i)){
         fill(color(#2BFA94));
       }else{
         fill(color(#3FCBF0));
       }
-      ellipse(polyLines.get(i).x, polyLines.get(i).y, pointSize, pointSize);
+      ellipse(polygons.get(i).x, polygons.get(i).y, pointSize, pointSize);
       fill(0);
-      text(i, polyLines.get(i).x - 3, polyLines.get(i).y+3);
-      if(polyLines.get(i) != null && polyLines.size()>i+1){
-         line( polyLines.get(i).x, polyLines.get(i).y, polyLines.get(i+1).x, polyLines.get(i+1).y );
+      text(i, polygons.get(i).x - 3, polygons.get(i).y + 3);
+      if(polygons.get(i) != null && polygons.size()> i + 1){
+         line( polygons.get(i).x, polygons.get(i).y, polygons.get(i+1).x, polygons.get(i+1).y );
       }else{
-        line( polyLines.get(0).x, polyLines.get(0).y, polyLines.get(i).x, polyLines.get(i).y );
+        line( polygons.get(0).x, polygons.get(0).y, polygons.get(i).x, polygons.get(i).y );
       }
     }
   }
@@ -199,25 +195,25 @@ void mousePressed() {
     
     if (overBut(butXCoord, addPointButY) ) {
       setModes(true, false, false, false);
-      polyLines.clear();
+      polygons.clear();
     } else if ( overBut(butXCoord, movePointButY) ) {
       setModes(false, false, true, false);
-      polyLines.clear();
+      polygons.clear();
     } else if ( overBut(butXCoord, deletePointButY) ) {
       setModes(false, true, false, false);
-      polyLines.clear();
+      polygons.clear();
     } else if ( overBut(butXCoord, createPolyButY) ) {
       setModes(false, false, false, true);
       removeAllPoints();
     }else if ( overBut(butXCoord, removePolyButY) ) {
       setModes(false, false, false, false);
-      polyLines.clear();
+      polygons.clear();
     }else if (overBut(butXCoord, clearSceneButY)) {
       setModes(false, false, false, false);
       removeAllPoints();
     }else if (overBut(butXCoord, randomPointsButY)) {
       setModes(false, false, false, false);
-      polyLines.clear();
+      polygons.clear();
       addRandomPoints();
     }else if (overBut(butXCoord, giftWrapButY)) {
       setModes(false, false, false, false);

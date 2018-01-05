@@ -4,13 +4,17 @@ ArrayList<PVector> points;
 int numberOfRandomPoints = 3;
 PVector changingPoint;
 
+//New structure for polygon created by Graham Scan, Gift Wrapping or just Create Polygon Mode
+//later used for triangulation, ...
+LinkedList<PVector> polygons;
+
 //Convex hull data structures
 PVector maxXPoint;
-PVector[] CHull;
+
 ArrayList<GrahamScanPoint> gSPoints;
 
 //PolygonCreation
-ArrayList<PVector> polyLines;
+
 PVector minYPPoint, maxYPPoint;
 
 
@@ -92,9 +96,11 @@ void giftWrapping(){
     println("Gift wrapping algorithm ... Convex Hull");
     ArrayList<PVector> tempPoints = new ArrayList<PVector>(points);
     
-    CHull = new PVector[tempPoints.size()+1];
+    polygons = new LinkedList<PVector>();
+    
     maxXPoint = getMaxXPoints(points).get(0);
-    PVector B = CHull[0] = maxXPoint;
+    PVector B = maxXPoint;
+    polygons.add(0, maxXPoint);
     
     //point under maxXPoint 
     PVector basePoint = new PVector(maxXPoint.x, maxXPoint.y + 2);
@@ -115,9 +121,9 @@ void giftWrapping(){
     
     while(tempPoints.size()>0){
       //when using A and B for the first time, specific values are already set
-      if(CHull[counter]!= null && CHull[counter - 1]!= null){
-        B = CHull[counter];
-        A = CHull[counter-1];
+      if(polygons.size() >= counter + 1 && counter >= 1){
+        B = polygons.get(counter);
+        A = polygons.get(counter-1);
         counter++;
       }
       
@@ -159,17 +165,13 @@ void giftWrapping(){
       //when the condition for stopping is fullfilled (smallest angle is with the first point of hull)
       if(maxXAngle < minAngle){
         tempPoints.clear();
-        CHull[counter] = maxXPoint;
       }else{
-        CHull[counter] = pointMinAngle; 
         tempPoints.remove(pointMinAngle);
+        polygons.add(counter, pointMinAngle); 
       }
       
-      //connecting last points when there is no point left
-      if(tempPoints.size()==0){
-        CHull[counter+1] = maxXPoint;
-      }
     }    
+     printPVectorList(polygons);
     
   }else{
     addMode = true;
@@ -177,18 +179,18 @@ void giftWrapping(){
 }
 
 void createPolygon(){
-  for(int i = 0; i < polyLines.size(); i++){
-    if(isPoint(polyLines.get(i).x, polyLines.get(i).y)){
+  for(int i = 0; i < polygons.size(); i++){
+    if(isPoint(polygons.get(i).x, polygons.get(i).y)){
       println("CREATED POLYGON");
       createPolyMode = false;
       println("Same points");
     }
   }
   if(createPolyMode){
-    polyLines.add(new PVector(mouseX, mouseY));
+    polygons.add(new PVector(mouseX, mouseY));
   }
-  maxYPPoint = getMaxYPoint(polyLines);
-  minYPPoint = getMinYPoint(polyLines);
+  maxYPPoint = getMaxYPoint(polygons);
+  minYPPoint = getMinYPoint(polygons);
 }
 
 //Removes point on specific possition if there is ont
@@ -242,7 +244,6 @@ void removeAllPoints(){
 }
 
 void removeLinesAndPolygons(){
-  polyLines.clear();
+  polygons.clear();
   gSPoints.clear();
-  CHull = new PVector[]{};
 }
