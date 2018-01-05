@@ -10,19 +10,23 @@ int butSizeY = 30;
 int pointSize = 18;
 
 int numOfBut = 13;
-int addPointButX, addPointButY;
-int clearSceneButX, clearSceneButY;
-int randomPointsButX,randomPointsButY;
-int movePointButX,movePointButY;
-int deletePointButX,deletePointButY;
-int createPolyButX,createPolyButY;
-int removePolyButX, removePolyButY;
-int giftWrapButX, giftWrapButY;
-int grahamScButX, grahamScButY;
-int triangulationButX, triangulationButY;
-int kDTreeButX, kDTreeButY;
-int delaunayTButX, delaunayTButY;
-int voronoiDiagButX, voronoiDiagButY;
+int butXCoord = 0;
+int butXNameCoord =  butXCoord + 5;
+
+//Y coordinates for creating buttons
+int addPointButY;
+int clearSceneButY;
+int randomPointsButY;
+int movePointButY;
+int deletePointButY;
+int createPolyButY;
+int removePolyButY;
+int giftWrapButY;
+int grahamScButY;
+int triangulationButY;
+int kDTreeButY;
+int delaunayTButY;
+int voronoiDiagButY;
 
 //Modes
 boolean moveMode = false;
@@ -37,43 +41,19 @@ color highlightButColor = color(204);
 void setup() {
        //size(1280, 800);
        size(960, 540);
-       clearSceneButX = 0;
        clearSceneButY = 0;
        
-       randomPointsButX = clearSceneButX  ;
        randomPointsButY = clearSceneButY  + butSizeY;
-       
-       addPointButX = randomPointsButX;
        addPointButY = randomPointsButY+ butSizeY;
-       
-       movePointButX = addPointButX;
        movePointButY = addPointButY + butSizeY;
-       
-       deletePointButX = movePointButX;
        deletePointButY = movePointButY + butSizeY;
-       
-       createPolyButX = deletePointButX;
        createPolyButY = deletePointButY + butSizeY;
-       
-       removePolyButX = createPolyButX;
        removePolyButY = createPolyButY + butSizeY;
-        
-       giftWrapButX = removePolyButX;
        giftWrapButY = removePolyButY + butSizeY;
-       
-       grahamScButX = giftWrapButX;
        grahamScButY = giftWrapButY + butSizeY;
-       
-       triangulationButX = grahamScButX;
        triangulationButY = grahamScButY + butSizeY;
-       
-       kDTreeButX = triangulationButX;
        kDTreeButY = triangulationButY + butSizeY;
-       
-       delaunayTButX = kDTreeButX;
        delaunayTButY = kDTreeButY + butSizeY;
-       
-       voronoiDiagButX = delaunayTButX;
        voronoiDiagButY = delaunayTButY + butSizeY;
        
        font = createFont("Courier New Bold", 16);
@@ -100,61 +80,62 @@ void draw(){
   
   //Rendering rectangles as buttons
   fill(currentColor);
-  rect(clearSceneButX, clearSceneButY, butSizeX, butSizeY);
-  rect(randomPointsButX, randomPointsButY, butSizeX, butSizeY);
+  rect(butXCoord, clearSceneButY, butSizeX, butSizeY);
+  rect(butXCoord, randomPointsButY, butSizeX, butSizeY);
   
   if (addMode) {
     fill(highlightButColor);
   }else {
     fill(currentColor);
   }
-  rect(addPointButX, addPointButY, butSizeX, butSizeY);
+  rect(butXCoord, addPointButY, butSizeX, butSizeY);
   
   if (moveMode) {
     fill(highlightButColor);
   }else {
     fill(currentColor);
   }
-  rect(movePointButX, movePointButY, butSizeX, butSizeY);
+  rect(butXCoord, movePointButY, butSizeX, butSizeY);
   
   if (deleteMode) {
     fill(highlightButColor);
   }else {
     fill(currentColor);
   }
-  rect(deletePointButX, deletePointButY, butSizeX, butSizeY);
+  rect(butXCoord, deletePointButY, butSizeX, butSizeY);
   
   if (createPolyMode) {
     fill(highlightButColor);
   }else {
     fill(currentColor);
   }
-  rect(createPolyButX, createPolyButY, butSizeX, butSizeY);
+  rect(butXCoord, createPolyButY, butSizeX, butSizeY);
   
   fill(currentColor);
-  rect(removePolyButX, removePolyButY, butSizeX, butSizeY);
-  rect(giftWrapButX, giftWrapButY, butSizeX, butSizeY);
-  rect(grahamScButX, grahamScButY, butSizeX, butSizeY);
-  rect(triangulationButX, triangulationButY, butSizeX, butSizeY);
-  rect(kDTreeButX, kDTreeButY, butSizeX, butSizeY);
-  rect(delaunayTButX, delaunayTButY, butSizeX, butSizeY);
-  rect(voronoiDiagButX, voronoiDiagButY, butSizeX, butSizeY);
+  rect(butXCoord, removePolyButY, butSizeX, butSizeY);
+  rect(butXCoord, giftWrapButY, butSizeX, butSizeY);
+  rect(butXCoord, grahamScButY, butSizeX, butSizeY);
+  rect(butXCoord, triangulationButY, butSizeX, butSizeY);
+  rect(butXCoord, kDTreeButY, butSizeX, butSizeY);
+  rect(butXCoord, delaunayTButY, butSizeX, butSizeY);
+  rect(butXCoord, voronoiDiagButY, butSizeX, butSizeY);
   
   //Adding names to buttons
   fill(0);
-  text("Clear scene", clearSceneButX + 5,clearSceneButY+20);
-  text("Random points", randomPointsButX + 5,randomPointsButY+20);
-  text("Add point mode", addPointButX + 5,addPointButY+20);
-  text("Move point mode", movePointButX + 5,movePointButY+20);
-  text("Delete point mode", deletePointButX + 5,deletePointButY+20);
-  text("Create polygon = POLY MODE", createPolyButX + 5, createPolyButY + 20);
-  text("Remove polygon by POLY MODE", removePolyButX + 5, removePolyButY + 20);
-  text("Gift Wrapping - convex hull", giftWrapButX + 5,giftWrapButY+20);
-  text("Graham Scan   - convex hull", grahamScButX + 5,grahamScButY+20);
-  text("Triangulation sweep line", triangulationButX + 5, triangulationButY + 20);
-  text("k-D tree", kDTreeButX + 5, kDTreeButY + 20);
-  text("Delaunay triangulation", delaunayTButX + 5, delaunayTButY + 20);
-  text("Voronoi diagrams", voronoiDiagButX + 5, voronoiDiagButY + 20);
+  
+  text("Clear scene", butXNameCoord,clearSceneButY+20);
+  text("Random points", butXNameCoord,randomPointsButY+20);
+  text("Add point mode", butXNameCoord,addPointButY+20);
+  text("Move point mode",butXNameCoord,movePointButY+20);
+  text("Delete point mode", butXNameCoord,deletePointButY+20);
+  text("Create polygon = POLY MODE", butXNameCoord, createPolyButY + 20);
+  text("Remove polygon by POLY MODE", butXNameCoord, removePolyButY + 20);
+  text("Gift Wrapping - convex hull", butXNameCoord,giftWrapButY+20);
+  text("Graham Scan   - convex hull",butXNameCoord,grahamScButY+20);
+  text("Triangulation sweep line",butXNameCoord, triangulationButY + 20);
+  text("k-D tree", butXNameCoord, kDTreeButY + 20);
+  text("Delaunay triangulation", butXNameCoord, delaunayTButY + 20);
+  text("Voronoi diagrams", butXNameCoord, voronoiDiagButY + 20);
   
  
   
@@ -216,44 +197,44 @@ void mousePressed() {
   //If you click into Buttons area
   if(inButtonsArea(mouseX, mouseY)){
     
-    if (overBut(addPointButX, addPointButY) ) {
+    if (overBut(butXCoord, addPointButY) ) {
       setModes(true, false, false, false);
       polyLines.clear();
-    } else if ( overBut(movePointButX, movePointButY) ) {
+    } else if ( overBut(butXCoord, movePointButY) ) {
       setModes(false, false, true, false);
       polyLines.clear();
-    } else if ( overBut(deletePointButX, deletePointButY) ) {
+    } else if ( overBut(butXCoord, deletePointButY) ) {
       setModes(false, true, false, false);
       polyLines.clear();
-    } else if ( overBut(createPolyButX, createPolyButY) ) {
+    } else if ( overBut(butXCoord, createPolyButY) ) {
       setModes(false, false, false, true);
       removeAllPoints();
-    }else if ( overBut(removePolyButX, removePolyButY) ) {
+    }else if ( overBut(butXCoord, removePolyButY) ) {
       setModes(false, false, false, false);
       polyLines.clear();
-    }else if (overBut(clearSceneButX, clearSceneButY)) {
+    }else if (overBut(butXCoord, clearSceneButY)) {
       setModes(false, false, false, false);
       removeAllPoints();
-    }else if (overBut(randomPointsButX, randomPointsButY)) {
+    }else if (overBut(butXCoord, randomPointsButY)) {
       setModes(false, false, false, false);
       polyLines.clear();
       addRandomPoints();
-    }else if (overBut(giftWrapButX, giftWrapButY)) {
+    }else if (overBut(butXCoord, giftWrapButY)) {
       setModes(false, false, false, false);
       giftWrapping();
-    }else if (overBut(grahamScButX, grahamScButY)) {
+    }else if (overBut(butXCoord, grahamScButY)) {
       setModes(false, false, false, false);
       grahamScan();
-    }else if (overBut(triangulationButX, triangulationButY)) {
+    }else if (overBut(butXCoord, triangulationButY)) {
       setModes(false, false, false, false);
       triangulation();
-    }else if (overBut(kDTreeButX, kDTreeButY)) {
+    }else if (overBut(butXCoord, kDTreeButY)) {
       setModes(false, false, false, false);
       kDTree();
-    }else if (overBut(delaunayTButX, delaunayTButY)) {
+    }else if (overBut(butXCoord, delaunayTButY)) {
       setModes(false, false, false, false);
       delaunayTriangulation();
-    }else if (overBut(voronoiDiagButX, voronoiDiagButY)) {
+    }else if (overBut(butXCoord, voronoiDiagButY)) {
       setModes(false, false, false, false);
       delaunayTriangulation();
       voronoiDiagrams();
