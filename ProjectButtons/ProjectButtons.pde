@@ -155,22 +155,7 @@ void draw(){
       text(p.x + " " + p.y, p.x - 25, p.y +25);
   }
   fill(0);
-  
-  /*if(gSPoints != null){
-    for (int i = 0; i< gSPoints.size() - 1; i++) {
-      if(gSPoints.get(i).getCoordinates() != null && gSPoints.get(i+1).getCoordinates() != null){
-         //line(gSPoints.get(i).getCoordinates().x, gSPoints.get(i).getCoordinates().y, 
-           //  gSPoints.get(i+1).getCoordinates().x, gSPoints.get(i+1).getCoordinates().y );
-          
-          text(i, gSPoints.get(i).getCoordinates().x - 3, gSPoints.get(i).getCoordinates().y + 3);
-      }
-    }
-    if(gSPoints.size()>1){
-      line(gSPoints.get(0).getCoordinates().x, gSPoints.get(0).getCoordinates().y, 
-             gSPoints.get(gSPoints.size() - 1).getCoordinates().x, gSPoints.get(gSPoints.size() - 1).getCoordinates().y );
-     }
-  }*/
-  
+    
   
   if(polygons != null){
     for (int i = 0; i< polygons.size(); i++) {

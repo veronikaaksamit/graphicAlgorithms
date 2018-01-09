@@ -39,8 +39,9 @@ void kDTree(){
 }
 
 void grahamScan(){
+  println("Graham scan algorithm for convex hull");
   removeLinesAndPolygons();
-  printPVectorList(points);
+  //printPVectorList(points);
   if(points.size() >= 3){
     gSPoints = new ArrayList<GrahamScanPoint>();
     maxXPoint = getMaxXPoints(points).get(0);
