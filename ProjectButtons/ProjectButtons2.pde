@@ -69,17 +69,19 @@ void grahamScan(){
     gSPoints.add(0, gSPoints.get(gSPoints.size() -1));
     gSPoints.remove(gSPoints.size() -1);
     
-    for(GrahamScanPoint p : gSPoints){
+    
+    
+    ArrayList<GrahamScanPoint> tempGSP = new ArrayList<GrahamScanPoint>(gSPoints);
+    for(GrahamScanPoint p : tempGSP){
       println(p);
     }
     
-    ArrayList<GrahamScanPoint> tempGSP = new ArrayList<GrahamScanPoint>(gSPoints);
-    
     for(int i = 1; i <  tempGSP.size(); i ++){
       if( tempGSP.size() >=3){
-        while(!leftCriterion( tempGSP, i) ){
+        while(leftCriterion( tempGSP, i) ){
           println("removing " + tempGSP.get(i) + " from Graham Scan Structure");
           tempGSP.remove(i);
+          i = i - 1;
           if(i == tempGSP.size())
             break;
         }

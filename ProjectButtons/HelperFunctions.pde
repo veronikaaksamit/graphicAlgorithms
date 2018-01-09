@@ -18,14 +18,14 @@ ArrayList<PVector> lexiSort(AbstractList<PVector> inLines){
 
 boolean leftCriterion(ArrayList<GrahamScanPoint> gSPoints, int index){
   Integer[] nearIndices = getNearIndices(gSPoints.size(), index);
-  println("Near indices are =" + nearIndices[1] + " " + nearIndices[0]);
-  PVector p3 = gSPoints.get(nearIndices[0]).getCoordinates();
+  println("Near indices for "+ index + " are =" + nearIndices[1] + " " + nearIndices[0]);
+  PVector p1 = gSPoints.get(nearIndices[0]).getCoordinates();
   PVector p2 = gSPoints.get(index).getCoordinates();
-  PVector p1 = gSPoints.get(nearIndices[1]).getCoordinates();
+  PVector p3 = gSPoints.get(nearIndices[1]).getCoordinates();
   
   float resultInNum = (p2.x - p1.x)* (p3.y - p1.y) - (p2.y - p1.y) *(p3.x - p1.x);
   println("result = "+  resultInNum );
-  println("p1 =" + p1 +", p2 =" + p2 +", p3 =" + p3);
+  println("p1 =" + p1.x +", p2 =" + p2.x +", p3 =" + p3.x);
   if(resultInNum >= 0) return true; //no need for deletion turns LEFT
   else return false;//need to remove middle point turns RIGHT
 }
@@ -44,8 +44,8 @@ Integer[] getNearIndices(int arrayLSize, int index){
   }
   
   if(index == arrayLSize - 1){
-    result[0] = 0;
-    result[1] = arrayLSize - 2;
+    result[0] = arrayLSize - 2;
+    result[1] = 0;
     return result;
   }
   
