@@ -40,6 +40,7 @@ void kDTree(){
 
 void grahamScan(){
   removeLinesAndPolygons();
+  printPVectorList(points);
   if(points.size() >= 3){
     gSPoints = new ArrayList<GrahamScanPoint>();
     maxXPoint = getMaxXPoints(points).get(0);
@@ -65,23 +66,30 @@ void grahamScan(){
     
     //sorting all point by angle from min to max angle
     Collections.sort(gSPoints);
+    gSPoints.add(0, gSPoints.get(gSPoints.size() -1));
+    gSPoints.remove(gSPoints.size() -1);
+    
     for(GrahamScanPoint p : gSPoints){
       println(p);
     }
     
-    for(int i = 0; i < gSPoints.size(); i ++){
-      while(leftCriterion(gSPoints, i) && gSPoints.size() >1){
-         println("removing " + gSPoints.get(i) + " from Graham Scan Structure");
-         gSPoints.remove(i);
-         if(i != 0){
-           //need to compare previous point (not the new i point)
-           i = i-1;
-         }
+    ArrayList<GrahamScanPoint> tempGSP = new ArrayList<GrahamScanPoint>(gSPoints);
+    
+    for(int i = 1; i <  tempGSP.size(); i ++){
+      if( tempGSP.size() >=3){
+        while(!leftCriterion( tempGSP, i) ){
+          println("removing " + tempGSP.get(i) + " from Graham Scan Structure");
+          tempGSP.remove(i);
+          if(i == tempGSP.size())
+            break;
+        }
       }
     }
-    
-    for(int i = 0; i < gSPoints.size(); i ++){
-       println("Zostal " + gSPoints.get(i) );
+    polygons = new LinkedList<PVector>();
+    for(int i = 0; i < tempGSP.size(); i ++){
+       println("Zostal " + gSPoints.indexOf(tempGSP.get(i))+ ":" + tempGSP.get(i) );
+       polygons.add(tempGSP.get(i).getCoordinates());
+       
     }
     
   }else{
@@ -171,7 +179,7 @@ void giftWrapping(){
       }
       
     }    
-     printPVectorList(polygons);
+    printPVectorList(polygons);
     
   }else{
     addMode = true;
@@ -223,12 +231,12 @@ void addPoint(){
 //Adding multiple random points to screen
 void addRandomPoints(){
   for(int i = 1; i <= numberOfRandomPoints; i++){
-    float x = random(pointSize/2, width - pointSize/2 );
-    float y = random(pointSize/2, height - pointSize/2);
+    int x = (int)random(pointSize/2, width - pointSize/2 );
+    int y = (int)random(pointSize/2, height - pointSize/2);
     
     if(inButtonsArea(x, y)){
-      x = butSizeX + x;
-      y = butSizeY + y;
+      x = (int)(butSizeX + x);
+      y = (int)(butSizeY + y);
     }
     points.add(new PVector(x, y));
   }

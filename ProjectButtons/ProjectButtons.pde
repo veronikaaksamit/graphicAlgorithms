@@ -151,20 +151,24 @@ void draw(){
         fill(color(#3FCBF0));
         ellipse(p.x, p.y, pointSize, pointSize);
       }
+      fill(0);
+      text(p.x + " " + p.y, p.x - 25, p.y +25);
   }
-  
+  fill(0);
   if(gSPoints != null){
     for (int i = 0; i< gSPoints.size() - 1; i++) {
       if(gSPoints.get(i).getCoordinates() != null && gSPoints.get(i+1).getCoordinates() != null){
-         line(gSPoints.get(i).getCoordinates().x, gSPoints.get(i).getCoordinates().y, 
-             gSPoints.get(i+1).getCoordinates().x, gSPoints.get(i+1).getCoordinates().y );
+         //line(gSPoints.get(i).getCoordinates().x, gSPoints.get(i).getCoordinates().y, 
+           //  gSPoints.get(i+1).getCoordinates().x, gSPoints.get(i+1).getCoordinates().y );
+          
+          text(i, gSPoints.get(i).getCoordinates().x - 3, gSPoints.get(i).getCoordinates().y + 3);
       }
     }
     if(gSPoints.size()>1){
       line(gSPoints.get(0).getCoordinates().x, gSPoints.get(0).getCoordinates().y, 
              gSPoints.get(gSPoints.size() - 1).getCoordinates().x, gSPoints.get(gSPoints.size() - 1).getCoordinates().y );
      }
-    }
+  }
   
   
   if(polygons != null){
@@ -176,7 +180,7 @@ void draw(){
       }
       ellipse(polygons.get(i).x, polygons.get(i).y, pointSize, pointSize);
       fill(0);
-      text(i, polygons.get(i).x - 3, polygons.get(i).y + 3);
+      //text(i, polygons.get(i).x - 3, polygons.get(i).y + 3);
       if(polygons.get(i) != null && polygons.size()> i + 1){
          line( polygons.get(i).x, polygons.get(i).y, polygons.get(i+1).x, polygons.get(i+1).y );
       }else{
