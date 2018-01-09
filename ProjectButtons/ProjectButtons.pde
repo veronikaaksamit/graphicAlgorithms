@@ -144,7 +144,7 @@ void draw(){
   
   //Printing points
   for (PVector p : points) {
-      if(maxXPoint != null && p == maxXPoint){
+      if (maxXPoint != null && p == maxXPoint){
         fill(color(#2BFA94));
         ellipse(p.x, p.y, pointSize, pointSize);
       }else{
@@ -157,9 +157,9 @@ void draw(){
   fill(0);
     
   
-  if(polygons != null){
+  if (polygons != null){
     for (int i = 0; i< polygons.size(); i++) {
-      if(minYPPoint == polygons.get(i) || maxYPPoint == polygons.get(i)){
+      if (minYPPoint == polygons.get(i) || maxYPPoint == polygons.get(i)){
         fill(color(#F70710));
       }else{
         fill(color(#3FCBF0));
@@ -167,7 +167,7 @@ void draw(){
       ellipse(polygons.get(i).x, polygons.get(i).y, pointSize, pointSize);
       fill(0);
       //text(i, polygons.get(i).x - 3, polygons.get(i).y + 3);
-      if(polygons.get(i) != null && polygons.size()> i + 1){
+      if (polygons.get(i) != null && polygons.size()> i + 1){
          line( polygons.get(i).x, polygons.get(i).y, polygons.get(i+1).x, polygons.get(i+1).y );
       }else{
         line( polygons.get(0).x, polygons.get(0).y, polygons.get(i).x, polygons.get(i).y );
@@ -181,7 +181,7 @@ void draw(){
 void mousePressed() {
   
   //If you click into Buttons area
-  if(inButtonsArea(mouseX, mouseY)){
+  if (inButtonsArea(mouseX, mouseY)){
     
     if (overBut(butXCoord, addPointButY) ) {
       setModes(true, false, false, false);
@@ -228,7 +228,7 @@ void mousePressed() {
   }
   
   //If you click outside buttons area
-  if(!inButtonsArea(mouseX, mouseY)){
+  if (!inButtonsArea(mouseX, mouseY)){
     if (addMode == true) {
        addPoint();
     }
@@ -238,7 +238,7 @@ void mousePressed() {
     if (moveMode == true) {
         movePoint();
     }
-    if(createPolyMode == true){
+    if (createPolyMode == true){
         createPolygon();
     }
   }

@@ -2,9 +2,9 @@ ArrayList<PVector> lexiSort(AbstractList<PVector> inLines){
   ArrayList<PVector> lines = new ArrayList<PVector>(inLines);
   ArrayList<PVector> result = new ArrayList<PVector>();
   float arraySize = lines.size();
-  while(result.size() != arraySize){
+  while (result.size() != arraySize){
     ArrayList<PVector> minY = getMinYPoints(lines);
-    while(minY.size()>0){
+    while (minY.size() > 0){
       PVector point = getMinXPoint(minY);
       result.add(point);
       minY.remove(point);
@@ -16,7 +16,7 @@ ArrayList<PVector> lexiSort(AbstractList<PVector> inLines){
   return result;
 }
 
-boolean leftCriterion(ArrayList<GrahamScanPoint> gSPoints, int index){
+boolean leftCriterion(ArrayList<GrahamScanPoint > gSPoints, int index){
   Integer[] nearIndices = getNearIndices(gSPoints.size(), index);
   //println("Near indices for "+ index + " are =" + nearIndices[1] + " " + nearIndices[0]);
   PVector p1 = gSPoints.get(nearIndices[0]).getCoordinates();
@@ -26,24 +26,24 @@ boolean leftCriterion(ArrayList<GrahamScanPoint> gSPoints, int index){
   float resultInNum = (p2.x - p1.x)* (p3.y - p1.y) - (p2.y - p1.y) *(p3.x - p1.x);
   //println("result = "+  resultInNum );
   //println("p1 =" + p1.x +", p2 =" + p2.x +", p3 =" + p3.x);
-  if(resultInNum >= 0) return true; //no need for deletion turns LEFT
+  if (resultInNum >= 0) return true; //no need for deletion turns LEFT
   else return false;//need to remove middle point turns RIGHT
 }
 
 Integer[] getNearIndices(int arrayLSize, int index){
   Integer[] result = new Integer[2];
-  if(arrayLSize < 2){
+  if (arrayLSize < 2){
     return null;
   }
   
   //println("arraySize " + arrayLSize + " index: "+ index);
-  if(index == 0){
+  if (index == 0){
     result[0] = 1;
     result[1] = arrayLSize - 1;
     return result;
   }
   
-  if(index == arrayLSize - 1){
+  if (index == arrayLSize - 1){
     result[0] = arrayLSize - 2;
     result[1] = 0;
     return result;
@@ -57,7 +57,7 @@ Integer[] getNearIndices(int arrayLSize, int index){
 
 void printPVectorList(AbstractList<PVector> vectors){
   println("Starting print");
-  for(int i = 0; i< vectors.size(); i++){
+  for (int i = 0; i< vectors.size(); i++){
     println(i + " :["+ vectors.get(i).x + ", "+ vectors.get(i).y + "]");
   }
   println("Ending print");
@@ -65,7 +65,7 @@ void printPVectorList(AbstractList<PVector> vectors){
 
 void mouseReleased(){
   //NEED to have point to be moved, can not move it to button area
-  if(moveMode == true &&  changingPoint != null && !inButtonsArea(mouseX, mouseY)){
+  if (moveMode == true &&  changingPoint != null && !inButtonsArea(mouseX, mouseY)){
     points.add(new PVector(mouseX, mouseY));
     
     //setting changingPoint to null after editation of point
@@ -91,7 +91,7 @@ boolean overBut(int x, int y) {
 
 //Whether you are in Buttons area 
 boolean inButtonsArea(float x, float y){
-  if(x < butSizeX + pointSize && y < butSizeY * numOfBut + pointSize){
+  if (x < butSizeX + pointSize && y < butSizeY * numOfBut + pointSize){
     return true;
   }
   return false;
@@ -106,7 +106,7 @@ void setModes(boolean add, boolean delete, boolean move, boolean createPoly){
 }
 
 void findMinAndMaxYPointForPolygons(){
-  if(polygons != null){
+  if (polygons != null){
     maxYPPoint = getMaxYPoint(polygons);
     minYPPoint = getMinYPoint(polygons);
   }else{
@@ -119,11 +119,11 @@ void findMinAndMaxYPointForPolygons(){
 ArrayList<PVector> getMinYPoints(AbstractList<PVector> lines){
   ArrayList<PVector> result = new ArrayList<PVector>();
   float min = MAX_FLOAT;
-  for(PVector p : lines){
-      if(p.y == min){
+  for (PVector p : lines){
+      if (p.y == min){
         result.add(p);
       }
-      if(p.y < min){
+      if (p.y < min){
         min = p.y;
         result.clear();
         result.add(p);
@@ -135,11 +135,11 @@ ArrayList<PVector> getMinYPoints(AbstractList<PVector> lines){
 ArrayList<PVector> getMinXPoints(AbstractList<PVector> lines){
   ArrayList<PVector> result = new ArrayList<PVector>();
   float min = MAX_FLOAT;
-  for(PVector p : lines){
-      if(p.x == min){
+  for (PVector p : lines){
+      if (p.x == min){
         result.add(p);
       }
-      if(p.x < min){
+      if (p.x < min){
         min = p.x;
         result.clear();
         result.add(p);
@@ -151,11 +151,11 @@ ArrayList<PVector> getMinXPoints(AbstractList<PVector> lines){
 ArrayList<PVector> getMaxXPoints(AbstractList<PVector> points){
   ArrayList<PVector> result = new ArrayList<PVector>();
   float max = 0;
-  for(PVector p : points){
-      if(p.x == max){
+  for (PVector p : points){
+      if (p.x == max){
         result.add(p);
       }
-      if(p.x > max){
+      if (p.x > max){
         max = p.x;
         result.clear();
         result.add(p);
@@ -167,11 +167,11 @@ ArrayList<PVector> getMaxXPoints(AbstractList<PVector> points){
 ArrayList<PVector> getMaxYPoints(AbstractList<PVector> points){
   ArrayList<PVector> result = new ArrayList<PVector>();
   float max = 0;
-  for(PVector p : points){
-      if(p.y == max){
+  for (PVector p : points){
+      if (p.y == max){
         result.add(p);
       }
-      if(p.y > max){
+      if (p.y > max){
         max = p.y;
         result.clear();
         result.add(p);
@@ -183,8 +183,8 @@ ArrayList<PVector> getMaxYPoints(AbstractList<PVector> points){
 PVector getMinYPoint(AbstractList<PVector> points){
   PVector result = null;
   float min = MAX_FLOAT;
-  for(PVector p : points){
-      if(p.y < min){
+  for (PVector p : points){
+      if (p.y < min){
         min = p.y;
         result = p;
       }
@@ -195,8 +195,8 @@ PVector getMinYPoint(AbstractList<PVector> points){
 PVector getMinXPoint(AbstractList<PVector> points){
   PVector result = null;
   float min = MAX_FLOAT;
-  for(PVector p : points){
-      if(p.x < min){
+  for (PVector p : points){
+      if (p.x < min){
         min = p.x;
         result = p;
       }
@@ -207,8 +207,8 @@ PVector getMinXPoint(AbstractList<PVector> points){
 PVector getMaxYPoint(AbstractList<PVector> points){
   PVector result = null;
   float max = 0;
-  for(PVector p : points){
-      if(p.y > max){
+  for (PVector p : points){
+      if (p.y > max){
         max = p.y;
         result = p;
       }

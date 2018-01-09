@@ -42,7 +42,7 @@ public class GrahamScanPoint implements Comparable{
   
   @Override
   public String toString(){
-    return "[ " + this.coordinates.x + ", " + this.coordinates.y + "] :" + angle ;
+    return "[" + this.coordinates.x + "," + this.coordinates.y + "]:" + Math.round(angle*100.00)/100.00 ;
   }
   
 }

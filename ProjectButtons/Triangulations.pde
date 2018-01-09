@@ -6,7 +6,7 @@ void delaunayTriangulation(){
 }
 
 void triangulation(){
-  if(polygons.size()>3){
+  if (polygons.size()>3){
     ArrayList<PVector> lexipolygons = lexiSort(polygons);
     //polygons = lexipolygons;
     ArrayList<PVector> rightP;
@@ -31,7 +31,7 @@ void triangulation(){
     
     
     
-    if(a.x < b.x){
+    if (a.x < b.x){
       //rightPath = l.getElementsBetween( upperPointIndex , lowerPointIndex, "N");
       println("right path");
       printPVectorList(rightPath);

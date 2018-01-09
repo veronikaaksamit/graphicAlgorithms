@@ -28,7 +28,7 @@ ArrayList<Float> horizontalLines;
 void kDTree(){
   float[] xAxes = new float[points.size()];
   float[] yAxes = new float[points.size()];
-  for(int i = 0; i < points.size(); i++ ){
+  for (int i = 0; i < points.size(); i++ ){
     println(points.get(i));
     xAxes[i] = points.get(i).x;
   }
@@ -42,21 +42,23 @@ void grahamScan(){
   println("Graham scan algorithm for convex hull");
   removeLinesAndPolygons();
   //printPVectorList(points);
-  if(points.size() >= 3){
+  
+  if (points.size() >= 3){
     gSPoints = new ArrayList<GrahamScanPoint>();
     maxXPoint = getMaxXPoints(points).get(0);
     //added maxX point to structure ...1.point
     gSPoints.add(new GrahamScanPoint(maxXPoint, 360));
     
-    //point under maxXPoint 
+    //point under maxXPoint ...TO COMPUTE ANGLE WITH NEXT POINT
     PVector basePoint = new PVector(maxXPoint.x, maxXPoint.y + 2);
     
     PVector vec1 = new PVector(basePoint.x - maxXPoint.x, basePoint.y - maxXPoint.y);
     float length1 = sqrt( sq(vec1.x) + sq(vec1.y) );
     
     //calculating angle between maxXPoint, basePoint and every point in the area
-    for(PVector p : points){
-      if(p != maxXPoint){
+    for (PVector p : points){
+      
+      if (p != maxXPoint){
          PVector vec2 = new PVector(p.x - maxXPoint.x, p.y - maxXPoint.y); //Bp ...p possible solution
          float length2 = sqrt( sq(vec2.x) + sq(vec2.y) );
          float angle = 180 - degrees(acos((vec1.x * vec2.x + vec1.y * vec2.y) / (length1 * length2)));
@@ -67,35 +69,37 @@ void grahamScan(){
     
     //sorting all point by angle from min to max angle
     Collections.sort(gSPoints);
-    gSPoints.add(0, gSPoints.get(gSPoints.size() -1));
-    gSPoints.remove(gSPoints.size() -1);
-    
-    
+    gSPoints.add(0, gSPoints.get(gSPoints.size() - 1));
+    gSPoints.remove(gSPoints.size() - 1);
     
     ArrayList<GrahamScanPoint> tempGSP = new ArrayList<GrahamScanPoint>(gSPoints);
-    for(GrahamScanPoint p : tempGSP){
+    /*for (GrahamScanPoint p : tempGSP){
       println(p);
-    }
+    }*/
     
-    for(int i = 1; i <  tempGSP.size(); i ++){
-      if( tempGSP.size() >=3){
-        while(leftCriterion( tempGSP, i) ){
+    //Cycle which removes points which does not fulfill leftCriterion
+    for (int i = 1; i <  tempGSP.size(); i ++){
+      if ( tempGSP.size() >=3){
+        while (leftCriterion( tempGSP, i) ){
           println("removing " + tempGSP.get(i) + " from Graham Scan Structure");
           tempGSP.remove(i);
           i = i - 1;
-          if(i == tempGSP.size())
+          if (i == tempGSP.size())
             break;
         }
       }
     }
+    
+    //Setting LinkedList which contains data about polygon on the screen
     polygons = new LinkedList<PVector>();
-    for(int i = 0; i < tempGSP.size(); i ++){
-       println("Zostal " + gSPoints.indexOf(tempGSP.get(i))+ ":" + tempGSP.get(i) );
+    print("Zostali: ");
+    for (int i = 0; i < tempGSP.size(); i ++){
+       print(gSPoints.indexOf(tempGSP.get(i))+":" + tempGSP.get(i) + "; ");
        polygons.add(tempGSP.get(i).getCoordinates());
-       
     }
     
     findMinAndMaxYPointForPolygons();
+    
   }else{
     addMode = true;
   }
@@ -104,7 +108,9 @@ void grahamScan(){
 
 void giftWrapping(){
   removeLinesAndPolygons();
-  if(points.size() >= 3){
+  
+  if (points.size() >= 3){
+    
     println("Gift wrapping algorithm ... Convex Hull");
     ArrayList<PVector> tempPoints = new ArrayList<PVector>(points);
     
@@ -131,9 +137,9 @@ void giftWrapping(){
     
     PVector vec2 = null;
     
-    while(tempPoints.size()>0){
+    while (tempPoints.size()>0){
       //when using A and B for the first time, specific values are already set
-      if(polygons.size() >= counter + 1 && counter >= 1){
+      if (polygons.size() >= counter + 1 && counter >= 1){
         B = polygons.get(counter);
         A = polygons.get(counter-1);
         counter++;
@@ -150,7 +156,7 @@ void giftWrapping(){
       float angle = 360;
       
       //checking all possible points
-      for(int i = 0; i < tempPoints.size(); i++){
+      for (int i = 0; i < tempPoints.size(); i++){
         PVector p = tempPoints.get(i);
         
         //getting vector(Bp) with p point at the end and his length + angle (Bp angle BA)
@@ -159,23 +165,25 @@ void giftWrapping(){
         angle = 180 - degrees(acos((vec1.x * vec2.x + vec1.y * vec2.y)/ (length1 * length2)));
         
         //Do we get the smallest angle with this point?
-        if(angle <= minAngle){
+        if (angle <= minAngle){
           pointMinAngle = new PVector(p.x, p.y);
           minAngle= angle;
         }
          
       }
+      
       // stopping values ...when the smallest angle is with the first point 
       float maxXAngle = 360;
+      
       //getting maxXAngle just when we are not working with first point(the maxXPoint) ...no maxXPoint- maxXPoint - A angle
-      if(counter > 1){
+      if (counter > 1){
         vec2 = new PVector(maxXPoint.x - B.x, maxXPoint.y - B.y); //BMaxXPoint 
         float length2 = sqrt(sq(vec2.x) + sq(vec2.y));
         maxXAngle = 180 - degrees(acos((vec1.x * vec2.x + vec1.y * vec2.y)/ (length1 * length2)));
       }
       
       //when the condition for stopping is fullfilled (smallest angle is with the first point of hull)
-      if(maxXAngle < minAngle){
+      if (maxXAngle < minAngle){
         tempPoints.clear();
       }else{
         tempPoints.remove(pointMinAngle);
@@ -183,6 +191,7 @@ void giftWrapping(){
       }
       
     }    
+    
     printPVectorList(polygons);
     findMinAndMaxYPointForPolygons();
   }else{
@@ -191,27 +200,31 @@ void giftWrapping(){
 }
 
 void createPolygon(){
-  for(int i = 0; i < polygons.size(); i++){
-    if(isPoint(polygons.get(i).x, polygons.get(i).y)){
+  
+  for (int i = 0; i < polygons.size(); i++){
+    if (isPoint(polygons.get(i).x, polygons.get(i).y)){
       println("CREATED POLYGON");
       createPolyMode = false;
       println("Same points");
     }
   }
-  if(createPolyMode){
+  
+  if (createPolyMode){
     polygons.add(new PVector(mouseX, mouseY));
   }
+  
   findMinAndMaxYPointForPolygons();
 }
 
 //Removes point on specific possition if there is ont
 void deletePoint(){
-  for(int i = 0; i < points.size(); i++){
+  for (int i = 0; i < points.size(); i++){
     
-    if(isPoint(points.get(i).x, points.get(i).y)){
-      if(moveMode){
+    if (isPoint(points.get(i).x, points.get(i).y)){
+      if (moveMode){
         changingPoint = new PVector(points.get(i).x, points.get(i).y);
       }
+      
       points.remove(points.get(i));
       println("DELETING POINT");
       break;
@@ -233,11 +246,11 @@ void addPoint(){
 
 //Adding multiple random points to screen
 void addRandomPoints(){
-  for(int i = 1; i <= numberOfRandomPoints; i++){
+  for (int i = 1; i <= numberOfRandomPoints; i++){
     int x = (int)random(pointSize/2, width - pointSize/2 );
     int y = (int)random(pointSize/2, height - pointSize/2);
     
-    if(inButtonsArea(x, y)){
+    if (inButtonsArea(x, y)){
       x = (int)(butSizeX + x);
       y = (int)(butSizeY + y);
     }
