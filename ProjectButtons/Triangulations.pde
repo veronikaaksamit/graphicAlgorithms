@@ -1,3 +1,5 @@
+boolean isOnRightPath = false;
+
 void voronoiDiagrams(){
 }
 
@@ -6,56 +8,84 @@ void delaunayTriangulation(){
 }
 
 void triangulation(){
+  println("Triangulation by sweep line");
+  
   if (polygons.size()>3){
+    
     ArrayList<PVector> lexipolygons = lexiSort(polygons);
+    printPVectorList(lexipolygons);
     //polygons = lexipolygons;
-    ArrayList<PVector> rightP;
-    ArrayList<PVector> leftP;
+    rightPath = new  ArrayList<PVector>();
+    leftPath = new  ArrayList<PVector>();
     //polygons = lexiSort(polygons);
     
     printPVectorList(polygons);
+    
     println("min y point " + minYPPoint );
     println("max y point " + maxYPPoint );
-    int upperPointIndex = polygons.indexOf(minYPPoint);
-    int lowerPointIndex = polygons.indexOf(maxYPPoint);
+    int upperPointIndex = polygons.indexOf(maxYPPoint);
+    
     
     println("upper point index " + upperPointIndex );
-    println("lower y point index " + lowerPointIndex );
+
     Integer[] nearIndices = getNearIndices(polygons.size(), upperPointIndex);
     println("bigger index " + nearIndices[1] );
     println("smaller index " + nearIndices[0] );
-    PVector a = polygons.get(nearIndices[0]);
-    PVector b = polygons.get(nearIndices[1]);
-    
-    //CyclicList l = new CyclicList(polygons);
     
     
+    PVector nextPoint = polygons.get(nearIndices[1]);
+    PVector previousPoint = polygons.get(nearIndices[0]);
+    int iterator = nearIndices[1];
     
-    if (a.x < b.x){
-      //rightPath = l.getElementsBetween( upperPointIndex , lowerPointIndex, "N");
-      println("right path");
-      printPVectorList(rightPath);
-      //leftPath = l.getElementsBetween( upperPointIndex , lowerPointIndex, "P");
-      println("left path");
-      printPVectorList(leftPath);
-      //od max(aj) -> a -> do min je RIGHT PATH
-      //od min(aj) -> b -> do max je LEFT PATH
+    rightPath.add(maxYPPoint);
+    
+    if (nextPoint.x > previousPoint.x){
+      isOnRightPath = true;
     }else{
-      
-      //leftPath = l.getElementsBetween( upperPointIndex , lowerPointIndex, "N");
-      println("left path");
-      printPVectorList(leftPath);
-      //rightPath = l.getElementsBetween( upperPointIndex , lowerPointIndex, "P");
-      println("right path");
-      printPVectorList(rightPath);
-      
-      //od max(aj) -> b -> do min je RIGHT PATH
-      //od min(aj) -> a -> do max je LEFT PATH
+      isOnRightPath = false;
     }
+    
+    while (iterator != upperPointIndex){
+      hasChanged(iterator);
+      
+      println("iterator =" + iterator);
+      if(isOnRightPath){
+        println("adding to right " + polygons.get(iterator));
+        rightPath.add(polygons.get(iterator));
+      }else{
+        println("adding to left " + polygons.get(iterator));
+        leftPath.add(polygons.get(iterator));
+      }
+    
+      iterator++;
+      
+      if(iterator >= polygons.size()){
+        println("need to change interator to 0 "+ iterator );
+        iterator = 0;
+      }
+  }
+    
+  println("left path");
+  printPVectorList(leftPath);
+  println("right path");
+  printPVectorList(rightPath);
+    
     
   }
    else{
     removeAllPoints();
     createPolyMode = true;
   }
+}
+
+boolean hasChanged(int iterator){
+  if(polygons.get(iterator) == minYPPoint || polygons.get(iterator) == maxYPPoint){
+    if(isOnRightPath){      
+       isOnRightPath  = false;
+    }else{
+      isOnRightPath  = true;
+    }
+    return true;
+  }
+  return false;
 }

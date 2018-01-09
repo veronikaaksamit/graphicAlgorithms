@@ -2,6 +2,7 @@ ArrayList<PVector> lexiSort(AbstractList<PVector> inLines){
   ArrayList<PVector> lines = new ArrayList<PVector>(inLines);
   ArrayList<PVector> result = new ArrayList<PVector>();
   float arraySize = lines.size();
+  
   while (result.size() != arraySize){
     ArrayList<PVector> minY = getMinYPoints(lines);
     while (minY.size() > 0){
@@ -16,7 +17,7 @@ ArrayList<PVector> lexiSort(AbstractList<PVector> inLines){
   return result;
 }
 
-boolean leftCriterion(ArrayList<GrahamScanPoint > gSPoints, int index){
+boolean leftCriterion(ArrayList<GrahamScanPoint> gSPoints, int index){
   Integer[] nearIndices = getNearIndices(gSPoints.size(), index);
   //println("Near indices for "+ index + " are =" + nearIndices[1] + " " + nearIndices[0]);
   PVector p1 = gSPoints.get(nearIndices[0]).getCoordinates();
@@ -56,11 +57,11 @@ Integer[] getNearIndices(int arrayLSize, int index){
 }
 
 void printPVectorList(AbstractList<PVector> vectors){
-  println("Starting print");
+  print("Starting print: ");
   for (int i = 0; i< vectors.size(); i++){
-    println(i + " :["+ vectors.get(i).x + ", "+ vectors.get(i).y + "]");
+    print(i + ":["+ vectors.get(i).x + ", "+ vectors.get(i).y + "] ");
   }
-  println("Ending print");
+  println(" Ending print");
 }
 
 void mouseReleased(){

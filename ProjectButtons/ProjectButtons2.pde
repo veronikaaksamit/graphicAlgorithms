@@ -97,7 +97,7 @@ void grahamScan(){
        print(gSPoints.indexOf(tempGSP.get(i))+":" + tempGSP.get(i) + "; ");
        polygons.add(tempGSP.get(i).getCoordinates());
     }
-    
+    println();
     findMinAndMaxYPointForPolygons();
     
   }else{
@@ -210,6 +210,7 @@ void createPolygon(){
   }
   
   if (createPolyMode){
+    points.add(new PVector(mouseX, mouseY));
     polygons.add(new PVector(mouseX, mouseY));
   }
   
