@@ -160,7 +160,7 @@ void draw(){
   if(polygons != null){
     for (int i = 0; i< polygons.size(); i++) {
       if(minYPPoint == polygons.get(i) || maxYPPoint == polygons.get(i)){
-        fill(color(#2BFA94));
+        fill(color(#F70710));
       }else{
         fill(color(#3FCBF0));
       }

@@ -105,6 +105,17 @@ void setModes(boolean add, boolean delete, boolean move, boolean createPoly){
   createPolyMode = createPoly;
 }
 
+void findMinAndMaxYPointForPolygons(){
+  if(polygons != null){
+    maxYPPoint = getMaxYPoint(polygons);
+    minYPPoint = getMinYPoint(polygons);
+  }else{
+    println("Polygons are not set");
+  }
+  
+}
+
+
 ArrayList<PVector> getMinYPoints(AbstractList<PVector> lines){
   ArrayList<PVector> result = new ArrayList<PVector>();
   float min = MAX_FLOAT;

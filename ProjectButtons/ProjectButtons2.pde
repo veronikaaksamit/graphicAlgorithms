@@ -95,6 +95,7 @@ void grahamScan(){
        
     }
     
+    findMinAndMaxYPointForPolygons();
   }else{
     addMode = true;
   }
@@ -183,7 +184,7 @@ void giftWrapping(){
       
     }    
     printPVectorList(polygons);
-    
+    findMinAndMaxYPointForPolygons();
   }else{
     addMode = true;
   }
@@ -200,8 +201,7 @@ void createPolygon(){
   if(createPolyMode){
     polygons.add(new PVector(mouseX, mouseY));
   }
-  maxYPPoint = getMaxYPoint(polygons);
-  minYPPoint = getMinYPoint(polygons);
+  findMinAndMaxYPointForPolygons();
 }
 
 //Removes point on specific possition if there is ont
