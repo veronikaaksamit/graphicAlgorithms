@@ -74,11 +74,10 @@ void triangulation(){
       
     stack.add(lexipolygons.get(0));
     stack.add(lexipolygons.get(1));
-    stack.add(lexipolygons.get(iterator));
     
     for (int j = 2; j < lexipolygons.size() - 1 ; j++){
       
-      PVector B = stack.get(stack.size() - 2);
+      PVector B = stack.get(stack.size() - 1);
       PVector C = lexipolygons.get(j);
       PVector A;
       
