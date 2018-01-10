@@ -24,6 +24,14 @@ boolean leftCriterion(ArrayList<GrahamScanPoint> gSPoints, int index){
   PVector p2 = gSPoints.get(index).getCoordinates();
   PVector p3 = gSPoints.get(nearIndices[1]).getCoordinates();
   
+  return leftCrit(p1,p2,p3);
+  //float resultInNum = (p2.x - p1.x)* (p3.y - p1.y) - (p2.y - p1.y) *(p3.x - p1.x);
+  
+  //if (resultInNum >= 0) return true; //no need for deletion turns LEFT
+  //else return false;//need to remove middle point turns RIGHT
+}
+
+boolean leftCrit(PVector p1, PVector p2, PVector p3){
   float resultInNum = (p2.x - p1.x)* (p3.y - p1.y) - (p2.y - p1.y) *(p3.x - p1.x);
   //println("result = "+  resultInNum );
   //println("p1 =" + p1.x +", p2 =" + p2.x +", p3 =" + p3.x);
@@ -57,11 +65,10 @@ Integer[] getNearIndices(int arrayLSize, int index){
 }
 
 void printPVectorList(AbstractList<PVector> vectors){
-  print("Starting print: ");
   for (int i = 0; i< vectors.size(); i++){
     print(i + ":["+ vectors.get(i).x + ", "+ vectors.get(i).y + "] ");
   }
-  println(" Ending print");
+  println();
 }
 
 void mouseReleased(){
