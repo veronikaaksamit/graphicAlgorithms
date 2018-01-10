@@ -95,6 +95,10 @@ boolean inButtonsArea(float x, float y){
   if (x < butSizeX + pointSize && y < butSizeY * numOfBut + pointSize){
     return true;
   }
+  //IF WANT POINTS JUST IN RIGHT AREA NEXT TO BUTTONS
+  if (x < butSizeX + pointSize && y < 540 + pointSize){
+    return true;
+  }
   return false;
 }
 
@@ -108,8 +112,8 @@ void setModes(boolean add, boolean delete, boolean move, boolean createPoly){
 
 void findMinAndMaxYPointForPolygons(){
   if (polygons != null){
-    maxYPPoint = getMaxYPoint(polygons);
-    minYPPoint = getMinYPoint(polygons);
+    maxYPoint = getMaxYPoint(polygons);
+    minYPoint = getMinYPoint(polygons);
   }else{
     println("Polygons are not set");
   }

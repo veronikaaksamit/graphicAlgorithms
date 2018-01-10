@@ -15,7 +15,7 @@ ArrayList<GrahamScanPoint> gSPoints;
 
 //PolygonCreation
 
-PVector minYPPoint, maxYPPoint;
+PVector minYPoint, maxYPoint;
 
 
 //Triangulation
@@ -248,13 +248,14 @@ void addPoint(){
 //Adding multiple random points to screen
 void addRandomPoints(){
   for (int i = 1; i <= numberOfRandomPoints; i++){
-    int x = (int)random(pointSize/2, width - pointSize/2 );
-    int y = (int)random(pointSize/2, height - pointSize/2);
+    int x = (int)random(pointSize/2, width - pointSize );
+    int y = (int)random(pointSize/2, height - 2* pointSize);
     
     if (inButtonsArea(x, y)){
       x = (int)(butSizeX + x);
       y = (int)(butSizeY + y);
     }
+    
     points.add(new PVector(x, y));
   }
   println("ADDING RANDOM POINTS");
