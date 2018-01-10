@@ -72,9 +72,8 @@ void setup() {
        //Triangulation
        rightPath = new ArrayList<PVector>();
        leftPath = new ArrayList<PVector>();
-       
-       verticalLines = new ArrayList<Float>();
-       horizontalLines = new ArrayList<Float>();
+       triangulation = new ArrayList<PVector>();
+        
 }
 
 void draw(){
@@ -175,6 +174,13 @@ void draw(){
     }
   }
   
+  if (triangulation != null){
+    for (int i = 0; i < triangulation.size(); i += 2) {
+      stroke(color(#FFF81A));
+      line(triangulation.get(i).x, triangulation.get(i).y, triangulation.get(i+1).x, triangulation.get(i+1).y );
+    }
+  }
+  
 }
 
 //setting modes + calling functions when button pressed
@@ -185,25 +191,25 @@ void mousePressed() {
     
     if (overBut(butXCoord, addPointButY) ) {
       setModes(true, false, false, false);
-      polygons.clear();
+      removePolyByPolygonsMode();
     } else if ( overBut(butXCoord, movePointButY) ) {
       setModes(false, false, true, false);
-      polygons.clear();
+      removePolyByPolygonsMode();
     } else if ( overBut(butXCoord, deletePointButY) ) {
       setModes(false, true, false, false);
-      polygons.clear();
+      removePolyByPolygonsMode();
     } else if ( overBut(butXCoord, createPolyButY) ) {
       setModes(false, false, false, true);
       removeAllPoints();
-    }else if ( overBut(butXCoord, removePolyButY) ) {
+    }else if (overBut(butXCoord, removePolyButY) ) {
       setModes(false, false, false, false);
-      polygons.clear();
+      removePolyByPolygonsMode();
     }else if (overBut(butXCoord, clearSceneButY)) {
       setModes(false, false, false, false);
       removeAllPoints();
     }else if (overBut(butXCoord, randomPointsButY)) {
       setModes(false, false, false, false);
-      polygons.clear();
+      removePolyByPolygonsMode();
       addRandomPoints();
     }else if (overBut(butXCoord, giftWrapButY)) {
       setModes(false, false, false, false);

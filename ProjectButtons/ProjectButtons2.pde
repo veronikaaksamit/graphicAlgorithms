@@ -14,16 +14,8 @@ PVector maxXPoint;
 ArrayList<GrahamScanPoint> gSPoints;
 
 //PolygonCreation
-
 PVector minYPoint, maxYPoint;
 
-
-//Triangulation
-ArrayList<PVector> rightPath, leftPath;
-
-//kDTree
-ArrayList<Float> verticalLines;
-ArrayList<Float> horizontalLines;
 
 void kDTree(){
   float[] xAxes = new float[points.size()];
@@ -271,5 +263,11 @@ void removeAllPoints(){
 
 void removeLinesAndPolygons(){
   polygons.clear();
+  triangulation.clear();
   gSPoints.clear();
+}
+
+void removePolyByPolygonsMode(){
+  polygons.clear();
+  triangulation.clear();
 }

@@ -220,3 +220,18 @@ PVector getMaxYPoint(AbstractList<PVector> points){
   }
   return result;
 }
+
+void removePointsInsidePolygon(){
+  println("before removing");
+  printPVectorList(polygons);  
+  ArrayList<PVector> toDelete = new ArrayList<PVector>();
+  
+  for (int i = 0; i < points.size(); i++){
+    PVector point = points.get(i);
+    if (!polygons.contains(point)){
+      toDelete.add(point);
+      println("removing " + point);
+    }
+  }
+  points.removeAll(toDelete);
+}
