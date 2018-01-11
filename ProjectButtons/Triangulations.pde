@@ -111,26 +111,26 @@ void triangulation(){
       if(!onSamePath(B, C)){
         for(int i = stack.size() - 1; i >= 1 ; i--){
             addEdge(stack.get(i), C);
-            println("adding " + stack.get(i) + " "+ C);
+            //println("adding " + stack.get(i) + " "+ C);
         }
         stack.clear();
         stack.add(B);
         stack.add(C);
       }else{
         A = stack.get(stack.size() - 2);
-        println("We are here"+ A +" B="+B+" C="+C );
+        //println("We are here"+ A +" B="+B+" C="+C );
         
         if(bothOnPath(B, C, rightPath)){
-          println("Both on right path");
+          //println("Both on right path");
           if(!leftCrit(A, B, C)){
-            println("left crit right path = NOK");
+            //println("left crit right path = NOK");
             stack.add(C);
           }else{
-            println("turning RIGHT " + leftCrit(A, B, C));
+            //println("turning RIGHT " + leftCrit(A, B, C));
             while(leftCrit(A, B, C) ){
               addEdge(A,C);
-              println("left crit right path = NOK");
-              println ("added edge both on 1 side " + A + " " + C);
+              //println("left crit right path = NOK");
+              //println ("added edge both on 1 side " + A + " " + C);
               stack.remove(B);
               B = A;
               if(stack.size() - 2 < 0){
@@ -143,15 +143,15 @@ void triangulation(){
         }
         
         if(bothOnPath(B, C, leftPath)){
-          println("Both on left path");
+          //println("Both on left path");
           if(leftCrit(A, B, C)){
-            println("left crit  left path = OK");
+            //println("left crit  left path = OK");
             stack.add(C);
           }else{
              while(!leftCrit(A, B, C)){
                 addEdge(A,C);
-                println("left crit  left path = OK");
-                println ("added edge both on 1 side " + A+ " " + C);
+                //println("left crit  left path = OK");
+                //println ("added edge both on 1 side " + A+ " " + C);
                 stack.remove(B);
                 B = A;
                 if(stack.size() - 2 <0){
@@ -182,8 +182,18 @@ boolean isExtreme(PVector A){
 }
 
 void addEdge(PVector A, PVector B){
-    triangulation.add(A);
-    triangulation.add(B);
+  int indexA = polygons.indexOf(A);
+  int indexB = polygons.indexOf(B);
+  Integer[] indicesA = getNearIndices(polygons.size(), indexA);
+  Integer[] indicesB = getNearIndices(polygons.size(), indexB);
+  if(Arrays.asList(indicesA).contains(indexB)){
+    return;
+  }
+  if(Arrays.asList(indicesB).contains(indexA)){
+    return;
+  }
+  triangulation.add(A);
+  triangulation.add(B);
 }
 
 boolean onSamePath(PVector A, PVector B){
