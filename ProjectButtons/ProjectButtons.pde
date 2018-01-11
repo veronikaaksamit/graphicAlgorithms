@@ -181,12 +181,24 @@ void draw(){
     }
   }
   
-  if(parent != null){
-    stroke(color(#2DEA64));
-    line(parent.getCoordinates().x, 0, parent.getCoordinates().x, 540 );
+  if(root != null){
+    printVertical(root.getCoordinates().x, 0, 540);
+    //printHorizontal(root.getCoordinates().y, butSizeX, 960);
+    
   }
   
 }
+
+void printVertical(float x, int top, int bottom){
+    stroke(color(#2DEA64));
+    line(x, top, x, bottom);
+}
+
+void printHorizontal(float y, int left, int right){
+    stroke(color(#2DD9EA));
+    line(left, y, right, y);
+}
+
 
 //setting modes + calling functions when button pressed
 void mousePressed() {
