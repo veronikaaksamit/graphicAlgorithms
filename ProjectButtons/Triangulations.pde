@@ -27,26 +27,31 @@ void triangulation(){
       PVector nextPoint = polygons.get(nearIndices[1]);
       PVector previousPoint = polygons.get(nearIndices[0]);
       int iterator = nearIndices[1];
-      println("iterator could be " + nearIndices[0] + " or ...IS " + nearIndices[1]);
+      //println("iterator could be " + nearIndices[0] + " or ...IS " + nearIndices[1]);
       
-      println("upper point "+ minYPoint );
-      if(nextPoint == maxYPoint ){
-        
-        if(leftCrit(previousPoint, minYPoint, nextPoint)){
-          isOnRightPath = false;
-          println("*START LEFT path " + iterator + " " + nextPoint);
-        }else{
-          isOnRightPath = true;
-          println("*START RIGHT path " + iterator + " " + nextPoint);
+      //println("upper point "+ minYPoint );
+      if(isExtreme(nextPoint)){
+        // FROM MOST LEFT ONES TO RIGHT
+        ArrayList<PVector> lexipolygonsX = lexiSortX(polygons);
+        if(isExtreme(lexipolygonsX.get(0)) && isExtreme(lexipolygonsX.get(1))){
+          lexipolygonsX.remove(1);
+          lexipolygonsX.remove(0);
+          rightPath.addAll(lexipolygonsX);
+        }
+        int size = lexipolygonsX.size();
+        if(isExtreme(lexipolygonsX.get(size - 1)) && isExtreme(lexipolygonsX.get(size - 2))){
+          lexipolygonsX.remove(size - 1);
+          lexipolygonsX.remove(size - 2);
+          leftPath.addAll(lexipolygonsX);
         }
         
       }else{
         if (nextPoint.x > previousPoint.x){
           isOnRightPath = true;
-          println("START RIGHT path " + iterator + " " + nextPoint);
+          //println("START RIGHT path " + iterator + " " + nextPoint);
         }else{
           isOnRightPath = false;
-          println("START LEFT path " + iterator + " " + nextPoint);
+          //println("START LEFT path " + iterator + " " + nextPoint);
         }
       }
       
@@ -57,7 +62,6 @@ void triangulation(){
       rightPath.add(maxYPoint);
       
       while(rightPath.size() + leftPath.size() != polygons.size()){
-      //while (iterator != upperPointIndex){
         if(hasChanged(iterator)){
           //println("Has changed path " + isOnRightPath + " on point " + polygons.get(iterator));
         }else{
@@ -165,6 +169,16 @@ void triangulation(){
     removeAllPoints();
     createPolyMode = true;
   }
+}
+
+boolean isExtreme(PVector A){
+  if(A == minYPoint){
+    return true;
+  }
+  if(A == maxYPoint){
+    return true;
+  }
+  return false;
 }
 
 void addEdge(PVector A, PVector B){

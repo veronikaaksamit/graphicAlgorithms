@@ -17,6 +17,25 @@ ArrayList<PVector> lexiSort(AbstractList<PVector> inLines){
   return result;
 }
 
+ArrayList<PVector> lexiSortX(AbstractList<PVector> inLines){
+  ArrayList<PVector> lines = new ArrayList<PVector>(inLines);
+  ArrayList<PVector> result = new ArrayList<PVector>();
+  float arraySize = lines.size();
+  
+  while (result.size() != arraySize){
+    ArrayList<PVector> minX = getMinXPoints(lines);
+    while (minX.size() > 0){
+      PVector point = getMinYPoint(minX);
+      result.add(point);
+      minX.remove(point);
+      lines.remove(point);
+      println(point);
+    }  
+  }
+  
+  return result;
+}
+
 boolean leftCriterion(ArrayList<GrahamScanPoint> gSPoints, int index){
   Integer[] nearIndices = getNearIndices(gSPoints.size(), index);
   //println("Near indices for "+ index + " are =" + nearIndices[1] + " " + nearIndices[0]);
