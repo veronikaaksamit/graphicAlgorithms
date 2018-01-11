@@ -117,16 +117,21 @@ void triangulation(){
         println("We are here"+ A +" B="+B+" C="+C );
         
         if(bothOnPath(B, C, rightPath)){
+          println("Both on right path");
           if(!leftCrit(A, B, C)){
             println("left crit right path = NOK");
             stack.add(C);
           }else{
-            while(leftCrit(A, B, C) && A != stack.get(0)){
+            println("turning RIGHT " + leftCrit(A, B, C));
+            while(leftCrit(A, B, C) ){
               addEdge(A,C);
               println("left crit right path = NOK");
               println ("added edge both on 1 side " + A + " " + C);
               stack.remove(B);
               B = A;
+              if(stack.size() - 2 < 0){
+                break;
+              }
               A = stack.get(stack.size() - 2);
             }
             stack.add(C);
@@ -134,16 +139,20 @@ void triangulation(){
         }
         
         if(bothOnPath(B, C, leftPath)){
+          println("Both on left path");
           if(leftCrit(A, B, C)){
             println("left crit  left path = OK");
             stack.add(C);
           }else{
-             while(!leftCrit(A, B, C) && A != stack.get(0)){
+             while(!leftCrit(A, B, C)){
                 addEdge(A,C);
                 println("left crit  left path = OK");
                 println ("added edge both on 1 side " + A+ " " + C);
                 stack.remove(B);
                 B = A;
+                if(stack.size() - 2 <0){
+                  break;
+                }
                 A = stack.get(stack.size() - 2);
              }
              stack.add(C);
