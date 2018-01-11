@@ -18,16 +18,11 @@ PVector minYPoint, maxYPoint;
 
 
 void kDTree(){
-  float[] xAxes = new float[points.size()];
-  float[] yAxes = new float[points.size()];
+  
   for (int i = 0; i < points.size(); i++ ){
     println(points.get(i));
-    xAxes[i] = points.get(i).x;
   }
   
-  xAxes = sort(xAxes);
-  println(xAxes.length/2.0);
-  println(xAxes[xAxes.length/2]);
 }
 
 void grahamScan(){

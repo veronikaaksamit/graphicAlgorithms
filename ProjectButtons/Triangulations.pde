@@ -18,7 +18,7 @@ void triangulation(){
   println("Triangulation by sweep line");
   if (polygons.size()>3){
       removePointsInsidePolygon();
-      ArrayList<PVector> lexipolygons = lexiSort(polygons);
+      ArrayList<PVector> lexipolygonsY = lexiSortY(polygons);
       rightPath = new  ArrayList<PVector>();
       leftPath = new  ArrayList<PVector>();
       
@@ -90,18 +90,18 @@ void triangulation(){
     println();
     println("START OF REAL TRIANGULATION");
     triangulation = new ArrayList<PVector>();
-    printPVectorList(lexipolygons);
+    printPVectorList(lexipolygonsY);
   
     iterator = 2;
     ArrayList<PVector> stack = new ArrayList<PVector> ();
       
-    stack.add(lexipolygons.get(0));
-    stack.add(lexipolygons.get(1));
+    stack.add(lexipolygonsY.get(0));
+    stack.add(lexipolygonsY.get(1));
     
-    for (int j = 2; j <= lexipolygons.size() - 1 ; j++){
+    for (int j = 2; j <= lexipolygonsY.size() - 1 ; j++){
       
       PVector B = stack.get(stack.size() - 1);
-      PVector C = lexipolygons.get(j);
+      PVector C = lexipolygonsY.get(j);
       PVector A;
       
       //println(" B=" + B + " C=" + C );

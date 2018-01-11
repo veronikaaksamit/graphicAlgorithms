@@ -1,4 +1,4 @@
-ArrayList<PVector> lexiSort(AbstractList<PVector> inLines){
+ArrayList<PVector> lexiSortY(AbstractList<PVector> inLines){
   ArrayList<PVector> lines = new ArrayList<PVector>(inLines);
   ArrayList<PVector> result = new ArrayList<PVector>();
   float arraySize = lines.size();

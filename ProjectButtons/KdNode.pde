@@ -7,6 +7,21 @@ public class KdNode{
   private KdNode left = null; // pointer to left child
   private KdNode right = null; // pointer to right child
   
+  public KdNode(int depth, PVector coordinates, KdNode parent, KdNode left, KdNode right){
+    this.depth = depth;
+    this.coordinates = coordinates;
+    this.parent = parent;
+    this.left = left;
+    this.right = right;
+  }
+  
+  public KdNode(int depth, PVector coordinates, KdNode left, KdNode right){
+    this.depth = depth;
+    this.coordinates = coordinates;
+    this.parent = null;
+    this.left = left;
+    this.right = right;
+  }
   
   public void setDepth(int depth){
     this.depth = depth;
