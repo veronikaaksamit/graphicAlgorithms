@@ -181,6 +181,11 @@ void draw(){
     }
   }
   
+  if(parent != null){
+    stroke(color(#2DEA64));
+    line(parent.getCoordinates().x, 0, parent.getCoordinates().x, 540 );
+  }
+  
 }
 
 //setting modes + calling functions when button pressed

@@ -23,6 +23,14 @@ public class KdNode{
     this.right = right;
   }
   
+  public KdNode(int depth, PVector coordinates){
+    this.depth = depth;
+    this.coordinates = coordinates;
+    this.parent = null;
+    this.left = null;
+    this.right = null;
+  }
+  
   public void setDepth(int depth){
     this.depth = depth;
   }

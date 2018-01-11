@@ -15,13 +15,27 @@ ArrayList<GrahamScanPoint> gSPoints;
 
 //PolygonCreation
 PVector minYPoint, maxYPoint;
+KdNode parent;
 
 
 void kDTree(){
-  
-  for (int i = 0; i < points.size(); i++ ){
-    println(points.get(i));
+  if(points.size()>0){
+    ArrayList<PVector> lexiPointsByX = new ArrayList<PVector>(lexiSortX(points));
+    for (int i = 0; i < lexiPointsByX.size(); i++ ){
+      println(lexiPointsByX.get(i));
+    }
+    int size = lexiPointsByX.size();
+    if(size % 2 == 0){
+      int sHalf = (size - 1)/2;
+      PVector leftPoint = lexiPointsByX.get(sHalf);
+      PVector rightPoint = lexiPointsByX.get(sHalf + 1);
+      PVector middlePoint = new PVector( (leftPoint.x + rightPoint.x)/2, (leftPoint.y + rightPoint.y)/2 );
+      parent = new KdNode(0, middlePoint);
+    }else{
+      parent = new KdNode(0, lexiPointsByX.get(size/2));
+    }
   }
+  
   
 }
 
