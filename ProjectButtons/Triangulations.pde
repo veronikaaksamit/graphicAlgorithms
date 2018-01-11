@@ -29,25 +29,44 @@ void triangulation(){
       int iterator = nearIndices[1];
       println("iterator could be " + nearIndices[0] + " or ...IS " + nearIndices[1]);
       
-      if (nextPoint.x > previousPoint.x){
-        isOnRightPath = true;
+      println("upper point "+ minYPoint );
+      if(nextPoint == maxYPoint ){
+        
+        if(leftCrit(previousPoint, minYPoint, nextPoint)){
+          isOnRightPath = false;
+          println("*START LEFT path " + iterator + " " + nextPoint);
+        }else{
+          isOnRightPath = true;
+          println("*START RIGHT path " + iterator + " " + nextPoint);
+        }
+        
       }else{
-        isOnRightPath = false;
+        if (nextPoint.x > previousPoint.x){
+          isOnRightPath = true;
+          println("START RIGHT path " + iterator + " " + nextPoint);
+        }else{
+          isOnRightPath = false;
+          println("START LEFT path " + iterator + " " + nextPoint);
+        }
       }
+      
+      
+      
       
       leftPath.add(minYPoint);
       rightPath.add(maxYPoint);
       
-      while (iterator != upperPointIndex){
+      while(rightPath.size() + leftPath.size() != polygons.size()){
+      //while (iterator != upperPointIndex){
         if(hasChanged(iterator)){
           //println("Has changed path " + isOnRightPath + " on point " + polygons.get(iterator));
         }else{
           //println("iterator = " + iterator + " point = "+polygons.get(iterator));
           if(isOnRightPath){
-            //println("adding to right " + polygons.get(iterator));
+            println("adding to right " + polygons.get(iterator));
             rightPath.add(polygons.get(iterator));
           }else{
-            //println("adding to left " + polygons.get(iterator));
+            println("adding to left " + polygons.get(iterator));
             leftPath.add(polygons.get(iterator));
           }
         }
@@ -64,7 +83,7 @@ void triangulation(){
     printPVectorList(leftPath);
     println("right path");
     printPVectorList(rightPath);
-    
+    println();
     println("START OF REAL TRIANGULATION");
     triangulation = new ArrayList<PVector>();
     printPVectorList(lexipolygons);
@@ -75,7 +94,7 @@ void triangulation(){
     stack.add(lexipolygons.get(0));
     stack.add(lexipolygons.get(1));
     
-    for (int j = 2; j < lexipolygons.size() - 1 ; j++){
+    for (int j = 2; j <= lexipolygons.size() - 1 ; j++){
       
       PVector B = stack.get(stack.size() - 1);
       PVector C = lexipolygons.get(j);
@@ -87,7 +106,7 @@ void triangulation(){
       
       if(!onSamePath(B, C)){
         for(int i = stack.size() - 1; i >= 1 ; i--){
-            addEdge(B, C);
+            addEdge(stack.get(i), C);
             println("adding " + stack.get(i) + " "+ C);
         }
         stack.clear();
@@ -98,28 +117,36 @@ void triangulation(){
         println("We are here"+ A +" B="+B+" C="+C );
         
         if(bothOnPath(B, C, rightPath)){
-          if(leftCrit(A, B, C)){
-            println("left crit right path = OK");
+          if(!leftCrit(A, B, C)){
+            println("left crit right path = NOK");
             stack.add(C);
           }else{
-            addEdge(A,C);
-            println("left crit right path = NOK");
-            println ("added edge both on 1 side " + A + " " + C);
-            stack.remove(B);
+            while(leftCrit(A, B, C) && A != stack.get(0)){
+              addEdge(A,C);
+              println("left crit right path = NOK");
+              println ("added edge both on 1 side " + A + " " + C);
+              stack.remove(B);
+              B = A;
+              A = stack.get(stack.size() - 2);
+            }
             stack.add(C);
           }
         }
         
         if(bothOnPath(B, C, leftPath)){
-          if(!leftCrit(A, B, C)){
-            println("left crit  left path = NOK");
+          if(leftCrit(A, B, C)){
+            println("left crit  left path = OK");
             stack.add(C);
           }else{
-            addEdge(A,C);
-            println("left crit  left path = OK");
-            println ("added edge both on 1 side " + A+ " " + C);
-            stack.remove(B);
-            stack.add(C);
+             while(!leftCrit(A, B, C) && A != stack.get(0)){
+                addEdge(A,C);
+                println("left crit  left path = OK");
+                println ("added edge both on 1 side " + A+ " " + C);
+                stack.remove(B);
+                B = A;
+                A = stack.get(stack.size() - 2);
+             }
+             stack.add(C);
           }
         }
       }
@@ -170,8 +197,10 @@ boolean bothOnPath(PVector A, PVector B, ArrayList<PVector> path){
 boolean hasChanged(int iterator){
   if(polygons.get(iterator) == minYPoint || polygons.get(iterator) == maxYPoint){
     if(isOnRightPath){      
+      println("CHANGED on LEFT path " + polygons.get(iterator));
        isOnRightPath  = false;
     }else{
+      println("CHANGED on RIGHT path" + polygons.get(iterator));
       isOnRightPath  = true;
     }
     return true;
