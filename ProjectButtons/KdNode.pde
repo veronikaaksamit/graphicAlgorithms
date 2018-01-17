@@ -7,6 +7,14 @@ public class KdNode{
   private KdNode left = null; // pointer to left child
   private KdNode right = null; // pointer to right child
   
+   public KdNode(int depth, PVector coordinates, KdNode parent){
+    this.depth = depth;
+    this.coordinates = coordinates;
+    this.parent = parent;
+    this.left = null;
+    this.right = null;
+  }
+  
   public KdNode(int depth, PVector coordinates, KdNode parent, KdNode left, KdNode right){
     this.depth = depth;
     this.coordinates = coordinates;
@@ -69,6 +77,12 @@ public class KdNode{
   
   public KdNode getRight(){
     return right;
+  }
+  @Override
+  public String toString(){
+    StringBuilder str = new StringBuilder();
+    str.append(this.depth + ", [" + this.coordinates.x + "," + this.coordinates.y + "]:");
+    return str.toString();
   }
   
 }
