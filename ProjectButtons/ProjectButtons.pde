@@ -9,6 +9,8 @@ int butSizeY = 30;
 
 int pointSize = 18;
 
+int maxX, maxY;
+
 int numOfBut = 13;
 int butXCoord = 0;
 int butXNameCoord =  butXCoord + 5;
@@ -41,6 +43,8 @@ color highlightButColor = color(204);
 void setup() {
        //size(1280, 800);
        size(960, 540);
+       maxX = 960;
+       maxY = 540;
        clearSceneButY = 0;
        
        randomPointsButY = clearSceneButY  + butSizeY;
@@ -182,21 +186,42 @@ void draw(){
   }
   
   if(root != null){
-    printVertical(root.getCoordinates().x, 0, 540);
-    //printHorizontal(root.getCoordinates().y, butSizeX, 960);
-    
+    printTree();    
   }
   
 }
 
-void printVertical(float x, int top, int bottom){
-    stroke(color(#2DEA64));
-    line(x, top, x, bottom);
+void printTree(){
+  printVertical(root, 0, maxY);
+  
 }
 
-void printHorizontal(float y, int left, int right){
-    stroke(color(#2DD9EA));
-    line(left, y, right, y);
+void printVertical(KdNode node,  int top, int bottom){
+  stroke(color(#2DEA64));
+  line(node.getCoordinates().x, top, node.getCoordinates().x, bottom);
+  
+  if(node.getLeft()!= null){
+    printHorizontal(node.getLeft(), butSizeX, (int)node.getCoordinates().x);
+  }
+  
+  if(node.getRight()!= null){
+    printHorizontal(node.getRight(), (int)node.getCoordinates().x, maxX);
+    
+  }
+}
+
+void printHorizontal(KdNode node, int left, int right){
+  stroke(color(#2DD9EA));
+  line(left, node.getCoordinates().y, right, node.getCoordinates().y);
+  
+  if(node.getLeft()!= null){
+    printVertical(node.getLeft(), 0, (int)node.getCoordinates().y);
+  }
+  
+  if(node.getRight()!= null){
+    printVertical(node.getRight(), (int)node.getCoordinates().y, maxY);
+    
+  }
 }
 
 
