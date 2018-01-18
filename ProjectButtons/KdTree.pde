@@ -86,7 +86,7 @@ KdNode kDDivideY(KdNode parent, ArrayList<PVector> lexiPointsByY){
   }
   
   if(P4.size() > 1){
-    node2 = kDDivideY(newKd, P4);
+    node2 = kDDivideX(newKd, P4);
   }
   
   newKd.setLeft(node2);
@@ -102,7 +102,8 @@ PVector getHalfPointIndex(ArrayList<PVector> points){
   
   if(size % 2 == 1){
     int sHalf = ((size + 1)/2) - 1;
-    halfPoint = points.get(sHalf);    
+    halfPoint = points.get(sHalf); 
+    println("sHalf " + sHalf + " point" + halfPoint);
   }else{
     halfPoint = points.get((size/2));
   }
