@@ -5,7 +5,7 @@ void kDTree(){
     
     ArrayList<PVector> lexiPointsByX = new ArrayList<PVector>(lexiSortX(points));
     for (int i = 0; i < lexiPointsByX.size(); i++ ){
-      println(lexiPointsByX.get(i));
+      //println(lexiPointsByX.get(i));
     }
     root = kDDivideX(null, lexiPointsByX);
     println("Root:" + root);
@@ -23,13 +23,7 @@ KdNode kDDivideX(KdNode parent, ArrayList<PVector> lexiPointsByX){
   KdNode node1 = null;
   KdNode node2 = null;
   
-  if(size % 2 == 0){
-    int sHalf = (size + 1)/2;
-    halfPoint = lexiPointsByX.get(sHalf);    
-  }else{
-    halfPoint = lexiPointsByX.get(size/2);
-  }
-  
+  halfPoint = getHalfPointIndex(lexiPointsByX);
   
   P1 = new ArrayList<PVector>(lexiPointsByX.subList(0, lexiPointsByX.indexOf(halfPoint)));
   lexiPointsByX.removeAll(P1);
@@ -39,8 +33,9 @@ KdNode kDDivideX(KdNode parent, ArrayList<PVector> lexiPointsByX){
   
   int depth = 0;
   if(parent != null){
-    depth = parent.getDepth() +1;
+    depth = parent.getDepth() + 1;
   }
+  
   KdNode newKd = new KdNode(depth, halfPoint, parent);
   println("P1");
   printPVectorList(P1);
@@ -60,26 +55,25 @@ KdNode kDDivideX(KdNode parent, ArrayList<PVector> lexiPointsByX){
 }
 
 KdNode kDDivideY(KdNode parent, ArrayList<PVector> lexiPointsByY){
+  Collections.reverse(lexiPointsByY);
+  printPVectorList(lexiPointsByY);
   
-  int size = lexiPointsByY.size();
   ArrayList<PVector> P3, P4;
   PVector halfPoint;
   KdNode node1 = null;
   KdNode node2 = null;
   
-  if(size % 2 == 0){
-    int sHalf = (size + 1)/2;
-    halfPoint = lexiPointsByY.get(sHalf);    
-  }else{
-    halfPoint = lexiPointsByY.get(size/2);
-  }
-  
+  halfPoint = getHalfPointIndex(lexiPointsByY);
   
   P3 = new ArrayList<PVector>(lexiPointsByY.subList(0, lexiPointsByY.indexOf(halfPoint)));
   lexiPointsByY.removeAll(P3);
   P4 = new ArrayList<PVector>(lexiPointsByY);
   P3 = lexiSortX(P3);
   P4 = lexiSortX(P4); 
+  println("P3");
+  printPVectorList(P3);
+  println("P4");
+  printPVectorList(P4);
   
   int depth = 0;
   if(parent != null){
@@ -95,11 +89,25 @@ KdNode kDDivideY(KdNode parent, ArrayList<PVector> lexiPointsByY){
     node2 = kDDivideY(newKd, P4);
   }
   
-  newKd.setLeft(node1);
-  newKd.setRight(node2);
+  newKd.setLeft(node2);
+  newKd.setRight(node1);
   
   return newKd;
   
+}
+
+PVector getHalfPointIndex(ArrayList<PVector> points){
+  int size = points.size();
+  PVector halfPoint = null;
+  
+  if(size % 2 == 1){
+    int sHalf = ((size + 1)/2) - 1;
+    halfPoint = points.get(sHalf);    
+  }else{
+    halfPoint = points.get((size/2));
+  }
+  
+  return halfPoint;
 }
 
 void printTree(KdNode node){

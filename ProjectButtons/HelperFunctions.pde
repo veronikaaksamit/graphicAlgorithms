@@ -10,7 +10,7 @@ ArrayList<PVector> lexiSortY(AbstractList<PVector> inLines){
       result.add(point);
       minY.remove(point);
       lines.remove(point);
-      println(point);
+      //println(point);
     }  
   }
   
@@ -29,7 +29,7 @@ ArrayList<PVector> lexiSortX(AbstractList<PVector> inLines){
       result.add(point);
       minX.remove(point);
       lines.remove(point);
-      println(point);
+      //println(point);
     }  
   }
   

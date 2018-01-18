@@ -85,4 +85,20 @@ public class KdNode{
     return str.toString();
   }
   
+  public boolean isOnLeftSide(){
+    KdNode node = this;
+    while(node != root){
+      if(node.parent == root){
+        
+        if(root.getLeft() == node){
+          return true;
+        }else{
+          return false;
+        }
+      }
+      node = node.parent;
+    }
+    return false;
+  }
+  
 }

@@ -200,12 +200,23 @@ void printVertical(KdNode node,  int top, int bottom){
   stroke(color(#2DEA64));
   line(node.getCoordinates().x, top, node.getCoordinates().x, bottom);
   
+  //println("is on left side "+ node.isOnLeftSide() + " " + node);
   if(node.getLeft()!= null){
-    printHorizontal(node.getLeft(), butSizeX, (int)node.getCoordinates().x);
+    if(!node.getLeft().isOnLeftSide()){
+      printHorizontal(node.getLeft(), (int)root.getCoordinates().x, (int)node.getCoordinates().x);
+    }else{
+      printHorizontal(node.getLeft(), butSizeX, (int)node.getCoordinates().x);
+    }
+    
   }
   
   if(node.getRight()!= null){
-    printHorizontal(node.getRight(), (int)node.getCoordinates().x, maxX);
+    if(node.getRight().isOnLeftSide()){
+       printHorizontal(node.getRight(), (int)node.getCoordinates().x, (int)root.getCoordinates().x);
+    }else{
+      printHorizontal(node.getRight(), (int)node.getCoordinates().x, maxX);
+    }
+   
     
   }
 }
@@ -213,14 +224,13 @@ void printVertical(KdNode node,  int top, int bottom){
 void printHorizontal(KdNode node, int left, int right){
   stroke(color(#2DD9EA));
   line(left, node.getCoordinates().y, right, node.getCoordinates().y);
-  
+  //println("is on left side "+ node.isOnLeftSide() + " " + node);
   if(node.getLeft()!= null){
     printVertical(node.getLeft(), 0, (int)node.getCoordinates().y);
   }
   
   if(node.getRight()!= null){
-    printVertical(node.getRight(), (int)node.getCoordinates().y, maxY);
-    
+    printVertical(node.getRight(), (int)node.getCoordinates().y, maxY); 
   }
 }
 
