@@ -193,16 +193,18 @@ void draw(){
 
 void printTree(){
   printVertical(root, 0, maxY);
-  
+  //setting line for root
+  PVector rootLinePoint1 = new PVector (root.getCoordinates().x, 0);
+  PVector rootLinePoint2 = new PVector (root.getCoordinates().x, maxY);
+  root.setLine(rootLinePoint1, rootLinePoint2);
 }
 
 void printVertical(KdNode node,  int top, int bottom){
   stroke(color(#2DEA64));
   line(node.getCoordinates().x, top, node.getCoordinates().x, bottom);
   
-  //println("is on left side "+ node.isOnLeftSide() + " " + node);
   if(node.getLeft()!= null){
-    if(!node.getLeft().isOnLeftSide()){
+    if(node.getLeft().isOnRightSide()){
       printHorizontal(node.getLeft(), (int)root.getCoordinates().x, (int)node.getCoordinates().x);
     }else{
       printHorizontal(node.getLeft(), butSizeX, (int)node.getCoordinates().x);
@@ -222,9 +224,10 @@ void printVertical(KdNode node,  int top, int bottom){
 }
 
 void printHorizontal(KdNode node, int left, int right){
+  
   stroke(color(#2DD9EA));
   line(left, node.getCoordinates().y, right, node.getCoordinates().y);
-  //println("is on left side "+ node.isOnLeftSide() + " " + node);
+  
   if(node.getLeft()!= null){
     printVertical(node.getLeft(), 0, (int)node.getCoordinates().y);
   }
