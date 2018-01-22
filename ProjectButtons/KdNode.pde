@@ -6,6 +6,8 @@ public class KdNode{
   private KdNode parent = null; // pointer to parent node
   private KdNode left = null; // pointer to left child
   private KdNode right = null; // pointer to right child
+  private Line line = null;
+  
   
    public KdNode(int depth, PVector coordinates, KdNode parent){
     this.depth = depth;
@@ -78,6 +80,15 @@ public class KdNode{
   public KdNode getRight(){
     return right;
   }
+  
+  public void setLine(PVector p1, PVector p2){
+    this.line = new Line(p1, p2);
+  }
+  
+  public Line getLine(){
+    return this.line;
+  }
+  
   @Override
   public String toString(){
     StringBuilder str = new StringBuilder();
@@ -101,4 +112,67 @@ public class KdNode{
     return false;
   }
   
+  public boolean isOnRightSide(){
+    KdNode node = this;
+    while(node != root){
+      if(node.parent == root){
+        
+        if(root.getRight() == node){
+          return true;
+        }else{
+          return false;
+        }
+      }
+      node = node.parent;
+    }
+    return false;
+  }
+  
+  public int minYAncestor(){
+    KdNode node = this.parent;
+    int minY = Integer.MAX_VALUE;
+    while(node != root){
+      if(node.getCoordinates().y < minY){
+        minY = (int)node.getCoordinates().y;
+      }
+      node = node.parent;
+    }
+    return minY;
+  }
+  
+  public int minXAncestor(){
+    KdNode node = this.parent;
+    int minX = Integer.MAX_VALUE;
+    while(node != root){
+      if(node.getCoordinates().x < minX){
+        minX = (int)node.getCoordinates().x;
+      }
+      node = node.parent;
+    }
+    return minX;
+  }
+  
+  public int maxYAncestor(){
+    KdNode node = this.parent;
+    int maxY = Integer.MIN_VALUE;
+    while(node != root){
+      if(node.getCoordinates().y > maxY){
+        maxY = (int)node.getCoordinates().y;
+      }
+      node = node.parent;
+    }
+    return maxY;
+  }
+  
+  public int maxXAncestor(){
+    KdNode node = this.parent;
+    int maxX = Integer.MIN_VALUE;
+    while(node != root){
+      if(node.getCoordinates().x > maxX){
+        maxX = (int)node.getCoordinates().x;
+      }
+      node = node.parent;
+    }
+    return maxX;
+  }
 }
