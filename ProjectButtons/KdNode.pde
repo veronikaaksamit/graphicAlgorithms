@@ -83,6 +83,7 @@ public class KdNode{
   
   public void setLine(PVector p1, PVector p2){
     this.line = new Line(p1, p2);
+    this.checkForCrossings();
   }
   
   public Line getLine(){
@@ -93,6 +94,9 @@ public class KdNode{
   public String toString(){
     StringBuilder str = new StringBuilder();
     str.append(this.depth + ", [" + this.coordinates.x + "," + this.coordinates.y + "]:");
+    if(this.line != null){
+      str.append(line);
+    }
     return str.toString();
   }
   
@@ -126,6 +130,23 @@ public class KdNode{
       node = node.parent;
     }
     return false;
+  }
+  
+  public boolean checkForCrossings(){
+    KdNode node = this.getParent();
+    boolean isCrossing = false;
+    while(node != null && node != root ){
+      
+      if(node.getLine() != null){
+         if(this.line.isCrossingLine(node.getLine())){
+           println(this.line + "is crossing " + node.getLine());
+           isCrossing = true;
+         }
+         //println(this.line + " vs " + node.getLine() + " " + isCrossing);
+      }
+      node = node.getParent();
+    }
+    return isCrossing;
   }
   
   public int minYAncestor(){

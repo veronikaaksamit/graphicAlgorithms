@@ -192,11 +192,6 @@ void draw(){
 }
 
 void printTree(){
-  setVertical(root);
-  //setting line for root
-  PVector rootLinePoint1 = new PVector (root.getCoordinates().x, 0);
-  PVector rootLinePoint2 = new PVector (root.getCoordinates().x, maxY);
-  root.setLine(rootLinePoint1, rootLinePoint2);
   
   paintTree(root);
 }
@@ -223,67 +218,7 @@ void paintTree(KdNode node){
   }
 }
 
-void setVertical(KdNode node){
-  
-  PVector point2 = null;
-  PVector point1 = null;
-  
-  if(node.getLeft()!= null){
-    if(node.getLeft().isOnRightSide()){
-      point1 = new PVector((int)root.getCoordinates().x, node.getLeft().getCoordinates().y);
-      point2 = new PVector((int)node.getCoordinates().x, node.getLeft().getCoordinates().y);
-      
-      setHorizontal(node.getLeft());
-    }else{
-      setHorizontal(node.getLeft());
-      
-      point1 = new PVector(butSizeX, node.getLeft().getCoordinates().y);
-      point2 = new PVector((int)node.getCoordinates().x, node.getLeft().getCoordinates().y);
-      
-    }
-    
-    node.getLeft().setLine(point1, point2 );
-  }
-  
-  if(node.getRight()!= null){
-    if(node.getRight().isOnLeftSide()){
-       setHorizontal(node.getRight());
-       
-       point1 = new PVector((int)node.getCoordinates().x, node.getRight().getCoordinates().y);
-       point2 = new PVector((int)root.getCoordinates().x, node.getRight().getCoordinates().y);
-       
-    }else{
-      setHorizontal(node.getRight());
-      
-      point1 = new PVector((int)node.getCoordinates().x, node.getRight().getCoordinates().y);
-      point2 = new PVector(maxX, node.getRight().getCoordinates().y);
-    }
-   
-    node.getRight().setLine(point1, point2 );
-  }
-}
 
-void setHorizontal(KdNode node){
-  PVector point1 = null;
-  PVector point2 = null;
-  
-  if(node.getLeft()!= null){
-    setVertical(node.getLeft());
-    
-    point1 = new PVector((int)node.getLeft().getCoordinates().x, 0);
-    point2 = new PVector((int)node.getLeft().getCoordinates().x, node.getCoordinates().y);
-    
-    node.getLeft().setLine(point1, point2);
-  }
-  
-  if(node.getRight()!= null){
-    setVertical(node.getRight()); 
-    
-    point1 = new PVector((int)node.getRight().getCoordinates().x, (int)node.getCoordinates().y);
-    point2 = new PVector((int)node.getRight().getCoordinates().x, maxY);
-    node.getRight().setLine(point1, point2);
-  }
-}
 
 
 //setting modes + calling functions when button pressed
