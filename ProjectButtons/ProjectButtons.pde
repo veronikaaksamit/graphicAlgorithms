@@ -197,43 +197,95 @@ void printTree(){
   PVector rootLinePoint1 = new PVector (root.getCoordinates().x, 0);
   PVector rootLinePoint2 = new PVector (root.getCoordinates().x, maxY);
   root.setLine(rootLinePoint1, rootLinePoint2);
+  
+  paintTree(root);
+}
+
+void paintTree(KdNode node){
+  Line line = node.getLine();
+  
+  if(line != null){
+    if(line.isVertical()){
+      stroke(color(#2DEA64));
+    }else{
+      stroke(color(#2DD9EA));
+    }
+    
+    line(line.getPoint1().x,line.getPoint1().y, line.getPoint2().x, line.getPoint2().y);
+    
+    if(node.getRight() != null){
+      paintTree(node.getRight());
+    }
+    
+    if(node.getLeft() != null){
+      paintTree(node.getLeft());
+    }
+  }
 }
 
 void printVertical(KdNode node,  int top, int bottom){
-  stroke(color(#2DEA64));
-  line(node.getCoordinates().x, top, node.getCoordinates().x, bottom);
+  //stroke(color(#2DEA64));
+  //line(node.getCoordinates().x, top, node.getCoordinates().x, bottom);
+  
+  PVector point2 = null;
+  PVector point1 = null;
   
   if(node.getLeft()!= null){
     if(node.getLeft().isOnRightSide()){
+      point1 = new PVector((int)root.getCoordinates().x, node.getLeft().getCoordinates().y);
+      point2 = new PVector((int)node.getCoordinates().x, node.getLeft().getCoordinates().y);
+      
       printHorizontal(node.getLeft(), (int)root.getCoordinates().x, (int)node.getCoordinates().x);
     }else{
       printHorizontal(node.getLeft(), butSizeX, (int)node.getCoordinates().x);
+      
+      point1 = new PVector(butSizeX, node.getLeft().getCoordinates().y);
+      point2 = new PVector((int)node.getCoordinates().x, node.getLeft().getCoordinates().y);
+      
     }
     
+    node.getLeft().setLine(point1, point2 );
   }
   
   if(node.getRight()!= null){
     if(node.getRight().isOnLeftSide()){
        printHorizontal(node.getRight(), (int)node.getCoordinates().x, (int)root.getCoordinates().x);
+       
+       point1 = new PVector((int)node.getCoordinates().x, node.getRight().getCoordinates().y);
+       point2 = new PVector((int)root.getCoordinates().x, node.getRight().getCoordinates().y);
+       
     }else{
       printHorizontal(node.getRight(), (int)node.getCoordinates().x, maxX);
+      
+      point1 = new PVector((int)node.getCoordinates().x, node.getRight().getCoordinates().y);
+      point2 = new PVector(maxX, node.getRight().getCoordinates().y);
     }
    
-    
+    node.getRight().setLine(point1, point2 );
   }
 }
 
 void printHorizontal(KdNode node, int left, int right){
-  
-  stroke(color(#2DD9EA));
-  line(left, node.getCoordinates().y, right, node.getCoordinates().y);
+  //stroke(color(#2DD9EA));
+  //line(left, node.getCoordinates().y, right, node.getCoordinates().y);
+  PVector point1 = null;
+  PVector point2 = null;
   
   if(node.getLeft()!= null){
     printVertical(node.getLeft(), 0, (int)node.getCoordinates().y);
+    
+    point1 = new PVector((int)node.getLeft().getCoordinates().x, 0);
+    point2 = new PVector((int)node.getLeft().getCoordinates().x, node.getCoordinates().y);
+    
+    node.getLeft().setLine(point1, point2);
   }
   
   if(node.getRight()!= null){
     printVertical(node.getRight(), (int)node.getCoordinates().y, maxY); 
+    
+    point1 = new PVector((int)node.getRight().getCoordinates().x, (int)node.getCoordinates().y);
+    point2 = new PVector((int)node.getRight().getCoordinates().x, maxY);
+    node.getRight().setLine(point1, point2);
   }
 }
 
