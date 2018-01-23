@@ -4,9 +4,9 @@ void kDTree(){
   if(points.size()>0){
     
     ArrayList<PVector> lexiPointsByX = new ArrayList<PVector>(lexiSortX(points));
-    for (int i = 0; i < lexiPointsByX.size(); i++ ){
-      //println(lexiPointsByX.get(i));
-    }
+    /*for (int i = 0; i < lexiPointsByX.size(); i++ ){
+      println(lexiPointsByX.get(i));
+    }*/
     root = kDDivideX(null, lexiPointsByX);
     println("Root:" + root);
     printTree(root);

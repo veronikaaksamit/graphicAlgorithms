@@ -140,7 +140,7 @@ public class KdNode{
       if(node.getLine() != null){
          PVector crossingPoint = this.line.isCrossingLine(node.getLine());
          if(crossingPoint!= null){
-           println(this.line + "is crossing " + node.getLine() + " in the point " + crossingPoint);
+           //println(this.line + "is crossing " + node.getLine() + " in the point " + crossingPoint);
            this.line.changeExtremePointOfLine(crossingPoint);
            isCrossing = true;
          }
