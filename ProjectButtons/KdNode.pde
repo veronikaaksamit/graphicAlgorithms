@@ -138,11 +138,12 @@ public class KdNode{
     while(node != null && node != root ){
       
       if(node.getLine() != null){
-         if(this.line.isCrossingLine(node.getLine())){
-           println(this.line + "is crossing " + node.getLine());
+         PVector crossingPoint = this.line.isCrossingLine(node.getLine());
+         if(crossingPoint!= null){
+           println(this.line + "is crossing " + node.getLine() + " in the point " + crossingPoint);
+           this.line.changeExtremePointOfLine(crossingPoint);
            isCrossing = true;
          }
-         //println(this.line + " vs " + node.getLine() + " " + isCrossing);
       }
       node = node.getParent();
     }

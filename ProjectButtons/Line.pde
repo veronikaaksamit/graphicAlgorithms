@@ -56,22 +56,29 @@ public class Line{
     return false;
   }
   
-  public boolean isCrossingLine(Line line2){
+  public PVector isCrossingLine(Line line2){
     Line line1 = this;
     boolean canCross1 = false;
     boolean canCross2 = false;
     
+    PVector point = null;
+    
     if(line1.isVertical()){
       canCross1 = isInTheInterval((int)line1.point1.x, (int)line2.getPoint1().x, (int)line2.getPoint2().x);
       canCross2 = isInTheInterval((int)line2.getPoint1().y, (int)line1.point1.y, (int)line1.point2.y);
-      return canCross1 && canCross2;
+      if(canCross1 && canCross2){
+        point = new PVector(line1.point1.x, line2.getPoint1().y);
+      }
     }
     if(line1.isHorizontal()){
       canCross1 = isInTheInterval((int)line2.getPoint1().x, (int)line1.point1.x, (int)line1.point2.x);
       canCross2 = isInTheInterval((int)line1.point1.y, (int)line2.getPoint1().y, (int)line2.getPoint2().y);
-      return canCross1 && canCross2;
+      if(canCross1 && canCross2){
+        point = new PVector(line2.getPoint1().x, line1.point1.y);
+      }
     }
-    return canCross1 && canCross2;
+    
+    return point;
   }
   
   private boolean isInTheInterval(int x, int a, int b){
@@ -87,5 +94,23 @@ public class Line{
     }
     
     return false;
+  }
+  
+  public void changeExtremePointOfLine(PVector crossingPoint){
+    if(this.isVertical()){
+      if(this.getPoint1().y == 0){
+        this.setPoint1(crossingPoint);
+      }else{
+        this.setPoint2(crossingPoint);
+      }
+    }
+    
+    if(this.isHorizontal()){
+      if(this.getPoint1().x == butSizeX){
+        this.setPoint1(crossingPoint);
+      }else{
+        this.setPoint2(crossingPoint);
+      }
+    }
   }
 }
