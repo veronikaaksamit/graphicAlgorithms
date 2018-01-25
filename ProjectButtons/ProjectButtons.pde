@@ -77,6 +77,9 @@ void setup() {
        rightPath = new ArrayList<PVector>();
        leftPath = new ArrayList<PVector>();
        triangulation = new ArrayList<PVector>();
+       
+       //DelaunayTriangulation
+       activeEdgesL = new ArrayList<ActiveEdge>();
         
 }
 
@@ -242,9 +245,11 @@ void mousePressed() {
     }else if (overBut(butXCoord, removePolyButY) ) {
       setModes(false, false, false, false);
       removePolyByPolygonsMode();
+      root = null;
     }else if (overBut(butXCoord, clearSceneButY)) {
       setModes(false, false, false, false);
       removeAllPoints();
+      root = null;
     }else if (overBut(butXCoord, randomPointsButY)) {
       setModes(false, false, false, false);
       removePolyByPolygonsMode();
@@ -252,20 +257,25 @@ void mousePressed() {
     }else if (overBut(butXCoord, giftWrapButY)) {
       setModes(false, false, false, false);
       giftWrapping();
+      root = null;
     }else if (overBut(butXCoord, grahamScButY)) {
       setModes(false, false, false, false);
       grahamScan();
+      root = null;
     }else if (overBut(butXCoord, triangulationButY)) {
       setModes(false, false, false, false);
       triangulation();
+      root = null;
     }else if (overBut(butXCoord, kDTreeButY)) {
       setModes(false, false, false, false);
       kDTree();
     }else if (overBut(butXCoord, delaunayTButY)) {
       setModes(false, false, false, false);
       delaunayTriangulation();
+      root = null;
     }else if (overBut(butXCoord, voronoiDiagButY)) {
       setModes(false, false, false, false);
+      root = null;
       delaunayTriangulation();
       voronoiDiagrams();
     }

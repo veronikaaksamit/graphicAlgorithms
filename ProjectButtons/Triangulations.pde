@@ -3,11 +3,14 @@ ArrayList<PVector> rightPath, leftPath;
 boolean isOnRightPath = false;
 ArrayList<PVector> triangulation;
 
+ArrayList<ActiveEdge> activeEdgesL;
+
 void voronoiDiagrams(){
 }
 
 
 void delaunayTriangulation(){
+  
 }
 
 void triangulation(){
@@ -53,10 +56,7 @@ void triangulation(){
           isOnRightPath = false;
           //println("START LEFT path " + iterator + " " + nextPoint);
         }
-      }
-      
-      
-      
+      }      
       
       leftPath.add(minYPoint);
       rightPath.add(maxYPoint);
