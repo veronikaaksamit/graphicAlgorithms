@@ -2,12 +2,15 @@ public class Circle{
   private RealPoint center;
   private float radius;
   
+  public Circle(){
+  }
+  
   public Circle(RealPoint centerV, float radiusV){
     this.center = centerV;
     this.radius = radiusV;
   }
   
-  public void setCener(RealPoint value){
+  public void setCenter(RealPoint value){
     this.center = value;
   }
   
@@ -29,16 +32,17 @@ public class Circle{
   
   public void circumCircle(RealPoint p1, RealPoint p2, RealPoint p3){
     float cp = crossProduct(p1,p2,p3);
-    if ( cp <> 0) {
+    if ( cp != 0) {
       float p1Sq  = sq(p1.getX()) + sq(p1.getY());
       float p2Sq = sq(p2.getX()) + sq(p2.getY());
-      float 3Sq = sq(p3.getX()) + sq(p3.getY());
-      /*num = p 1Sq *(p Sq *(p 2.y .y -p3.y) + p.y) + p .y) + p.y) + p 2Sq *(p Sq *(p 3.y -p1.y) + .y) + .y) + .y) + p3Sq *(p Sq *(pSq *(p 1.y -p2.y); .y); .y);
-      cx = num / (2.0 * / (2.0 * / (2.0 * / (2.0 * / (2.0 * cp ); );
-      num = p 1Sq *(p Sq *(pSq *(p 3.x -p2.x) + p .x) + p 2Sq*(p Sq*(p 1.x -p3.x) + .x) + p3Sq*(p Sq*(p 2.x -p1.x);
-      cy = num / (2.0f * / (2.0f * cp ); ); c.set c.set(cx , cy );
-      c.set(cx , cy ); );
-      r = c.distance(p 1);*/
+      float p3Sq = sq(p3.getX()) + sq(p3.getY());
+      float num = p1Sq *(p2.getY() - p3.getY()) + p2Sq *(p3.getY() - p1.getY()) + p3Sq *(p1.getY() - p2.getY());
+      float cx = num / (2.0f * cp );
+      num = p1Sq *(p3.getX() - p2.getX()) + p2Sq*(p1.getX() - p3.getX()) + p3Sq*(p2.getX() - p1.getX());
+      float cy = num / (2.0f * cp );
+      this.setCenter(new RealPoint(cx, cy));
+      this.setRadius(this.center.distance(p1));
+    }
   }
   
   private float crossProduct(RealPoint p1, RealPoint p2, RealPoint p3){

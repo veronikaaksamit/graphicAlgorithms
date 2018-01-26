@@ -49,7 +49,7 @@ public class ActiveEdge{
     return this.twin;
   }
   
-  public RealPoint minDelDistPoint(ArrayList<PVector> points){
+  /*public RealPoint minDelDistPoint(ArrayList<PVector> points){
     ActiveEdge
-  } 
+  } */
 }

@@ -80,6 +80,7 @@ void setup() {
        
        //DelaunayTriangulation
        activeEdgesL = new ArrayList<ActiveEdge>();
+       c = new Circle();
         
 }
 
@@ -190,6 +191,11 @@ void draw(){
   
   if(root != null){
     printTree();    
+  }
+  
+  if(c!= null && c.getCenter() != null){
+    fill(color(#FFF81A));
+    ellipse(c.getCenter().x, c.getCenter().y, c.getRadius(),  c.getRadius());
   }
   
 }

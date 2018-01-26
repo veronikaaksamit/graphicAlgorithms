@@ -2,6 +2,11 @@ public class RealPoint{
   private float x;
   private float y;
   
+  public RealPoint(PVector p){
+    this.x = p.x;
+    this.y = p.y;
+  }
+  
   public RealPoint(float xV, float yV){
     this.x = xV;
     this.y = yV;
