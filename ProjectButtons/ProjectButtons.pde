@@ -194,8 +194,8 @@ void draw(){
   }
   
   if(c!= null && c.getCenter() != null){
-    fill(color(#FFF81A));
-    ellipse(c.getCenter().x, c.getCenter().y, c.getRadius(),  c.getRadius());
+    fill(color(#FFF81A, 1.5));
+    ellipse(c.getCenter().x, c.getCenter().y, c.getRadius()*2,  c.getRadius()*2);
   }
   
 }

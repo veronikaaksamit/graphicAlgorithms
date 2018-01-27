@@ -7,17 +7,17 @@ ArrayList<ActiveEdge> activeEdgesL;
 Circle c;
 
 void voronoiDiagrams(){
+  
+}
+
+
+void delaunayTriangulation(){
   if(points.size() >= 3){
     RealPoint p1 = new RealPoint(points.get(0));
     RealPoint p2 = new RealPoint(points.get(1));
     RealPoint p3 = new RealPoint(points.get(2));
     c.circumCircle(p1, p2, p3);
   }
-}
-
-
-void delaunayTriangulation(){
-  
 }
 
 void triangulation(){
