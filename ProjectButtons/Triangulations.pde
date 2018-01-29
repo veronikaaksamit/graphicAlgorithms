@@ -4,6 +4,7 @@ boolean isOnRightPath = false;
 ArrayList<PVector> triangulation;
 
 ArrayList<ActiveEdge> activeEdgesL;
+ArrayList<ActiveEdge> DT;
 Circle c;
 
 void voronoiDiagrams(){
@@ -13,11 +14,108 @@ void voronoiDiagrams(){
 
 void delaunayTriangulation(){
   if(points.size() >= 3){
-    RealPoint p1 = new RealPoint(points.get(0));
-    RealPoint p2 = new RealPoint(points.get(1));
-    RealPoint p3 = new RealPoint(points.get(2));
-    c.circumCircle(p1, p2, p3);
+    activeEdgesL = new ArrayList<ActiveEdge>();
+    DT = new ArrayList<ActiveEdge>();
+    maxXPoint = getMaxXPoints(points).get(0);
+    
+    RealPoint p1 = new RealPoint(maxXPoint);
+    RealPoint p2 =  p1.nearestPoint();
+    
+    RealPoint p3 = smallestDelaunayDistancePoint(p1, p2, points);
+    if(p3 == null){      
+      println("Could not find p for "+ p1 +" "+ p2);
+      RealPoint tmp = p1;
+      p1 = p2;
+      p2 = tmp;
+      p3 = smallestDelaunayDistancePoint(p1,p2, points);
+    }
+    
+    if(p3!= null){
+      
+      println(p1 +""+ p2 + " " + p3);
+      c.circumCircle(p1, p2, p3);
+      
+      ActiveEdge e1 = new ActiveEdge(p1,p2);
+      ActiveEdge e2 = new ActiveEdge(p2,p3);
+      ActiveEdge e3 = new ActiveEdge(p3,p1);
+      activeEdgesL = new ArrayList<ActiveEdge>();
+      
+      addToAEL(e1, e2, e3);
+      
+      ArrayList<PVector> tmpPoints = new ArrayList<PVector>(points);
+      removeFromTmpPoints(p1, p2, p3, tmpPoints);
+      
+      while(activeEdgesL.size() > 0){
+        e1 = activeEdgesL.get(0).swapOrientation();
+        p3 = smallestDelaunayDistancePoint(e1.getP1(), e1.getP2(), tmpPoints);
+        //println(e1 + " p3 ="+ p3);
+        if(p3!= null){
+          e2 =  new ActiveEdge(e1.getP2(), p3);
+          e3 = new ActiveEdge(p3, e1.getP1());
+          activeEdgesL.get(0).setTwin(e1);
+          addToAEL(e1, e2, e3);
+          removeFromTmpPoints(e1.getP1(), e1.getP2(), p3, tmpPoints);
+        }
+        removeFromAEL(e1.swapOrientation());
+      }
+      printDelaunayTriangulation();
+    }
   }
+}
+
+public ArrayList<PVector> removeFromTmpPoints(RealPoint p1, RealPoint p2, RealPoint p3, ArrayList<PVector>tmpPoints){
+  ArrayList<PVector>result = new ArrayList<PVector>(tmpPoints);
+  for(int i =  tmpPoints.size() - 1; i >= 0 ; i--){
+    if(tmpPoints.get(i).x == p1.getX() &&  tmpPoints.get(i).y == p1.getY()){
+      result.remove(i);
+    }
+    if(tmpPoints.get(i).x == p2.getX() &&  tmpPoints.get(i).y == p2.getY()){
+      result.remove(i);
+    }
+    if(tmpPoints.get(i).x == p3.getX() &&  tmpPoints.get(i).y == p3.getY()){
+      result.remove(i);
+    }
+  }
+  return result;
+}
+
+public void printDelaunayTriangulation(){
+  println("Delaunay Triangulation result");
+  for(ActiveEdge ae : DT){
+    println(ae);
+  }
+}
+
+public RealPoint smallestDelaunayDistancePoint(RealPoint p1, RealPoint p2, ArrayList<PVector> pointList){
+  Circle c1 = new Circle();
+  RealPoint smallerDistPoint = null;
+  
+  for(int i = 0; i < pointList.size() ; i++){
+    RealPoint p = new RealPoint(pointList.get(i));
+    
+    if(!p.equals(p1) && !p.equals(p2)){
+      //println("Not p1, p2 point" + p);
+      if(c1.getCenter() == null){
+        //println("c1.getCenter() is null");
+        if(!leftCrit(p1, p2, p)){
+          //println("Left crit NOK");
+          c1.circumCircle(p1,p2,p);
+          smallerDistPoint = p;
+        }
+      }else{
+        //println("c1.getCenter() is  NOT null");
+        if(c1.inside(p)){
+          //println(p + "p is inside");
+          if(!leftCrit(p1, p2, p)){
+            //println("Left crit NOK");
+            c1.circumCircle(p1,p2,p);
+            smallerDistPoint = p;
+          }
+        }
+      }
+    }
+  }
+  return smallerDistPoint;
 }
 
 void triangulation(){

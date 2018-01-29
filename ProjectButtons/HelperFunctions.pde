@@ -58,6 +58,13 @@ boolean leftCrit(PVector p1, PVector p2, PVector p3){
   else return false;//need to remove middle point turns RIGHT
 }
 
+boolean leftCrit(RealPoint p1, RealPoint p2, RealPoint p3){
+  float resultInNum = (p2.getX() - p1.getX())* (p3.getY() - p1.getY()) - (p2.getY() - p1.getY()) *(p3.getX() - p1.getX());
+  //println("p1 =" + p1.x +", p2 =" + p2.x +", p3 =" + p3.x);
+  if (resultInNum >= 0) return true; //no need for deletion turns LEFT
+  else return false;//need to remove middle point turns RIGHT
+}
+
 Integer[] getNearIndices(int arrayLSize, int index){
   Integer[] result = new Integer[2];
   if (arrayLSize < 2){
@@ -260,4 +267,16 @@ void removePointsInsidePolygon(){
     }
   }
   points.removeAll(toDelete);
+}
+
+public void removePolygonsKdTreeTriangulations(){
+  //kDTree
+  root = null;
+  //Triangulation
+  triangulation.clear();
+  //Delaunay triangulation
+  DT = new ArrayList<ActiveEdge>();
+  c = new Circle();
+  //Polygons
+  polygons.clear();
 }

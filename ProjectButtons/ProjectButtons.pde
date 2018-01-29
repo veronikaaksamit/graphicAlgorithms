@@ -1,5 +1,7 @@
 import java.util.*;
 
+  
+//PrintWriter output;
 PFont font;
 
 //Sizes
@@ -43,6 +45,7 @@ color highlightButColor = color(204);
 void setup() {
        //size(1280, 800);
        size(960, 540);
+       //output = createWriter("output from DT.txt"); 
        maxX = 960;
        maxY = 540;
        clearSceneButY = 0;
@@ -80,6 +83,7 @@ void setup() {
        
        //DelaunayTriangulation
        activeEdgesL = new ArrayList<ActiveEdge>();
+       DT = new ArrayList<ActiveEdge>();
        c = new Circle();
         
 }
@@ -193,9 +197,21 @@ void draw(){
     printTree();    
   }
   
-  if(c!= null && c.getCenter() != null){
-    fill(color(#FFF81A, 1.5));
-    ellipse(c.getCenter().x, c.getCenter().y, c.getRadius()*2,  c.getRadius()*2);
+  
+  
+  if(DT!= null){
+    for (int i = 0; i < DT.size(); i ++) {
+      stroke(color(#FFF81A));
+      line(DT.get(i).getP1().getX(), DT.get(i).getP1().getY(), DT.get(i).getP2().getX(), DT.get(i).getP2().getY());
+      /*if(i % 3 == 2){
+        c.circumCircle(DT.get(i-2).getP1(), DT.get(i-1).getP1(), DT.get(i).getP1());
+        if(c!= null && c.getCenter() != null){
+          stroke(0);
+          noFill();
+          ellipse(c.getCenter().x, c.getCenter().y, c.getRadius()*2,  c.getRadius()*2);
+        }
+      }*/
+    }
   }
   
 }
@@ -241,47 +257,47 @@ void mousePressed() {
       removePolyByPolygonsMode();
     } else if ( overBut(butXCoord, movePointButY) ) {
       setModes(false, false, true, false);
-      removePolyByPolygonsMode();
     } else if ( overBut(butXCoord, deletePointButY) ) {
       setModes(false, true, false, false);
       removePolyByPolygonsMode();
     } else if ( overBut(butXCoord, createPolyButY) ) {
       setModes(false, false, false, true);
+      removePolygonsKdTreeTriangulations();
       removeAllPoints();
     }else if (overBut(butXCoord, removePolyButY) ) {
       setModes(false, false, false, false);
       removePolyByPolygonsMode();
-      root = null;
     }else if (overBut(butXCoord, clearSceneButY)) {
       setModes(false, false, false, false);
       removeAllPoints();
-      root = null;
+      removePolygonsKdTreeTriangulations();
     }else if (overBut(butXCoord, randomPointsButY)) {
       setModes(false, false, false, false);
       removePolyByPolygonsMode();
       addRandomPoints();
     }else if (overBut(butXCoord, giftWrapButY)) {
       setModes(false, false, false, false);
+      removePolygonsKdTreeTriangulations();
       giftWrapping();
-      root = null;
     }else if (overBut(butXCoord, grahamScButY)) {
       setModes(false, false, false, false);
+      removePolygonsKdTreeTriangulations();
       grahamScan();
-      root = null;
     }else if (overBut(butXCoord, triangulationButY)) {
       setModes(false, false, false, false);
+      removePolygonsKdTreeTriangulations();
       triangulation();
-      root = null;
     }else if (overBut(butXCoord, kDTreeButY)) {
       setModes(false, false, false, false);
+      removePolygonsKdTreeTriangulations();
       kDTree();
     }else if (overBut(butXCoord, delaunayTButY)) {
       setModes(false, false, false, false);
+      removePolygonsKdTreeTriangulations();
       delaunayTriangulation();
-      root = null;
     }else if (overBut(butXCoord, voronoiDiagButY)) {
       setModes(false, false, false, false);
-      root = null;
+      removePolygonsKdTreeTriangulations();
       delaunayTriangulation();
       voronoiDiagrams();
     }
