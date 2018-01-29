@@ -85,7 +85,8 @@ void setup() {
        activeEdgesL = new ArrayList<ActiveEdge>();
        DT = new ArrayList<ActiveEdge>();
        c = new Circle();
-        
+       //Voronoi diagrams
+       VD = new ArrayList<Line>();
 }
 
 void draw(){
@@ -203,14 +204,23 @@ void draw(){
     for (int i = 0; i < DT.size(); i ++) {
       stroke(color(#FFF81A));
       line(DT.get(i).getP1().getX(), DT.get(i).getP1().getY(), DT.get(i).getP2().getX(), DT.get(i).getP2().getY());
-      /*if(i % 3 == 2){
+      if(i % 3 == 2){
         c.circumCircle(DT.get(i-2).getP1(), DT.get(i-1).getP1(), DT.get(i).getP1());
-        if(c!= null && c.getCenter() != null){
+        /*if(c!= null && c.getCenter() != null){
           stroke(0);
           noFill();
           ellipse(c.getCenter().x, c.getCenter().y, c.getRadius()*2,  c.getRadius()*2);
-        }
-      }*/
+        }*/
+      }
+    }
+  }
+  if(VD != null){
+    for (int i = 0; i < VD.size(); i ++) {
+
+      stroke(color(#31BCDE));      
+      ellipse(VD.get(i).getPoint1().x, VD.get(i).getPoint1().y, pointSize/5, pointSize/5);
+      ellipse(VD.get(i).getPoint2().x, VD.get(i).getPoint2().y, pointSize/5, pointSize/5);
+      line(VD.get(i).getPoint1().x, VD.get(i).getPoint1().y, VD.get(i).getPoint2().x, VD.get(i).getPoint2().y);
     }
   }
   

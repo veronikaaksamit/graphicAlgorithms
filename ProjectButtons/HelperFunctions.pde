@@ -277,6 +277,8 @@ public void removePolygonsKdTreeTriangulations(){
   //Delaunay triangulation
   DT = new ArrayList<ActiveEdge>();
   c = new Circle();
+  //Voronoi diagrams
+  VD = new ArrayList<Line>();
   //Polygons
   polygons.clear();
 }

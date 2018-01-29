@@ -11,6 +11,11 @@ public class Line{
     this.point2 = p2;
   }
   
+  public Line(RealPoint p1, RealPoint p2){
+    this.point1 = new PVector(p1.getX(), p1.getY());
+    this.point2 = new PVector(p2.getX(), p2.getY());
+  }
+  
   public PVector getPoint1(){
     return this.point1;
   }

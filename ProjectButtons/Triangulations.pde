@@ -7,8 +7,41 @@ ArrayList<ActiveEdge> activeEdgesL;
 ArrayList<ActiveEdge> DT;
 Circle c;
 
+ArrayList<Line> VD;
+
 void voronoiDiagrams(){
-  
+  if(DT!= null){
+    for (int i = 0; i < DT.size(); i ++) {
+      Circle c1 = new Circle();
+      if(i % 3 == 2){
+        c.circumCircle(DT.get(i-2).getP1(), DT.get(i-1).getP1(), DT.get(i).getP1());
+        
+        if(DT.get(i).getTwin() != null && DT.get(i).getTwin().getNext()!= null){
+          c1.circumCircle(DT.get(i).getP1(), DT.get(i).getP2(), DT.get(i).getTwin().getNext().getP2());
+          Line l = new Line(c.getCenter(), c1.getCenter());
+          VD.add(l);
+        }else{
+          //Line l = new Line(c.getCenter(),);
+        }
+        
+        if(DT.get(i-1).getTwin() != null && DT.get(i-1).getTwin().getNext()!= null){
+          c1.circumCircle(DT.get(i-1).getP1(), DT.get(i-1).getP2(), DT.get(i-1).getTwin().getNext().getP2());
+          Line l = new Line(c.getCenter(), c1.getCenter());
+          VD.add(l);
+        }else{
+          //Line l = new Line(c.getCenter(),);
+        }
+        
+        if(DT.get(i-2).getTwin() != null && DT.get(i-2).getTwin().getNext()!= null){
+          c1.circumCircle(DT.get(i-2).getP1(), DT.get(i-2).getP2(), DT.get(i-2).getTwin().getNext().getP2());
+          Line l = new Line(c.getCenter(), c1.getCenter());
+          VD.add(l);
+        }else{
+          //Line l = new Line(c.getCenter(), );
+        }
+      }
+    }
+  }
 }
 
 
