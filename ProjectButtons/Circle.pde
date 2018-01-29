@@ -10,6 +10,11 @@ public class Circle{
     this.radius = radiusV;
   }
   
+  public Circle(Circle c){
+    this.center = c.getCenter();
+    this.radius = c.getRadius();
+  }
+  
   public void setCenter(RealPoint value){
     this.center = value;
   }
@@ -52,4 +57,6 @@ public class Circle{
     float v2= p3.getY() - p1.getY();
     return u1* v2 - v1* u2;
   }
+  
+  
 }
