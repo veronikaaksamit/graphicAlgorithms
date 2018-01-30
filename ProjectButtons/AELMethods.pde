@@ -43,17 +43,29 @@ public void addToAEL(ActiveEdge e1, ActiveEdge e2, ActiveEdge e3){
   }else{
     //println("Not adding to AEL e3 is in AEL "+ e3);
   }
-  e1.setNext(e2);
+  
   DT.add(e1);
-  //println("Adding to DT e1 "+ e1);
+  output.println("Adding to DT e1 "+ e1);
   
-  e2.setNext(e3);
   DT.add(e2);
-  //println("Adding to DT e2 "+ e2);
+  output.println("Adding to DT e2 "+ e2);
   
-  e3.setNext(e1);
   DT.add(e3);
-  //println("Adding to DT e3 "+ e3);
+  output.println("Adding to DT e3 "+ e3);
+  
+}
+
+public ActiveEdge findInDT(ActiveEdge ae){
+  ActiveEdge result = null;
+  for(int i = 0 ; i< DT.size() ; i++){
+    if(DT.get(i).equals(ae)){
+      if(DT.get(i).getTwin().getNext() != null){
+        ae.setTwin(DT.get(i).getTwin());
+        result = DT.get(i);
+      }
+    }
+  }
+  return result;
 }
 
 public boolean isInAEL(ActiveEdge ae){

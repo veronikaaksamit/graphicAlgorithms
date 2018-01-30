@@ -1,7 +1,7 @@
 import java.util.*;
 
   
-//PrintWriter output;
+PrintWriter output;
 PFont font;
 
 //Sizes
@@ -45,7 +45,7 @@ color highlightButColor = color(204);
 void setup() {
        //size(1280, 800);
        size(960, 540);
-       //output = createWriter("output from DT.txt"); 
+       output = createWriter("output from VD.txt"); 
        maxX = 960;
        maxY = 540;
        clearSceneButY = 0;
@@ -204,14 +204,15 @@ void draw(){
     for (int i = 0; i < DT.size(); i ++) {
       stroke(color(#FFF81A));
       line(DT.get(i).getP1().getX(), DT.get(i).getP1().getY(), DT.get(i).getP2().getX(), DT.get(i).getP2().getY());
-      if(i % 3 == 2){
+      /*if(i % 3 == 2){
         c.circumCircle(DT.get(i-2).getP1(), DT.get(i-1).getP1(), DT.get(i).getP1());
-        /*if(c!= null && c.getCenter() != null){
+        if(c!= null && c.getCenter() != null){
           stroke(0);
           noFill();
           ellipse(c.getCenter().x, c.getCenter().y, c.getRadius()*2,  c.getRadius()*2);
-        }*/
-      }
+          text(c.getCenter().x + c.getCenter().y, c.getCenter().x - 3, c.getCenter().y + 3);
+        }
+      }*/
     }
   }
   if(VD != null){
@@ -221,6 +222,15 @@ void draw(){
       ellipse(VD.get(i).getPoint1().x, VD.get(i).getPoint1().y, pointSize/5, pointSize/5);
       ellipse(VD.get(i).getPoint2().x, VD.get(i).getPoint2().y, pointSize/5, pointSize/5);
       line(VD.get(i).getPoint1().x, VD.get(i).getPoint1().y, VD.get(i).getPoint2().x, VD.get(i).getPoint2().y);
+    }
+  }
+  if(otherLines != null){
+    for (int i = 0; i < otherLines.size(); i ++) {
+
+      stroke(color(#FF1281));      
+      ellipse(otherLines.get(i).getPoint1().x, otherLines.get(i).getPoint1().y, pointSize/5, pointSize/5);
+      ellipse(otherLines.get(i).getPoint2().x, otherLines.get(i).getPoint2().y, pointSize/5, pointSize/5);
+      line(otherLines.get(i).getPoint1().x,otherLines.get(i).getPoint1().y, otherLines.get(i).getPoint2().x, otherLines.get(i).getPoint2().y);
     }
   }
   

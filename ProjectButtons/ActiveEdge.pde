@@ -28,6 +28,21 @@ public class ActiveEdge{
   public String toString(){
     StringBuilder sb = new StringBuilder();
     sb.append(p1.toString() + "->" + p2.toString());
+    if(next != null){
+      sb.append("Next " + next.getP1());
+    }else{
+      sb.append("Next is NULL");
+    }
+    if(twin != null){
+      sb.append("Twin" + twin.getP1());
+      if(twin.getNext()!= null){
+        sb.append("Twin next" +twin.getNext().getP1());
+      }else{
+        sb.append("Twin next is NULL");
+      }
+    }else{
+      sb.append("Twin is NULL");
+    }
     return sb.toString();
   }
   
@@ -64,11 +79,15 @@ public class ActiveEdge{
   }
   
   public void setNext(ActiveEdge n){
-    this.next = n;
+    if(n != null){
+      this.next = n;
+    }
   }
   
   public void setTwin(ActiveEdge t){
-    this.twin = t;
+    if(t!= null){
+      this.twin = t;
+    }
   }
   
   public ActiveEdge getNext(){
@@ -77,5 +96,16 @@ public class ActiveEdge{
   
   public ActiveEdge getTwin(){
     return this.twin;
+  }
+  
+  public PVector getVector(){
+    PVector p = new PVector(this.p2.x - this.p1.x,this.p2.y - this.p1.y);
+    p.normalize();
+    return p;
+  }
+  
+  public PVector getPerpendVector(){
+    PVector v = getVector();
+    return new PVector(-v.y, v.x).normalize();
   }
 }

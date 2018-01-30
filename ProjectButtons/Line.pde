@@ -11,9 +11,18 @@ public class Line{
     this.point2 = p2;
   }
   
+  public Line(ActiveEdge ae){
+    this(ae.getP1(), ae.getP2());
+  }
+  
   public Line(RealPoint p1, RealPoint p2){
     this.point1 = new PVector(p1.getX(), p1.getY());
     this.point2 = new PVector(p2.getX(), p2.getY());
+  }
+  
+   public Line(RealPoint p1, PVector p2){
+    this.point1 = new PVector(p1.getX(), p1.getY());
+    this.point2 = p2;
   }
   
   public PVector getPoint1(){
@@ -60,6 +69,25 @@ public class Line{
     }
     return false;
   }
+  
+  public float getSlope(){
+    return (this.point2.y - this.point1.y) /(this.point2.x - this.point1.x);
+  }
+  
+  public float wantedSlopeForPerpendicular(){
+    return -1/getSlope();
+  }
+  
+  public PVector getVector(){
+    return new PVector(this.point2.x - this.point1.x,this.point2.y - this.point1.y);
+  }
+  
+  public PVector vectorSum(Line l2){
+    PVector u = this.getVector();
+    PVector v = l2.getVector();
+    return new PVector(u.x + v.x, u.y + v.y);
+  }
+  
   
   public PVector isCrossingLine(Line line2){
     Line line1 = this;

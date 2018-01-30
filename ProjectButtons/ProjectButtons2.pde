@@ -234,7 +234,7 @@ void addRandomPoints(){
       x = (int)(butSizeX + x);
       y = (int)(butSizeY + y);
     }
-    
+    y = 135;
     points.add(new PVector(x, y));
   }
   println("ADDING RANDOM POINTS");
