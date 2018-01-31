@@ -1,7 +1,7 @@
 import java.util.*;
 
   
-PrintWriter output;
+//PrintWriter output;
 PFont font;
 
 //Sizes
@@ -45,7 +45,7 @@ color highlightButColor = color(204);
 void setup() {
        //size(1280, 800);
        size(960, 540);
-       output = createWriter("output from VD.txt"); 
+       //output = createWriter("output from VD.txt"); 
        maxX = 960;
        maxY = 540;
        clearSceneButY = 0;
@@ -224,15 +224,6 @@ void draw(){
       line(VD.get(i).getPoint1().x, VD.get(i).getPoint1().y, VD.get(i).getPoint2().x, VD.get(i).getPoint2().y);
     }
   }
-  if(otherLines != null){
-    for (int i = 0; i < otherLines.size(); i ++) {
-
-      stroke(color(#FF1281));      
-      ellipse(otherLines.get(i).getPoint1().x, otherLines.get(i).getPoint1().y, pointSize/5, pointSize/5);
-      ellipse(otherLines.get(i).getPoint2().x, otherLines.get(i).getPoint2().y, pointSize/5, pointSize/5);
-      line(otherLines.get(i).getPoint1().x,otherLines.get(i).getPoint1().y, otherLines.get(i).getPoint2().x, otherLines.get(i).getPoint2().y);
-    }
-  }
   
 }
 
@@ -277,6 +268,7 @@ void mousePressed() {
       removePolyByPolygonsMode();
     } else if ( overBut(butXCoord, movePointButY) ) {
       setModes(false, false, true, false);
+      removePolyByPolygonsMode();
     } else if ( overBut(butXCoord, deletePointButY) ) {
       setModes(false, true, false, false);
       removePolyByPolygonsMode();
@@ -305,7 +297,8 @@ void mousePressed() {
       grahamScan();
     }else if (overBut(butXCoord, triangulationButY)) {
       setModes(false, false, false, false);
-      removePolygonsKdTreeTriangulations();
+      //removePolygonsKdTreeTriangulations();
+      removeKdTreeTriangulations();
       triangulation();
     }else if (overBut(butXCoord, kDTreeButY)) {
       setModes(false, false, false, false);

@@ -58,7 +58,7 @@ KdNode kDDivideX(KdNode parent, ArrayList<PVector> lexiPointsByX){
 
 KdNode kDDivideY(KdNode parent, ArrayList<PVector> lexiPointsByY){
   Collections.reverse(lexiPointsByY);
-  printPVectorList(lexiPointsByY);
+  //printPVectorList(lexiPointsByY);
   
   ArrayList<PVector> P3, P4;
   PVector halfPoint;

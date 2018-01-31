@@ -255,21 +255,27 @@ PVector getMaxYPoint(AbstractList<PVector> points){
 }
 
 void removePointsInsidePolygon(){
-  println("before removing");
-  printPVectorList(polygons);  
+ //println("before removing");
+  //printPVectorList(polygons);  
   ArrayList<PVector> toDelete = new ArrayList<PVector>();
   
   for (int i = 0; i < points.size(); i++){
     PVector point = points.get(i);
     if (!polygons.contains(point)){
       toDelete.add(point);
-      println("removing " + point);
+     //println("removing " + point);
     }
   }
   points.removeAll(toDelete);
 }
 
 public void removePolygonsKdTreeTriangulations(){
+  removeKdTreeTriangulations();
+  //Polygons
+  polygons.clear();
+}
+
+public void removeKdTreeTriangulations(){
   //kDTree
   root = null;
   //Triangulation
@@ -279,6 +285,4 @@ public void removePolygonsKdTreeTriangulations(){
   c = new Circle();
   //Voronoi diagrams
   VD = new ArrayList<Line>();
-  //Polygons
-  polygons.clear();
 }

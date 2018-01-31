@@ -45,13 +45,13 @@ public void addToAEL(ActiveEdge e1, ActiveEdge e2, ActiveEdge e3){
   }
   
   DT.add(e1);
-  output.println("Adding to DT e1 "+ e1);
+  //output.println("Adding to DT e1 "+ e1);
   
   DT.add(e2);
-  output.println("Adding to DT e2 "+ e2);
+  //output.println("Adding to DT e2 "+ e2);
   
   DT.add(e3);
-  output.println("Adding to DT e3 "+ e3);
+  //output.println("Adding to DT e3 "+ e3);
   
 }
 

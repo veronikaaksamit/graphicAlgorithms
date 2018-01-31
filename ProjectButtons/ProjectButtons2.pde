@@ -60,7 +60,7 @@ void grahamScan(){
     for (int i = 1; i <  tempGSP.size(); i ++){
       if ( tempGSP.size() >=3){
         while (leftCriterion( tempGSP, i) ){
-          println("removing " + tempGSP.get(i) + " from Graham Scan Structure");
+         //println("removing " + tempGSP.get(i) + " from Graham Scan Structure");
           tempGSP.remove(i);
           i = i - 1;
           if (i == tempGSP.size())
@@ -71,12 +71,12 @@ void grahamScan(){
     
     //Setting LinkedList which contains data about polygon on the screen
     polygons = new LinkedList<PVector>();
-    print("Zostali: ");
+    //print("Zostali: ");
     for (int i = 0; i < tempGSP.size(); i ++){
-       print(gSPoints.indexOf(tempGSP.get(i))+":" + tempGSP.get(i) + "; ");
+       //print(gSPoints.indexOf(tempGSP.get(i))+":" + tempGSP.get(i) + "; ");
        polygons.add(tempGSP.get(i).getCoordinates());
     }
-    println();
+   //println();
     findMinAndMaxYPointForPolygons();
     
   }else{
@@ -171,7 +171,7 @@ void giftWrapping(){
       
     }    
     
-    printPVectorList(polygons);
+    //printPVectorList(polygons);
     findMinAndMaxYPointForPolygons();
   }else{
     addMode = true;
@@ -184,7 +184,7 @@ void createPolygon(){
     if (isPoint(polygons.get(i).x, polygons.get(i).y)){
       println("CREATED POLYGON");
       createPolyMode = false;
-      println("Same points");
+     //println("Same points");
     }
   }
   
@@ -206,6 +206,7 @@ void deletePoint(){
       }
       
       points.remove(points.get(i));
+      
       println("DELETING POINT");
       break;
     }
@@ -234,7 +235,7 @@ void addRandomPoints(){
       x = (int)(butSizeX + x);
       y = (int)(butSizeY + y);
     }
-    y = 135;
+    //y = 250;
     points.add(new PVector(x, y));
   }
   println("ADDING RANDOM POINTS");

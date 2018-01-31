@@ -5,14 +5,13 @@ ArrayList<PVector> triangulation;
 
 ArrayList<ActiveEdge> activeEdgesL;
 ArrayList<ActiveEdge> DT;
-ArrayList<Line> otherLines;
 Circle c;
 
 ArrayList<Line> VD;
 
 void voronoiDiagrams(){
   if(DT!= null && DT.size()>0){
-    otherLines = new ArrayList<Line>();
+    println("Voronoi diagrams");
     for (int i = 0; i < DT.size(); i ++) {
       Circle c1 = new Circle();
       if(i % 3 == 2){
@@ -26,9 +25,9 @@ void voronoiDiagrams(){
         
         if(DT.get(i).getTwin().getNext()== null){
           PVector vector = DT.get(i).getPerpendVector();
-          PVector point2 = new PVector(c.getCenter().getX() + vector.x*30, c.getCenter().getY() +vector.y*30);
+          PVector point2 = new PVector(c.getCenter().getX() + vector.x*c.getRadius()*1.3, c.getCenter().getY() +vector.y* c.getRadius()*1.3);
           Line l = new Line(c.getCenter(), point2 );
-          output.println("adding"+ l + "because twin and next are null for "+  DT.get(i));
+          //output.println("adding"+ l + "because twin and next are null for "+  DT.get(i));
           VD.add(l);
         }
         
@@ -39,9 +38,9 @@ void voronoiDiagrams(){
         }
         if( DT.get(i-1).getTwin().getNext()== null){
           PVector vector = DT.get(i-1).getPerpendVector();
-          PVector point2 = new PVector(c.getCenter().getX() + vector.x*30, c.getCenter().getY() +vector.y*30);
+          PVector point2 = new PVector(c.getCenter().getX() + vector.x* c.getRadius()*1.3, c.getCenter().getY() +vector.y* c.getRadius()*1.3);
           Line l = new Line(c.getCenter(), point2 );
-          output.println("adding"+ l + "because twin and next are null for "+  DT.get(i-1));
+          //output.println("adding"+ l + "because twin and next are null for "+  DT.get(i-1));
           VD.add(l);
         }
         
@@ -54,9 +53,9 @@ void voronoiDiagrams(){
         
         if(DT.get(i-2).getTwin().getNext()== null){
           PVector vector = DT.get(i-2).getPerpendVector();
-          PVector point2 = new PVector(c.getCenter().getX() + vector.x*30, c.getCenter().getY() +vector.y*30);
+          PVector point2 = new PVector(c.getCenter().getX() + vector.x* c.getRadius()*1.3, c.getCenter().getY() +vector.y* c.getRadius()*1.3);
           Line l = new Line(c.getCenter(), point2 );
-          output.println("adding"+ l + "because twin and next are null for "+  DT.get(i-2));
+          //output.println("adding"+ l + "because twin and next are null for "+  DT.get(i-2));
           VD.add(l);
         }
       }
@@ -65,16 +64,17 @@ void voronoiDiagrams(){
     if(points.size() != 0){
       points = lexiSortX(points);
        for(int i = 0; i < points.size()-1; i++){
-         println("solving "+ i);
          RealPoint p1 = new RealPoint(points.get(i));
          RealPoint p2 = new RealPoint(points.get(i+1));
          float dist = p1.distance(p2);
          PVector vector = new ActiveEdge(p1,p2).getVector();
          PVector normal = new ActiveEdge(p1,p2).getPerpendVector();
          
-         PVector point1 = new PVector(p1.getX()+dist/2 + (vector.x*10), p1.getY() + (vector.y*10));
-         PVector point2 = new PVector(point1.x + normal.x*1000, point1.y +normal.y*1000);
-         println(point1, point2);
+         PVector point1 = new PVector(p1.getX() + (vector.x*dist/2), p1.getY() - (vector.y*dist/2));
+         PVector point2 = new PVector(point1.x + normal.x*250, point1.y -normal.y*250);
+         //println(normal);
+         point1 = new PVector(point1.x +  normal.x*250, point1.y  + normal.y*250);
+         //println(point1, point2);
          Line l = new Line(point1, point2 );
          VD.add(l);
          
@@ -94,6 +94,7 @@ P4 = (-v.y, v.x) / Sqrt(v.x^2 + v.y^2) * -h
 */
 void delaunayTriangulation(){
   if(points.size() >= 3){
+    println("Delaunay triangulation");
     activeEdgesL = new ArrayList<ActiveEdge>();
     DT = new ArrayList<ActiveEdge>();
     maxXPoint = getMaxXPoints(points).get(0);
@@ -103,7 +104,7 @@ void delaunayTriangulation(){
     
     RealPoint p3 = smallestDelaunayDistancePoint(p1, p2, points);
     if(p3 == null){      
-      println("Could not find p for "+ p1 +" "+ p2);
+     //println("Could not find p for "+ p1 +" "+ p2);
       RealPoint tmp = p1;
       p1 = p2;
       p2 = tmp;
@@ -112,7 +113,7 @@ void delaunayTriangulation(){
     
     if(p3!= null){
       
-      println(p1 +""+ p2 + " " + p3);
+     //println(p1 +""+ p2 + " " + p3);
       c.circumCircle(p1, p2, p3);
       
       ActiveEdge e1 = new ActiveEdge(p1,p2);
@@ -180,13 +181,13 @@ public ArrayList<PVector> removeFromTmpPoints(RealPoint p1, RealPoint p2, RealPo
 }
 
 public void printDelaunayTriangulation(){
-  output.println("Delaunay Triangulation result");
+  //output.println("Delaunay Triangulation result");
   for(ActiveEdge ae : DT){
     ActiveEdge fromDT = findInDT(ae);
     if(fromDT!= null){
-      output.println(fromDT);
+      //output.println(fromDT);
     }else{
-      output.println(ae);
+      //output.println(ae);
     }
   }
 }
@@ -224,13 +225,13 @@ public RealPoint smallestDelaunayDistancePoint(RealPoint p1, RealPoint p2, Array
 }
 
 void triangulation(){
-  if(points.size()>3 && polygons.size() < 3){
+  if(points.size()>=3 && polygons.size() < 3){
     grahamScan();
+    removePointsInsidePolygon();
   }
   
   println("Triangulation by sweep line");
-  if (polygons.size()>3){
-      removePointsInsidePolygon();
+  if (polygons.size()>=3){
       ArrayList<PVector> lexipolygonsY = lexiSortY(polygons);
       rightPath = new  ArrayList<PVector>();
       leftPath = new  ArrayList<PVector>();
@@ -277,10 +278,10 @@ void triangulation(){
         }else{
           //println("iterator = " + iterator + " point = "+polygons.get(iterator));
           if(isOnRightPath){
-            println("adding to right " + polygons.get(iterator));
+           //println("adding to right " + polygons.get(iterator));
             rightPath.add(polygons.get(iterator));
           }else{
-            println("adding to left " + polygons.get(iterator));
+           //println("adding to left " + polygons.get(iterator));
             leftPath.add(polygons.get(iterator));
           }
         }
@@ -293,14 +294,15 @@ void triangulation(){
         }
     }
     
-    println("left path");
+   /*println("left path");
     printPVectorList(leftPath);
     println("right path");
     printPVectorList(rightPath);
-    println();
+    println();*/
+    
     println("START OF REAL TRIANGULATION");
     triangulation = new ArrayList<PVector>();
-    printPVectorList(lexipolygonsY);
+    //printPVectorList(lexipolygonsY);
   
     iterator = 2;
     ArrayList<PVector> stack = new ArrayList<PVector> ();
@@ -315,8 +317,8 @@ void triangulation(){
       PVector A;
       
       //println(" B=" + B + " C=" + C );
-      print("STACK: ");
-      printPVectorList(stack);
+      //print("STACK: ");
+      //printPVectorList(stack);
       
       if(!onSamePath(B, C)){
         for(int i = stack.size() - 1; i >= 1 ; i--){
@@ -440,10 +442,10 @@ boolean bothOnPath(PVector A, PVector B, ArrayList<PVector> path){
 boolean hasChanged(int iterator){
   if(polygons.get(iterator) == minYPoint || polygons.get(iterator) == maxYPoint){
     if(isOnRightPath){      
-      println("CHANGED on LEFT path " + polygons.get(iterator));
+     //println("CHANGED on LEFT path " + polygons.get(iterator));
        isOnRightPath  = false;
     }else{
-      println("CHANGED on RIGHT path" + polygons.get(iterator));
+     //println("CHANGED on RIGHT path" + polygons.get(iterator));
       isOnRightPath  = true;
     }
     return true;
